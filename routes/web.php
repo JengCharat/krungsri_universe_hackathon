@@ -22,3 +22,10 @@ Route::get('/test', function () {
 Route::get('/map', function () {
     return view('map');
 });
+Route::get('/admin', function () {
+    return 'Welcome Admin!';
+})->middleware('checkRole:admin');
+
+Route::get('/user', function () {
+    return 'Welcome User!';
+})->middleware('checkRole:user');
