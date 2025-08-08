@@ -18,3 +18,7 @@ Route::middleware([
 Route::get('/test', function () {
     return view('app');
 });
+
+Route::get('/map', function () {
+    return view('map');
+});
