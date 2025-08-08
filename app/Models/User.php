@@ -64,4 +64,14 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+
+
+
+
+    public function chatGroups() {
+        return $this->belongsToMany(ChatGroup::class, 'chat_group_user')
+                    ->withPivot('role', 'joined_at')
+                    ->withTimestamps();
+    }
 }
