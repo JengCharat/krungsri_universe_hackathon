@@ -10,7 +10,6 @@ Route::post('messages', [\App\Http\Controllers\ChatController::class, 'message']
 
 
 
-
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/chat-groups/{id}/messages', [MessageController::class, 'index']);
     Route::post('/chat-groups/{id}/messages', [MessageController::class, 'store']);

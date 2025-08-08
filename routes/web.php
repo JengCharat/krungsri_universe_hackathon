@@ -1,7 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
+use Illuminate\Support\Facades\Auth;
 Route::get('/', function () {
     return view('welcome');
 });
@@ -15,12 +15,23 @@ Route::middleware([
         return view('dashboard');
     })->name('dashboard');
 });
-Route::get('/test', function () {
 
-$token = Auth::user()->createToken('chat-token')->plainTextToken;
-return view('app', compact('token'));
-    // return view('app');
-});
+
+
+
+
+
+Route::get('/test', function () {
+    $token = Auth::user()->createToken('chat-token')->plainTextToken;
+    $chatGroupId = 1; // ตัวอย่าง
+
+    return view('app', compact('token', 'chatGroupId'));
+})->middleware('auth');
+
+
+
+
+
 
 Route::get('/map', function () {
     return view('map');

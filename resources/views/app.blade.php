@@ -1,17 +1,14 @@
-
-
 <!DOCTYPE html>
 <html>
 <head>
     <title>Laravel + React</title>
-@vite(['resources/js/app.jsx']) //this will change if it's not a app.blade.php
+    @vite(['resources/js/app.jsx'])
 </head>
 <body>
-
-<script>
-    window.userToken = "{{ $token }}";
-    window.chatGroupId = 1;
-</script>
+    <script>
+        window.userToken = @json($token);
+        window.chatGroupId = @json($chatGroupId);
+    </script>
     <div id="app"></div>
 </body>
 </html>
