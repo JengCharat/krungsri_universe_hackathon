@@ -29,3 +29,9 @@ Route::get('/admin', function () {
 Route::get('/user', function () {
     return 'Welcome User!';
 })->middleware('checkRole:user');
+
+
+
+Route::get('/upload_place', function () {
+    return view('upload_place');
+})->middleware('auth');
