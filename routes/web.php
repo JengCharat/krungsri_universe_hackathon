@@ -16,7 +16,10 @@ Route::middleware([
     })->name('dashboard');
 });
 Route::get('/test', function () {
-    return view('app');
+
+$token = Auth::user()->createToken('chat-token')->plainTextToken;
+return view('app', compact('token'));
+    // return view('app');
 });
 
 Route::get('/map', function () {
