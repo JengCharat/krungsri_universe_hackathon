@@ -1,11 +1,11 @@
+// TouristAttractionMap.jsx
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { createRoot } from "react-dom/client";
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
+import { useNavigate } from "react-router-dom";
 import "leaflet/dist/leaflet.css";
 
-// แก้ไข default marker icon path ให้โหลดจาก CDN
 delete L.Icon.Default.prototype._getIconUrl;
 
 L.Icon.Default.mergeOptions({
@@ -15,8 +15,9 @@ L.Icon.Default.mergeOptions({
   shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
 });
 
-function TouristAttractionMap() {
+export default function TouristAttractionMap() {
   const [markers, setMarkers] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     async function fetchMarkers() {
@@ -42,13 +43,17 @@ function TouristAttractionMap() {
           key={id}
           position={[parseFloat(latitude), parseFloat(longitude)]}
         >
-          <Popup>{description || "No description"}</Popup>
+          <Popup>
+            {description || "No description"} <br />
+            <button
+              style={{ color: "blue", textDecoration: "underline", cursor: "pointer", background: "none", border: "none" }}
+              onClick={() => navigate(`/attraction/${id}`)}
+            >
+              ดูรายละเอียด
+            </button>
+          </Popup>
         </Marker>
       ))}
     </MapContainer>
   );
 }
-
-const container = document.getElementById("map");
-const root = createRoot(container);
-root.render(<TouristAttractionMap />);
