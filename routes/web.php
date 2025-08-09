@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\TouristAttractionController;
 Route::get('/', function () {
     return view('welcome');
 });
@@ -27,6 +28,24 @@ Route::get('/test', function () {
 
     return view('app', compact('token', 'chatGroupId'));
 })->middleware('auth');
+
+
+
+
+
+
+Route::middleware('auth:sanctum')->group(function () {
+    // CRUD สำหรับ Tourist Attraction
+    Route::get('/tourist-attractions', [TouristAttractionController::class, 'index']); // แสดงรายการทั้งหมด
+    Route::post('/tourist-attractions', [TouristAttractionController::class, 'store']); // เพิ่มใหม่
+    Route::get('/tourist-attractions/{id}', [TouristAttractionController::class, 'show']); // ดูข้อมูลเดี่ยว
+    Route::put('/tourist-attractions/{id}', [TouristAttractionController::class, 'update']); // แก้ไข
+    Route::delete('/tourist-attractions/{id}', [TouristAttractionController::class, 'destroy']); // ลบ
+
+    // ดึงสถานที่ของ user คนนั้น ๆ
+    Route::get('/users/{user}/tourist-attractions', [TouristAttractionController::class, 'getByUser']);
+});
+
 
 
 
