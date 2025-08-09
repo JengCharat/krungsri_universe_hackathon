@@ -215,22 +215,37 @@ export default function TouristAttractionMap() {
         {clusters.map((cluster, idx) => {
           const count = cluster.members.length;
           return (
-            <Marker
-              key={idx}
-              position={[cluster.centroidLat, cluster.centroidLon]}
-              icon={createClusterIcon(count)}
-            >
-              <Popup>
-                มีสถานที่ท่องเที่ยว {count} แห่งในบริเวณนี้
-                <br />
-                {/* แสดงคำอธิบายคร่าว ๆ ของแต่ละสถานที่ */}
-                <ul style={{ paddingLeft: "15px" }}>
-                  {cluster.members.map((m) => (
-                    <li key={m.id}>{m.description || "ไม่มีคำอธิบาย"}</li>
-                  ))}
-                </ul>
-              </Popup>
-            </Marker>
+// ตัวอย่างใน component TouristAttractionMap.jsx
+    <Marker
+    key={idx}
+    position={[cluster.centroidLat, cluster.centroidLon]}
+    icon={createClusterIcon(count)}
+    >
+    <Popup>
+    <div>
+      มีสถานที่ท่องเที่ยว {count} แห่งในบริเวณนี้
+      <br />
+      <button
+        onClick={() =>
+          navigate(`/attraction/${cluster.members[0].id}`, {
+            state: { details: cluster.members },
+          })
+        }
+        style={{
+          marginTop: "8px",
+          cursor: "pointer",
+          color: "blue",
+          textDecoration: "underline",
+          background: "none",
+          border: "none",
+          padding: 0,
+        }}
+      >
+        ดูรายละเอียดทั้งหมด
+      </button>
+    </div>
+    </Popup>
+    </Marker>
           );
         })}
       </MapContainer>
