@@ -1,7 +1,6 @@
-// TouristAttractionMap.jsx
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Popup, Circle, useMap } from "react-leaflet";
 import L from "leaflet";
 import { useNavigate } from "react-router-dom";
 import "leaflet/dist/leaflet.css";
@@ -15,8 +14,41 @@ L.Icon.Default.mergeOptions({
   shadowUrl: "https://unpkg.com/leaflet@1.9.4/dist/images/marker-shadow.png",
 });
 
+const userIcon = new L.Icon({
+  iconUrl: "https://cdn-icons-png.flaticon.com/512/64/64113.png",
+  iconSize: [30, 30],
+  iconAnchor: [15, 30],
+  popupAnchor: [0, -28],
+});
+
+function getDistanceKm(lat1, lon1, lat2, lon2) {
+  const R = 6371;
+  const dLat = ((lat2 - lat1) * Math.PI) / 180;
+  const dLon = ((lon2 - lon1) * Math.PI) / 180;
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos((lat1 * Math.PI) / 180) *
+      Math.cos((lat2 * Math.PI) / 180) *
+      Math.sin(dLon / 2) *
+      Math.sin(dLon / 2);
+  return R * (2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a)));
+}
+
+// Component นี้ช่วยอัพเดต center ของแผนที่
+function MapUpdater({ center, zoom }) {
+  const map = useMap();
+  useEffect(() => {
+    if (center) {
+      map.setView(center, zoom);
+    }
+  }, [center, zoom, map]);
+  return null;
+}
+
 export default function TouristAttractionMap() {
   const [markers, setMarkers] = useState([]);
+  const [userLocation, setUserLocation] = useState(null);
+  const [radiusKm, setRadiusKm] = useState(1);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -31,29 +63,95 @@ export default function TouristAttractionMap() {
     fetchMarkers();
   }, []);
 
+  useEffect(() => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          setUserLocation([pos.coords.latitude, pos.coords.longitude]);
+        },
+        (err) => {
+          console.error("ไม่สามารถดึงตำแหน่งได้:", err);
+        }
+      );
+    } else {
+      console.error("เบราว์เซอร์นี้ไม่รองรับ Geolocation");
+    }
+  }, []);
+
+  const filteredMarkers = userLocation
+    ? markers.filter((m) => {
+        const dist = getDistanceKm(
+          userLocation[0],
+          userLocation[1],
+          parseFloat(m.latitude),
+          parseFloat(m.longitude)
+        );
+        return dist <= radiusKm;
+      })
+    : markers;
+
   return (
-    <MapContainer
-      center={[13.7367, 100.5231]}
-      zoom={6}
-      style={{ height: "400px", width: "100%" }}
-    >
-      <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-      {markers.map(({ id, latitude, longitude, description }) => (
-        <Marker
-          key={id}
-          position={[parseFloat(latitude), parseFloat(longitude)]}
-        >
-          <Popup>
-            {description || "No description"} <br />
-            <button
-              style={{ color: "blue", textDecoration: "underline", cursor: "pointer", background: "none", border: "none" }}
-              onClick={() => navigate(`/attraction/${id}`)}
-            >
-              ดูรายละเอียด
-            </button>
-          </Popup>
-        </Marker>
-      ))}
-    </MapContainer>
+    <div>
+      <div style={{ marginBottom: "10px" }}>
+        <label>
+          ระยะรัศมี: {radiusKm} กม.
+          <input
+            type="range"
+            min="1"
+            max="200"
+            value={radiusKm}
+            onChange={(e) => setRadiusKm(Number(e.target.value))}
+            style={{ width: "200px", marginLeft: "10px" }}
+          />
+        </label>
+      </div>
+
+      <MapContainer
+        center={[13.7367, 100.5231]}
+        zoom={14}
+        style={{ height: "400px", width: "100%" }}
+      >
+        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+
+        {/* อัพเดต center กับ zoom ทุกครั้งที่ userLocation มีค่า */}
+        {userLocation && <MapUpdater center={userLocation} zoom={14} />}
+
+        {userLocation && (
+          <>
+            <Marker position={userLocation} icon={userIcon}>
+              <Popup>คุณอยู่ที่นี่</Popup>
+            </Marker>
+            <Circle
+              center={userLocation}
+              radius={radiusKm * 1000}
+              pathOptions={{ color: "blue", fillColor: "blue", fillOpacity: 0.1 }}
+            />
+          </>
+        )}
+
+        {filteredMarkers.map(({ id, latitude, longitude, description }) => (
+          <Marker
+            key={id}
+            position={[parseFloat(latitude), parseFloat(longitude)]}
+          >
+            <Popup>
+              {description || "No description"} <br />
+              <button
+                style={{
+                  color: "blue",
+                  textDecoration: "underline",
+                  cursor: "pointer",
+                  background: "none",
+                  border: "none",
+                }}
+                onClick={() => navigate(`/attraction/${id}`)}
+              >
+                ดูรายละเอียด
+              </button>
+            </Popup>
+          </Marker>
+        ))}
+      </MapContainer>
+    </div>
   );
 }
