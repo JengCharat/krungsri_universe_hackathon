@@ -74,4 +74,8 @@ class User extends Authenticatable
                     ->withPivot('role', 'joined_at')
                     ->withTimestamps();
     }
+    public function touristAttractions()
+    {
+        return $this->hasMany(TouristAttraction::class, 'posted_by');
+    }
 }
