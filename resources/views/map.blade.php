@@ -6,5 +6,6 @@
 </head>
 <body>
     <div id="map"></div>
+
 </body>
 </html>
