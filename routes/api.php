@@ -19,17 +19,24 @@ Route::middleware('auth:sanctum')->group(function () {
 });
 
 
-Route::get('/tourist-attractions', function () {
-    return TouristAttraction::select('id', 'latitude', 'longitude', 'description')->get();
-});
+// Route::get('/tourist-attractions', function () {
+//     return TouristAttraction::select('id', 'latitude', 'longitude', 'description')->get();
+// });
 
 
 
 
 Route::get('/tourist-attractions', function () {
-    return TouristAttraction::all();
+    return TouristAttraction::with('images')->get();
 });
 
 Route::get('/tourist-attractions/{id}', function ($id) {
     return TouristAttraction::with('images')->findOrFail($id);
 });
+// Route::get('/tourist-attractions', function () {
+//     return TouristAttraction::all();
+// });
+//
+// Route::get('/tourist-attractions/{id}', function ($id) {
+//     return TouristAttraction::with('images')->findOrFail($id);
+// });

@@ -225,24 +225,16 @@ export default function TouristAttractionMap() {
     <div>
       มีสถานที่ท่องเที่ยว {count} แห่งในบริเวณนี้
       <br />
-      <button
-        onClick={() =>
-          navigate(`/attraction/${cluster.members[0].id}`, {
-            state: { details: cluster.members },
-          })
-        }
-        style={{
-          marginTop: "8px",
-          cursor: "pointer",
-          color: "blue",
-          textDecoration: "underline",
-          background: "none",
-          border: "none",
-          padding: 0,
-        }}
-      >
-        ดูรายละเอียดทั้งหมด
-      </button>
+                <button
+                  onClick={() =>
+                    navigate(`/attraction/${cluster.members[0].id}`, {
+                      state: { details: cluster.members },
+                    })
+                  }
+                  // ...style etc.
+                >
+                  ดูรายละเอียดทั้งหมด
+                </button>
     </div>
     </Popup>
     </Marker>
