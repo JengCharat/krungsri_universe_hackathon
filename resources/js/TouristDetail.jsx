@@ -13,7 +13,8 @@ export default function TouristDetail() {
   // สเตทฟอร์มสร้าง trip
   const [tripName, setTripName] = useState("");
   const [startDate, setStartDate] = useState("");
-  const [endDate, setEndDate] = useState("");
+  const [conditions, setConditions] = useState("");
+  const [maxPeople, setMaxPeople] = useState(1);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -53,7 +54,8 @@ export default function TouristDetail() {
       const res = await axios.post("/api/trips", {
         name: tripName,
         start_date: startDate || null,
-        end_date: endDate || null,
+        conditions,
+        max_people: maxPeople,
         tourist_attraction_id: id,
       });
       setLoading(false);
@@ -118,7 +120,14 @@ export default function TouristDetail() {
       )}
 
       {/* ฟอร์มสร้าง Trip */}
-      <div style={{ marginTop: "40px", padding: "20px", border: "1px solid #ddd", borderRadius: "8px" }}>
+      <div
+        style={{
+          marginTop: "40px",
+          padding: "20px",
+          border: "1px solid #ddd",
+          borderRadius: "8px",
+        }}
+      >
         <h3>สร้าง Trip ใหม่โดยใช้สถานที่นี้</h3>
         <form onSubmit={handleCreateTrip}>
           <label>
@@ -143,11 +152,21 @@ export default function TouristDetail() {
           </label>
           <br />
           <label>
-            วันที่สิ้นสุด:
+            เงื่อนไข (เช่น ไม่ต้องการไปกับคนสูบบุหรี่):
+            <textarea
+              value={conditions}
+              onChange={(e) => setConditions(e.target.value)}
+              style={{ marginLeft: 10, width: "100%", height: "60px" }}
+            />
+          </label>
+          <br />
+          <label>
+            จำนวนคนที่ต้องการ:
             <input
-              type="date"
-              value={endDate}
-              onChange={(e) => setEndDate(e.target.value)}
+              type="number"
+              min="1"
+              value={maxPeople}
+              onChange={(e) => setMaxPeople(Number(e.target.value))}
               style={{ marginLeft: 10 }}
             />
           </label>

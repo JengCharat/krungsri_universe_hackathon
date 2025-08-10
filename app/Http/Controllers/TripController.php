@@ -25,7 +25,6 @@ class TripController extends Controller
         $trip = Trip::create([
             'name' => $request->input('name', 'My Trip'),
             'start_date' => $request->input('start_date'),
-            'end_date' => $request->input('end_date'),
         ]);
 
         $trip->touristAttractions()->attach($touristAttraction->id);
