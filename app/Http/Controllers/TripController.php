@@ -1,14 +1,21 @@
 <?php
+
 namespace App\Http\Controllers;
 
 use App\Models\Trip;
 use App\Models\TouristAttraction;
 use Illuminate\Http\Request;
 
-// TripController.php
-
 class TripController extends Controller
 {
+    // ดึงรายการทริปทั้งหมด พร้อม tourist attractions ที่เกี่ยวข้อง
+    public function index()
+    {
+        $trips = Trip::with('touristAttractions')->get();
+        return response()->json($trips);
+    }
+
+    // สร้างทริปใหม่และผูกกับสถานที่ท่องเที่ยว
     public function store(Request $request)
     {
         $touristAttractionId = $request->input('tourist_attraction_id');
@@ -23,9 +30,10 @@ class TripController extends Controller
 
         $trip->touristAttractions()->attach($touristAttraction->id);
 
-        return response()->json($trip, 201); // API response แบบ JSON
+        return response()->json($trip, 201);
     }
 
+    // ดูรายละเอียดทริป พร้อม tourist attractions
     public function show($id)
     {
         $trip = Trip::with('touristAttractions')->findOrFail($id);

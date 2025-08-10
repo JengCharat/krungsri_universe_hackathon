@@ -166,9 +166,9 @@ export default function TouristAttractionMap() {
 
         {userLocation && (
           <>
-            <Marker position={userLocation} icon={userIcon}>
-              <Popup>คุณอยู่ที่นี่</Popup>
-            </Marker>
+            {/* <Marker position={userLocation} icon={userIcon}> */}
+            {/*   <Popup>คุณอยู่ที่นี่</Popup> */}
+            {/* </Marker> */}
             <Circle
               center={userLocation}
               radius={radiusKm * 1000}
@@ -180,12 +180,28 @@ export default function TouristAttractionMap() {
         {clusters.map((cluster, idx) => {
           const count = cluster.members.length;
           return (
+
             <Marker
               key={idx}
               position={[cluster.centroidLat, cluster.centroidLon]}
               icon={createClusterIcon(count)}
             >
+
               <Popup>
+
+<button
+          onClick={() => navigate("/trips")}
+          style={{
+            padding: "8px 16px",
+            backgroundColor: "#007bff",
+            color: "white",
+            border: "none",
+            borderRadius: 4,
+            cursor: "pointer",
+          }}
+        >
+          ดูทริปทั้งหมด
+        </button>
                 <div>
                   มีสถานที่ท่องเที่ยว {count} แห่งในบริเวณนี้
                   <br />
