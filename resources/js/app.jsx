@@ -1,17 +1,15 @@
+// App.jsx
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import TouristAttractionMap from "./map_page";
 import TouristDetail from "./TouristDetail";
-import TripList from "./all_trip";
 import { createRoot } from "react-dom/client";
-
 export default function App() {
   return (
     <Router>
       <Routes>
         <Route path="/test" element={<TouristAttractionMap />} />
         <Route path="/attraction/:id" element={<TouristDetail />} />
-        <Route path="/trips" element={<TripList />} />
       </Routes>
     </Router>
   );

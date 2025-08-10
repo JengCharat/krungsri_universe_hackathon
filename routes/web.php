@@ -80,4 +80,17 @@ Route::get('/chatpage', function () {
 
 
 
+Route::get('/all_trip', function () {
+    if (!Auth::check()) {
+        return redirect('/login'); // หรือจะ return 403 ก็ได้
+    }
 
+    $token = Auth::user()->createToken('chat-token')->plainTextToken;
+
+    return view('all_trip', compact('token'));
+})->middleware('auth');
+// Route::get('/all_trip', function () {
+//     $token = Auth::user()->createToken('chat-token')->plainTextToken;
+//
+//     return view('all_trip', compact('token'));
+// })->middleware('auth');
