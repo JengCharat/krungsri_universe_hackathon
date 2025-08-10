@@ -68,3 +68,10 @@ Route::get('/user', function () {
 Route::get('/upload_place', function () {
     return view('upload_place');
 })->middleware('auth');
+
+Route::get('/chatpage', function () {
+    $token = Auth::user()->createToken('chat-token')->plainTextToken;
+    $chatGroupId = 1; // ตัวอย่าง
+
+    return view('chatpage', compact('token', 'chatGroupId'));
+})->middleware('auth');
