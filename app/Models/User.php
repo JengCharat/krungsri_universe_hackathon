@@ -78,4 +78,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(TouristAttraction::class, 'posted_by');
     }
+
+    public function trips()
+    {
+        return $this->belongsToMany(Trip::class, 'trip_user')->withTimestamps();
+    }
 }

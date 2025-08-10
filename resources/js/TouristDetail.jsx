@@ -10,12 +10,19 @@ export default function TouristDetail() {
   const [details, setDetails] = useState(passedDetails);
   const { id } = useParams();
 
+  // สเตทฟอร์มสร้าง trip
+  const [tripName, setTripName] = useState("");
+  const [startDate, setStartDate] = useState("");
+  const [endDate, setEndDate] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
+
   useEffect(() => {
     if (!passedDetails) {
       async function fetchDetail() {
         try {
           const response = await axios.get(`/api/tourist-attractions/${id}`);
-          setDetails([response.data]); // เก็บเป็น array เพื่อให้ consistent กับ passedDetails
+          setDetails([response.data]);
         } catch (error) {
           console.error("Error fetching detail:", error);
         }
@@ -26,34 +33,69 @@ export default function TouristDetail() {
 
   if (!details) return <p>Loading...</p>;
 
-  // รวมรูปภาพทั้งหมดจาก details ทุกโพสต์ มาเป็น array เดียว
-  const allImages = details.flatMap(detail => {
+  const allImages = details.flatMap((detail) => {
     const mainImage = detail.image
       ? [detail.image.startsWith("http") ? detail.image : "/uploads/" + detail.image]
       : [];
     const additionalImages = detail.images
-      ? detail.images.map(img => "/uploads/" + img.image_path)
+      ? detail.images.map((img) => "/uploads/" + img.image_path)
       : [];
     return [...mainImage, ...additionalImages];
   });
+
+  // ฟังก์ชันส่งข้อมูลสร้าง Trip
+  const handleCreateTrip = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+
+    try {
+      const res = await axios.post("/api/trips", {
+        name: tripName,
+        start_date: startDate || null,
+        end_date: endDate || null,
+        tourist_attraction_id: id,
+      });
+      setLoading(false);
+      navigate(`/trip/${res.data.id}`); // redirect ไปหน้า Trip Detail
+    } catch (err) {
+      setLoading(false);
+      setError(err.response?.data?.message || "เกิดข้อผิดพลาด");
+    }
+  };
 
   return (
     <div style={{ padding: "20px" }}>
       <button onClick={() => navigate(-1)}>⬅ กลับ</button>
 
-      {/* แสดงรายละเอียดแต่ละโพสต์ */}
       {details.map((detail) => (
-        <div key={detail.id} style={{ marginBottom: "40px", borderBottom: "1px solid #ccc", paddingBottom: "20px" }}>
+        <div
+          key={detail.id}
+          style={{
+            marginBottom: "40px",
+            borderBottom: "1px solid #ccc",
+            paddingBottom: "20px",
+          }}
+        >
           <h2>{detail.description}</h2>
-          <p><strong>เปิด:</strong> {detail.open_time}</p>
-          <p><strong>ปิด:</strong> {detail.close_time}</p>
-          <p><strong>ค่าเข้า:</strong> {detail.entry_fee} บาท</p>
-          <p><strong>หมวดหมู่:</strong> {detail.tag}</p>
-          <p><strong>ติดต่อ:</strong> {detail.contact_info}</p>
+          <p>
+            <strong>เปิด:</strong> {detail.open_time}
+          </p>
+          <p>
+            <strong>ปิด:</strong> {detail.close_time}
+          </p>
+          <p>
+            <strong>ค่าเข้า:</strong> {detail.entry_fee} บาท
+          </p>
+          <p>
+            <strong>หมวดหมู่:</strong> {detail.tag}
+          </p>
+          <p>
+            <strong>ติดต่อ:</strong> {detail.contact_info}
+          </p>
         </div>
       ))}
 
-      {/* แสดงรูปภาพทั้งหมดรวมกัน */}
       {allImages.length > 0 && (
         <div>
           <h3>รูปภาพทั้งหมด</h3>
@@ -74,6 +116,48 @@ export default function TouristDetail() {
           </div>
         </div>
       )}
+
+      {/* ฟอร์มสร้าง Trip */}
+      <div style={{ marginTop: "40px", padding: "20px", border: "1px solid #ddd", borderRadius: "8px" }}>
+        <h3>สร้าง Trip ใหม่โดยใช้สถานที่นี้</h3>
+        <form onSubmit={handleCreateTrip}>
+          <label>
+            ชื่อทริป:
+            <input
+              type="text"
+              value={tripName}
+              onChange={(e) => setTripName(e.target.value)}
+              required
+              style={{ marginLeft: 10 }}
+            />
+          </label>
+          <br />
+          <label>
+            วันที่เริ่มต้น:
+            <input
+              type="date"
+              value={startDate}
+              onChange={(e) => setStartDate(e.target.value)}
+              style={{ marginLeft: 10 }}
+            />
+          </label>
+          <br />
+          <label>
+            วันที่สิ้นสุด:
+            <input
+              type="date"
+              value={endDate}
+              onChange={(e) => setEndDate(e.target.value)}
+              style={{ marginLeft: 10 }}
+            />
+          </label>
+          <br />
+          <button type="submit" disabled={loading} style={{ marginTop: 10 }}>
+            {loading ? "กำลังสร้าง..." : "สร้าง Trip"}
+          </button>
+        </form>
+        {error && <p style={{ color: "red" }}>{error}</p>}
+      </div>
     </div>
   );
 }

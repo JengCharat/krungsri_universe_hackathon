@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MessageController;
 use App\Models\TouristAttraction;
 
+use App\Http\Controllers\TripController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -40,3 +41,12 @@ Route::get('/tourist-attractions/{id}', function ($id) {
 // Route::get('/tourist-attractions/{id}', function ($id) {
 //     return TouristAttraction::with('images')->findOrFail($id);
 // });
+//
+//
+//
+//
+//
+//
+
+Route::post('/trips', [TripController::class, 'store']);
+Route::get('/trips/{id}', [TripController::class, 'show']);

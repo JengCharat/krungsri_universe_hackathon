@@ -75,3 +75,6 @@ Route::get('/chatpage', function () {
 
     return view('chatpage', compact('token', 'chatGroupId'));
 })->middleware('auth');
+
+
+
