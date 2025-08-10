@@ -14,7 +14,7 @@ class TouristAttractionController extends Controller
         return TouristAttraction::with(['user', 'images'])->get();
     }
 
-    public function store(Request $request)
+    public function store(request $request)
     {
         $request->validate([
             'images' => 'nullable|array',
