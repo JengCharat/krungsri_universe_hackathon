@@ -58,6 +58,7 @@ export default function TouristDetail() {
         max_people: maxPeople,
         tourist_attraction_id: id,
       });
+
       setLoading(false);
       navigate(`/trip/${res.data.id}`); // redirect ไปหน้า Trip Detail
     } catch (err) {

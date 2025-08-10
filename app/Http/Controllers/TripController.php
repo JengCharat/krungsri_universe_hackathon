@@ -22,10 +22,12 @@ class TripController extends Controller
 
         $touristAttraction = TouristAttraction::findOrFail($touristAttractionId);
 
-        $trip = Trip::create([
-            'name' => $request->input('name', 'My Trip'),
-            'start_date' => $request->input('start_date'),
-        ]);
+                $trip = Trip::create([
+                        'name' => $request->input('name', 'My Trip'),
+                        'start_date' => $request->input('start_date'),
+                        'conditions' => $request->input('conditions', ''),  // เพิ่มตรงนี้
+                        'max_people' => $request->input('max_people', 1),   // เพิ่มตรงนี้
+                    ]);
 
         $trip->touristAttractions()->attach($touristAttraction->id);
 
@@ -45,24 +47,26 @@ class TripController extends Controller
 
 
 
-public function join(Request $request, Trip $trip)
-{
-    $user = $request->user();
+    public function join(Request $request, Trip $trip)
+    {
+        $user = $request->user();
 
-    if (!$user) {
-        return response()->json(['message' => 'Unauthorized'], 401);
+        if (!$user) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
+
+        // เช็คว่ามีอยู่แล้วหรือไม่
+        if ($trip->users()->where('user_id', $user->id)->exists()) {
+            return response()->json(['message' => 'คุณได้เข้าร่วมทริปนี้แล้ว'], 400);
+        }
+
+        // เช็คจำนวนคน
+        if ($trip->users()->count() >= $trip->max_people) {
+            return response()->json(['message' => 'ทริปเต็มแล้ว'], 400);
+        }
+
+        $trip->users()->attach($user->id);
+
+        return response()->json(['message' => 'เข้าร่วมทริปสำเร็จ']);
     }
-
-    if ($trip->users()->where('user_id', $user->id)->exists()) {
-        return response()->json(['message' => 'คุณได้เข้าร่วมทริปนี้แล้ว'], 400);
-    }
-
-    if ($trip->users()->count() >= $trip->max_people) {
-        return response()->json(['message' => 'ทริปเต็มแล้ว'], 400);
-    }
-
-    $trip->users()->attach($user->id);
-
-    return response()->json(['message' => 'เข้าร่วมทริปสำเร็จ']);
-}
 }

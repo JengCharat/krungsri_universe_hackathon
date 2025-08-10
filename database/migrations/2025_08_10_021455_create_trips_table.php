@@ -12,7 +12,7 @@ return new class extends Migration {
             $table->string('name');
             $table->date('start_date')->nullable();
             $table->text('conditions')->nullable(); // เงื่อนไขร่วมทริป
-            $table->unsignedInteger('max_people')->default(1); // จำนวนคนที่ต้องการ
+             $table->integer('max_people')->default(1);
             $table->unsignedInteger('current_people')->default(0); // ตอนนี้มีกี่คนแล้ว
             $table->timestamps();
         });

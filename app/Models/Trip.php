@@ -6,13 +6,15 @@ use Illuminate\Database\Eloquent\Model;
 
 class Trip extends Model
 {
-    protected $fillable = [
+ protected $fillable = [
         'tourist_attraction_id',
         'created_by',
         'name',
         'description',
         'start_date',
-        'end_date'
+        'end_date',
+        'conditions',   // เพิ่มตรงนี้
+        'max_people'    // เพิ่มตรงนี้
     ];
 
     public function users()

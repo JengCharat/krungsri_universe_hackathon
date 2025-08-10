@@ -49,17 +49,12 @@ Route::get('/tourist-attractions/{id}', function ($id) {
 //
 
 
-Route::get('/trips', [TripController::class, 'index']);       // ดึงทริปทั้งหมด
-Route::post('/trips', [TripController::class, 'store']);      // สร้างทริปใหม่
-Route::get('/trips/{id}', [TripController::class, 'show']);   // ดูรายละเอียดทริป
-
-// Route::post('/trips', [TripController::class, 'store']);
-// Route::get('/trips/{id}', [TripController::class, 'show']);
 //
 //
 //
 //
 //
 Route::get('/trips', [TripController::class, 'index']); // ดึง list
+Route::post('/trips', [TripController::class, 'store']);      // สร้างทริปใหม่
 Route::get('/trips/{id}', [TripController::class, 'show']); // ดู detail
 Route::middleware('auth:sanctum')->post('/trips/{trip}/join', [TripController::class, 'join']);

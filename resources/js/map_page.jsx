@@ -189,19 +189,6 @@ export default function TouristAttractionMap() {
 
               <Popup>
 
-<button
-          onClick={() => navigate("/trips")}
-          style={{
-            padding: "8px 16px",
-            backgroundColor: "#007bff",
-            color: "white",
-            border: "none",
-            borderRadius: 4,
-            cursor: "pointer",
-          }}
-        >
-          ดูทริปทั้งหมด
-        </button>
                 <div>
                   มีสถานที่ท่องเที่ยว {count} แห่งในบริเวณนี้
                   <br />
