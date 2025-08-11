@@ -17,47 +17,54 @@ class TripController extends Controller
     }
 
     // สร้างทริปใหม่และผูกกับสถานที่ท่องเที่ยว
-public function store(Request $request)
-{
-    $touristAttractionId = $request->input('tourist_attraction_id');
-    $touristAttraction = TouristAttraction::findOrFail($touristAttractionId);
+            public function store(Request $request)
+            {
+                $touristAttractionId = $request->input('tourist_attraction_id');
+                $touristAttraction = TouristAttraction::findOrFail($touristAttractionId);
 
-    $userId = auth()->id();
+                $userId = auth()->id();
 
-    DB::beginTransaction();
+                DB::beginTransaction();
 
-    try {
-        $trip = Trip::create([
-            'created_by' => $userId,
-            'name' => $request->input('name', 'My Trip'),
-            'start_date' => $request->input('start_date'),
-            'conditions' => $request->input('conditions', ''),
-            'max_people' => $request->input('max_people', 1),
-        ]);
+                try {
+                    $trip = Trip::create([
+                        'created_by'   => $userId,
+                        'name'         => $request->input('name', 'My Trip'),
+                        'start_date'   => $request->input('start_date'),
+                        'conditions'   => $request->input('conditions', ''),
+                        'max_people'   => $request->input('max_people', 1),
+                    ]);
 
-        $trip->touristAttractions()->attach($touristAttraction->id);
+                    // เพิ่ม tourist attraction ให้ trip
+                    $trip->touristAttractions()->attach($touristAttraction->id);
 
-        // สร้าง chat group สำหรับ trip นี้ (ถ้ายังไม่มี)
-        $chatGroup = ChatGroup::create([
-            'name' => 'Chat Group for Trip: ' . $trip->name,
-            'description' => 'Group chat for trip ' . $trip->name,
-            'owner_id' => $userId,
-        ]);
+                    // เพิ่ม user เจ้าของทริปเข้า trip_user
+                    $trip->users()->attach($userId);
+                    // ต้องมี relation users() ในโมเดล Trip
 
-        // เพิ่ม user เจ้าของทริปเข้า chat group ด้วย role 'owner'
-        $chatGroup->members()->attach($userId, [
-            'role' => 'owner',
-            'joined_at' => now(),
-        ]);
+                    // สร้าง chat group สำหรับ trip นี้
+                    $chatGroup = ChatGroup::create([
+                        'name'        => 'Chat Group for Trip: ' . $trip->name,
+                        'description' => 'Group chat for trip ' . $trip->name,
+                        'owner_id'    => $userId,
+                    ]);
 
-        DB::commit();
+                    // เพิ่ม user เจ้าของทริปเข้า chat group ด้วย role 'owner'
+                    $chatGroup->members()->attach($userId, [
+                        'role'      => 'owner',
+                        'joined_at' => now(),
+                    ]);
 
-        return response()->json($trip, 201);
-    } catch (\Exception $e) {
-        DB::rollBack();
-        return response()->json(['message' => 'Error creating trip: ' . $e->getMessage()], 500);
-    }
-}
+                    DB::commit();
+
+                    return response()->json($trip, 201);
+                } catch (\Exception $e) {
+                    DB::rollBack();
+                    return response()->json([
+                        'message' => 'Error creating trip: ' . $e->getMessage()
+                    ], 500);
+                }
+            }
 
     // ดูรายละเอียดทริป พร้อม tourist attractions
     public function show($id)
