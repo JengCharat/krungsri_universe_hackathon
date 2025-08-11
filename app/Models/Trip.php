@@ -28,6 +28,7 @@ class Trip extends Model
     }
      public function touristAttractions()
         {
+
             return $this->belongsToMany(TouristAttraction::class, 'trip_tourist_attraction');
         }
 }

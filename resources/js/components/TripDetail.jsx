@@ -59,11 +59,17 @@ export default function TripDetail() {
       <p><strong>เงื่อนไข:</strong> {trip.conditions || "-"}</p>
       <p><strong>จำนวนคนที่ต้องการ:</strong> {trip.max_people}</p>
       <p><strong>สถานที่ท่องเที่ยว:</strong></p>
-      <ul>
-        {trip.tourist_attractions?.map((attraction) => (
-          <li key={attraction.id}>{attraction.name}</li>
-        ))}
-      </ul>
+        <ul>
+          {trip.tourist_attractions?.map(attraction => (
+            <li key={attraction.id}>
+                       <h1>descriptions:{attraction.description}</h1>
+                        <h1>openat {attraction.open_time}</h1>
+
+                    </li>
+
+
+          ))}
+        </ul>
 
       <button onClick={() => navigate(-1)} style={{ marginRight: "10px" }}>
         กลับ
