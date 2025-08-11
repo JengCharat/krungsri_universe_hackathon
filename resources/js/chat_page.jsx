@@ -1,43 +1,39 @@
-
 import { createRoot } from 'react-dom/client';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
+import { useParams } from 'react-router-dom';
 
-function ChatPage({ chatGroupId, userToken }) {
+function ChatPage({ userToken }) {
+  const { id } = useParams(); // ดึง id จาก URL
   const [messages, setMessages] = useState([]);
   const [text, setText] = useState("");
 
-  // ฟังก์ชันดึงข้อความ
   const fetchMessages = async () => {
     try {
-      const res = await axios.get(
-        `/api/chat-groups/${chatGroupId}/messages`,
-        { headers: { Authorization: `Bearer ${userToken}` } }
-      );
+      const res = await axios.get(`/api/chat-groups/${id}/messages`, {
+        headers: { Authorization: `Bearer ${userToken}` }
+      });
       setMessages(res.data);
     } catch (err) {
       console.error("Fetch error:", err);
     }
   };
 
-  // เรียกทุก 3 วินาที
   useEffect(() => {
-    fetchMessages(); // โหลดครั้งแรก
+    fetchMessages();
     const interval = setInterval(fetchMessages, 3000);
     return () => clearInterval(interval);
-  }, [chatGroupId, userToken]);
+  }, [id, userToken]);
 
-  // ส่งข้อความ
   const sendMessage = async () => {
     if (!text.trim()) return;
     try {
-      await axios.post(
-        `/api/chat-groups/${chatGroupId}/messages`,
+      await axios.post(`/api/chat-groups/${id}/messages`,
         { message: text },
         { headers: { Authorization: `Bearer ${userToken}` } }
       );
       setText("");
-      fetchMessages(); // โหลดใหม่หลังส่ง
+      fetchMessages();
     } catch (err) {
       console.error("Send error:", err);
     }
@@ -53,19 +49,10 @@ function ChatPage({ chatGroupId, userToken }) {
         ))}
       </div>
 
-      <input
-        value={text}
-        onChange={e => setText(e.target.value)}
-        placeholder="Type a message"
-      />
+      <input value={text} onChange={e => setText(e.target.value)} placeholder="Type a message" />
       <button onClick={sendMessage}>Send</button>
     </div>
   );
 }
 
-// รับค่าจาก Blade ผ่าน window
-const container = document.getElementById("chat_page");
-const root = createRoot(container);
-root.render(
-  <ChatPage chatGroupId={window.chatGroupId} userToken={window.userToken} />
-);
+export default ChatPage;
