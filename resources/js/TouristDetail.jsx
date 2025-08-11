@@ -45,27 +45,36 @@ export default function TouristDetail() {
   });
 
   // ฟังก์ชันส่งข้อมูลสร้าง Trip
-  const handleCreateTrip = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    setError(null);
+const handleCreateTrip = async (e) => {
+  e.preventDefault();
+  setLoading(true);
+  setError(null);
 
-    try {
-      const res = await axios.post("/api/trips", {
+  try {
+    const res = await axios.post(
+      "/trips_uploads",
+      {
         name: tripName,
         start_date: startDate || null,
         conditions,
         max_people: maxPeople,
         tourist_attraction_id: id,
-      });
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${window.userToken}`,
+          "Content-Type": "application/json",
+        },
+      }
+    );
 
-      setLoading(false);
-      navigate(`/trip/${res.data.id}`); // redirect ไปหน้า Trip Detail
-    } catch (err) {
-      setLoading(false);
-      setError(err.response?.data?.message || "เกิดข้อผิดพลาด");
-    }
-  };
+    setLoading(false);
+    navigate(`/trip/${res.data.id}`); // redirect ไปหน้า Trip Detail
+  } catch (err) {
+    setLoading(false);
+    setError(err.response?.data?.message || "เกิดข้อผิดพลาด");
+  }
+};
 
   return (
     <div style={{ padding: "20px" }}>

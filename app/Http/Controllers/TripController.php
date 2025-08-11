@@ -23,10 +23,12 @@ class TripController extends Controller
         $touristAttraction = TouristAttraction::findOrFail($touristAttractionId);
 
                 $trip = Trip::create([
+
                         'name' => $request->input('name', 'My Trip'),
                         'start_date' => $request->input('start_date'),
                         'conditions' => $request->input('conditions', ''),  // เพิ่มตรงนี้
-                        'max_people' => $request->input('max_people', 1),   // เพิ่มตรงนี้
+                        // 'max_people' => $request->input('max_people', 1),   // เพิ่มตรงนี้
+                        'max_people' => auth()->id()  // เพิ่มตรงนี้
                     ]);
 
         $trip->touristAttractions()->attach($touristAttraction->id);
