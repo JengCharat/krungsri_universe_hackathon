@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Trip;
 use App\Models\TouristAttraction;
 use Illuminate\Http\Request;
-
+use App\Models\ChatGroup;
 class TripController extends Controller
 {
     // ดึงรายการทริปทั้งหมด พร้อม tourist attractions ที่เกี่ยวข้อง
@@ -65,8 +65,31 @@ class TripController extends Controller
             return response()->json(['message' => 'ทริปเต็มแล้ว'], 400);
         }
 
+        // บันทึกเข้าทริป
         $trip->users()->attach($user->id);
 
-        return response()->json(['message' => 'เข้าร่วมทริปสำเร็จ']);
+        // อัพเดทจำนวนคน
+        $trip->increment('current_people');
+
+        // หา chat group ของ trip นี้ ถ้าไม่มีให้สร้าง
+        $chatGroup = \App\Models\ChatGroup::firstOrCreate(
+            ['name' => 'Trip: ' . $trip->name],
+            [
+                'description' => 'กลุ่มแชทของทริป ' . $trip->name,
+                'owner_id' => $trip->created_by ?? $user->id
+            ]
+        );
+
+        // เพิ่ม user เข้า chat group ถ้ายังไม่มี
+        $chatGroup->users()->syncWithoutDetaching([
+            $user->id => [
+                'role' => 'member',
+                'joined_at' => now(),
+                'created_at' => now(),
+                'updated_at' => now()
+            ]
+        ]);
+
+        return response()->json(['message' => 'เข้าร่วมทริปสำเร็จและเข้ากลุ่มแชทแล้ว']);
     }
 }
