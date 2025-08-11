@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\MessageController;
 use App\Models\TouristAttraction;
 
+use App\Http\Controllers\ChatGroupController;
 use App\Http\Controllers\TripController;
 
 Route::get('/user', function (Request $request) {
@@ -15,6 +16,7 @@ Route::post('messages', [\App\Http\Controllers\ChatController::class, 'message']
 
 
 Route::middleware('auth:sanctum')->group(function () {
+ Route::get('/chat-groups', [ChatGroupController::class, 'index']);
     Route::get('/chat-groups/{id}/messages', [MessageController::class, 'index']);
     Route::post('/chat-groups/{id}/messages', [MessageController::class, 'store']);
 });

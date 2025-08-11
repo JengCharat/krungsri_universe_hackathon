@@ -96,3 +96,15 @@ Route::get('/all_trip', function () {
 //
 //     return view('all_trip', compact('token'));
 // })->middleware('auth');
+//
+//
+//
+//
+//
+
+Route::get('/all_chat', function () {
+    $token = Auth::user()->createToken('chat-token')->plainTextToken;
+    $chatGroupId = 1; // ตัวอย่าง
+
+    return view('all_chat', compact('token', 'chatGroupId'));
+})->middleware('auth');
