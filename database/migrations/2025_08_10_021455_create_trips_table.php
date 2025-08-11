@@ -8,8 +8,11 @@ return new class extends Migration {
     {
         // ตาราง trips (แก้ไข)
         Schema::create('trips', function (Blueprint $table) {
+
             $table->id();
             $table->string('name');
+
+         $table->foreignId('created_by')->constrained('users')->onDelete('cascade'); // owner_id FK
             $table->date('start_date')->nullable();
             $table->text('conditions')->nullable(); // เงื่อนไขร่วมทริป
              $table->integer('max_people')->default(1);
