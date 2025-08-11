@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { createRoot } from "react-dom/client";
-import { BrowserRouter } from "react-router-dom";
-
+import TripDetail from "./components/TripDetail";
 export default function AllTrips() {
   const [trips, setTrips] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -96,10 +96,14 @@ export default function AllTrips() {
   );
 }
 
-const container2 = document.getElementById("all_trip");
-const root = createRoot(container2);
+const container = document.getElementById("all_trip");
+const root = createRoot(container);
+
 root.render(
   <BrowserRouter>
-    <AllTrips />
+    <Routes>
+      <Route path="/all_trip" element={<AllTrips />} />
+      <Route path="/trip/:tripId" element={<TripDetail />} />
+    </Routes>
   </BrowserRouter>
 );
