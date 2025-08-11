@@ -105,7 +105,7 @@ class TripController extends Controller
 
         // หา chat group ของ trip นี้ ถ้าไม่มีให้สร้าง
         $chatGroup = \App\Models\ChatGroup::firstOrCreate(
-            ['name' => 'Trip: ' . $trip->name],
+            ['name' => 'Chat Group for Trip: ' . $trip->name],
             [
                 'description' => 'กลุ่มแชทของทริป ' . $trip->name,
                 'owner_id' => $trip->created_by ?? $user->id
