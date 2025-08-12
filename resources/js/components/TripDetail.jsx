@@ -1,4 +1,3 @@
-
 // TripDetail.jsx
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
@@ -36,9 +35,13 @@ export default function TripDetail() {
     setJoining(true);
     setError(null);
     try {
-      await axios.post(`/api/trips/${tripId}/join`, {}, {
-        headers: { Authorization: `Bearer ${window.userToken}` },
-      });
+      await axios.post(
+        `/api/trips/${tripId}/join`,
+        {},
+        {
+          headers: { Authorization: `Bearer ${window.userToken}` },
+        }
+      );
       alert("เข้าร่วมทริปสำเร็จ!");
     } catch (err) {
       console.error("Error joining trip:", err);
@@ -55,21 +58,26 @@ export default function TripDetail() {
   return (
     <div style={{ padding: "20px" }}>
       <h2>{trip.name}</h2>
-      <p><strong>วันที่เริ่ม:</strong> {trip.start_date || "ไม่ระบุ"}</p>
-      <p><strong>เงื่อนไข:</strong> {trip.conditions || "-"}</p>
-      <p><strong>จำนวนคนที่ต้องการ:</strong> {trip.max_people}</p>
-      <p><strong>สถานที่ท่องเที่ยว:</strong></p>
-        <ul>
-          {trip.tourist_attractions?.map(attraction => (
-            <li key={attraction.id}>
-                       <h1>descriptions:{attraction.description}</h1>
-                        <h1>openat {attraction.open_time}</h1>
-
-                    </li>
-
-
-          ))}
-        </ul>
+      <p>
+        <strong>วันที่เริ่ม:</strong> {trip.start_date || "ไม่ระบุ"}
+      </p>
+      <p>
+        <strong>เงื่อนไข:</strong> {trip.conditions || "-"}
+      </p>
+      <p>
+        <strong>จำนวนคนที่ต้องการ:</strong> {trip.max_people}
+      </p>
+      <p>
+        <strong>สถานที่ท่องเที่ยว:</strong>
+      </p>
+      <ul>
+        {trip.tourist_attractions?.map((attraction) => (
+          <li key={attraction.id}>
+            <h1>descriptions: {attraction.description}</h1>
+            <h1>openat {attraction.open_time}</h1>
+          </li>
+        ))}
+      </ul>
 
       <button onClick={() => navigate(-1)} style={{ marginRight: "10px" }}>
         กลับ

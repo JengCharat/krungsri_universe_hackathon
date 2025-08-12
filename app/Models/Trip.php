@@ -14,7 +14,8 @@ class Trip extends Model
         'start_date',
         'end_date',
         'conditions',   // เพิ่มตรงนี้
-        'max_people'    // เพิ่มตรงนี้
+        'max_people' ,   // เพิ่มตรงนี้
+'needs_guide', 'needs_driver'
     ];
 
     public function users()

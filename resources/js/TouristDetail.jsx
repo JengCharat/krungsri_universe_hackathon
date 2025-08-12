@@ -52,8 +52,8 @@ export default function TouristDetail() {
     setError(null);
 
     // กำหนดค่า need_guide และ need_driver จาก travelOption
-    const need_guide = travelOption === "guide";
-    const need_driver = travelOption === "driver";
+    const needs_guide = travelOption === "guide";
+    const needs_driver = travelOption === "driver";
 
     try {
       const res = await axios.post(
@@ -63,8 +63,8 @@ export default function TouristDetail() {
           start_date: startDate || null,
           conditions,
           max_people: maxPeople,
-          need_guide,
-          need_driver,
+          needs_guide,
+          needs_driver,
           tourist_attraction_id: id,
         },
         {

@@ -33,23 +33,24 @@ class TripController extends Controller
                         'start_date'   => $request->input('start_date'),
                         'conditions'   => $request->input('conditions', ''),
                         'max_people'   => $request->input('max_people', 1),
+                        'needs_guide'  => $request->boolean('needs_guide', false),
+                        'needs_driver' => $request->boolean('needs_driver', false),
                     ]);
 
-                    // เพิ่ม tourist attraction ให้ trip
+                    // ผูก tourist attraction กับ trip
                     $trip->touristAttractions()->attach($touristAttraction->id);
 
-                    // เพิ่ม user เจ้าของทริปเข้า trip_user
+                    // เพิ่มเจ้าของทริปเข้า trip_user
                     $trip->users()->attach($userId);
-                    // ต้องมี relation users() ในโมเดล Trip
 
-                    // สร้าง chat group สำหรับ trip นี้
+                    // สร้าง chat group
                     $chatGroup = ChatGroup::create([
                         'name'        => 'Chat Group for Trip: ' . $trip->name,
                         'description' => 'Group chat for trip ' . $trip->name,
                         'owner_id'    => $userId,
                     ]);
 
-                    // เพิ่ม user เจ้าของทริปเข้า chat group ด้วย role 'owner'
+                    // เพิ่มเจ้าของทริปเข้า chat group
                     $chatGroup->members()->attach($userId, [
                         'role'      => 'owner',
                         'joined_at' => now(),
