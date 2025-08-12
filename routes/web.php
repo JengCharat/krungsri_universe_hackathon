@@ -91,6 +91,16 @@ Route::get('/all_trip', function () {
 
     return view('all_trip', compact('token'));
 })->middleware('auth');
+
+Route::get('/my-trips', function () {
+    if (!Auth::check()) {
+        return redirect('/login'); // หรือจะ return 403 ก็ได้
+    }
+
+    $token = Auth::user()->createToken('chat-token')->plainTextToken;
+
+    return view('my_trips', compact('token'));
+})->middleware('auth');
 // Route::get('/all_trip', function () {
 //     $token = Auth::user()->createToken('chat-token')->plainTextToken;
 //

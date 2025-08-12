@@ -60,3 +60,6 @@ Route::get('/trips', [TripController::class, 'index']); // ดึง list
 Route::post('/trips', [TripController::class, 'store']);      // สร้างทริปใหม่
 Route::get('/trips/{id}', [TripController::class, 'show']); // ดู detail
 Route::middleware('auth:sanctum')->post('/trips/{trip}/join', [TripController::class, 'join']);
+
+// routes/api.php
+Route::middleware('auth:sanctum')->get('/my-trips', [TripController::class, 'myTrips']);

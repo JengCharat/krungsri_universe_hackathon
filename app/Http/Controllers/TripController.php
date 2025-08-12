@@ -73,6 +73,17 @@ class TripController extends Controller
         return response()->json($trip);
     }
 
+// TripController.php
+        public function myTrips(Request $request) {
+            $userId = $request->user()->id;
+
+            $trips = Trip::with('touristAttractions')
+                ->where('created_by', $userId)
+                ->get();
+
+            return response()->json($trips);
+        }
+
 
 
 
