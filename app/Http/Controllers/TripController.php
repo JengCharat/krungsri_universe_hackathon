@@ -6,6 +6,8 @@ use App\Models\Trip;
 use App\Models\TouristAttraction;
 use Illuminate\Http\Request;
 use App\Models\ChatGroup;
+use App\Models\TripGuide;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 class TripController extends Controller
 {
@@ -21,6 +23,29 @@ class TripController extends Controller
                     ->get();
 
                 return response()->json($trips);
+            }
+            public function offerPrice(Request $request)
+            {
+                $request->validate([
+                    'trip_id' => 'required|exists:trips,id',
+                    'price' => 'required|numeric|min:0',
+                ]);
+
+                $user = Auth::user();
+
+                // สร้าง record ใน trip_guides
+                $tripGuide = TripGuide::updateOrCreate(
+                    [
+                        'trip_id' => $request->trip_id,
+                        'guide_id' => $user->id,
+                    ],
+                    [
+                        'price' => $request->price,
+                        'status' => 'pending',
+                    ]
+                );
+
+                return response()->json(['message' => 'เสนอราคาเรียบร้อย']);
             }
     public function index()
     {

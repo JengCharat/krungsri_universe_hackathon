@@ -65,3 +65,9 @@ Route::middleware('auth:sanctum')->post('/trips/{trip}/join', [TripController::c
 
 // routes/api.php
 Route::middleware('auth:sanctum')->get('/my-trips', [TripController::class, 'myTrips']);
+
+
+
+
+
+Route::post('/trip-guides', [TripController::class, 'offerPrice'])->middleware('auth:sanctum');

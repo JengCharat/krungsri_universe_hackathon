@@ -1,10 +1,14 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+
+
 import { createRoot } from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import { Routes } from "react-router-dom";
 import { Route } from "react-router-dom";
+
+
 export default function AllTripsForGuide() {
   const [trips, setTrips] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -15,9 +19,12 @@ export default function AllTripsForGuide() {
   useEffect(() => {
     async function fetchTrips() {
       try {
-        // ดึงข้อมูลทริปที่ต้องการไกด์หรือคนขับรถเท่านั้น
-        const res = await axios.get('/api/trips/guide');
-                setTrips(res.data);
+        const res = await axios.get("/api/trips/guide", {
+          headers: {
+            Authorization: `Bearer ${window.userToken}`,
+          },
+        });
+        setTrips(res.data);
       } catch (err) {
         console.error("Error fetching trips:", err);
         setError("ไม่สามารถโหลดข้อมูลทริปได้");
@@ -45,6 +52,40 @@ export default function AllTripsForGuide() {
     } catch (err) {
       console.error("Error joining trip:", err);
       setError(err.response?.data?.message || "เกิดข้อผิดพลาด");
+    } finally {
+      setJoining(null);
+    }
+  };
+
+  const handleOfferPrice = async (tripId) => {
+    const priceStr = prompt("กรุณาใส่ราคาที่ต้องการเสนอ (บาท):");
+    if (priceStr === null) return; // ยกเลิก
+    const price = parseFloat(priceStr);
+    if (isNaN(price) || price <= 0) {
+      alert("กรุณาใส่ราคาที่ถูกต้อง (ตัวเลขมากกว่า 0)");
+      return;
+    }
+
+    setJoining(tripId);
+    setError(null);
+
+    try {
+      await axios.post(
+        `/api/trip-guides`,
+        {
+          trip_id: tripId,
+          price: price,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${window.userToken}`,
+          },
+        }
+      );
+      alert("เสนอราคาเรียบร้อย รอการอนุมัติจากเจ้าของทริป");
+    } catch (err) {
+      console.error("Error offering price:", err);
+      setError(err.response?.data?.message || "เกิดข้อผิดพลาดในการเสนอราคา");
     } finally {
       setJoining(null);
     }
@@ -92,11 +133,20 @@ export default function AllTripsForGuide() {
               >
                 ดูรายละเอียด
               </button>
+
               <button
                 onClick={() => handleJoinTrip(trip.id)}
                 disabled={joining === trip.id}
               >
                 {joining === trip.id ? "กำลังเข้าร่วม..." : "Join Trip"}
+              </button>
+
+              <button
+                onClick={() => handleOfferPrice(trip.id)}
+                disabled={joining === trip.id}
+                style={{ marginLeft: "10px" }}
+              >
+                {joining === trip.id ? "กำลังส่งราคา..." : "เสนอราคา"}
               </button>
             </div>
           ))}
@@ -105,8 +155,6 @@ export default function AllTripsForGuide() {
     </div>
   );
 }
-
-
 const container = document.getElementById("all_trip_for_guide");
 const root = createRoot(container);
 
@@ -114,7 +162,7 @@ root.render(
   <BrowserRouter>
     <Routes>
       <Route path="/all_trip_for_guide" element={<AllTripsForGuide />} />
-      {/* <Route path="/trip/:tripId" element={<TripDetail />} /> */}
+      {/* เพิ่ม route อื่น ๆ ตามต้องการ */}
     </Routes>
   </BrowserRouter>
 );
