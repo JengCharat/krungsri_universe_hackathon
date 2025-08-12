@@ -122,9 +122,13 @@ Route::get('/all_chat', function () {
 
 
 Route::get('/all_trip_for_guide', function () {
+     $user = Auth::user();
     if (!Auth::check()) {
         return redirect('/login'); // หรือจะ return 403 ก็ได้
     }
+            if ($user->role !== 'guide') {
+            abort(403, 'คุณไม่มีสิทธิเข้าถึงหน้านี้');
+            }
 
     $token = Auth::user()->createToken('chat-token')->plainTextToken;
 
