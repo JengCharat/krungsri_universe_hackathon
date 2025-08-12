@@ -5,22 +5,32 @@ import axios from "axios";
 export default function MyTripDetail() {
   const { tripId } = useParams();
   const navigate = useNavigate();
+
   const [trip, setTrip] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
+  // ตั้งค่า Authorization header สำหรับทุก request
+  axios.defaults.headers.common['Authorization'] = `Bearer ${window.userToken}`;
+
   useEffect(() => {
     async function fetchTrip() {
       try {
-        const res = await axios.get(`/api/my-trips/${tripId}`, {
-          headers: {
-            Authorization: `Bearer ${window.userToken}`,
-          },
-        });
-        setTrip(res.data);
+        const res = await axios.get(`/api/my-trips/${tripId}`);
+        const data = res.data;
+
+        // แปลง trip_guides (snake_case) เป็น tripGuides (camelCase) เพื่อสะดวกใช้ใน React
+        if (data.trip_guides) {
+          data.tripGuides = data.trip_guides;
+          delete data.trip_guides;
+        }
+
+        setTrip(data);
       } catch (err) {
         console.error("Error fetching trip:", err);
-        setError("ไม่สามารถโหลดข้อมูลทริปได้");
+        setError(
+          err.response?.data?.message || "ไม่สามารถโหลดข้อมูลทริปได้"
+        );
       } finally {
         setLoading(false);
       }
@@ -44,21 +54,24 @@ export default function MyTripDetail() {
       <p>
         <strong>จำนวนคนที่ต้องการ:</strong> {trip.max_people}
       </p>
-      <p>
-        <strong>สถานที่ท่องเที่ยว:</strong>
-      </p>
+
+      <p><strong>สถานที่ท่องเที่ยว:</strong></p>
       <ul>
-        {trip.tourist_attractions?.map((attraction) => (
+        {trip.touristAttractions?.map((attraction) => (
           <li key={attraction.id}>
-            <div>คำอธิบาย: {attraction.description}</div>
-            <div>เวลาเปิด: {attraction.open_time}</div>
+            <div>คำอธิบาย: {attraction.description || "-"}</div>
+            <div>เวลาเปิด: {attraction.open_time || "-"}</div>
           </li>
         ))}
       </ul>
 
       <h3>รายการไกด์ที่เสนอราคา</h3>
-      {trip.trip_guides && trip.trip_guides.length > 0 ? (
-        <table border="1" cellPadding="5" style={{ borderCollapse: "collapse" }}>
+      {trip.tripGuides && trip.tripGuides.length > 0 ? (
+        <table
+          border="1"
+          cellPadding="5"
+          style={{ borderCollapse: "collapse", width: "100%" }}
+        >
           <thead>
             <tr>
               <th>ชื่อไกด์</th>
@@ -68,7 +81,7 @@ export default function MyTripDetail() {
             </tr>
           </thead>
           <tbody>
-            {trip.trip_guides.map(({ id, guide, price, status }) => (
+            {trip.tripGuides.map(({ id, guide, price, status }) => (
               <tr key={id}>
                 <td>{guide?.name || "-"}</td>
                 <td>{guide?.email || "-"}</td>

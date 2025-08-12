@@ -32,4 +32,19 @@ class Trip extends Model
 
             return $this->belongsToMany(TouristAttraction::class, 'trip_tourist_attraction');
         }
+
+            public function guide()
+                {
+                    return $this->belongsTo(User::class, 'guide_id');
+                }
+
+                // ความสัมพันธ์กับ Trip (ถ้าต้องการ)
+                public function trip()
+                {
+                    return $this->belongsTo(Trip::class);
+                }
+             public function tripGuides()
+                {
+                    return $this->hasMany(TripGuide::class);
+                }
 }

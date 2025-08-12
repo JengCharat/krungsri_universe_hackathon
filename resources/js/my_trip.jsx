@@ -1,30 +1,34 @@
+// MyTrips.jsx
 import React, { useEffect, useState } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { createRoot } from "react-dom/client";
-import TripDetail from "./components/TripDetail";
-
+import { BrowserRouter } from "react-router-dom";
+import { Routes } from "react-router-dom";
+import { Route } from "react-router-dom";
+import MyTripDetail from "./components/MyTripDetail";
 export default function MyTrips() {
   const [trips, setTrips] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [joining, setJoining] = useState(null); // เก็บ id trip ที่กำลัง join
+  const [joining, setJoining] = useState(null);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  // ดึงข้อมูล trip ของ user ที่ล็อกอินอยู่
+  // ตั้งค่า Authorization header สำหรับทุก request (ถ้าต้องการ)
+  axios.defaults.headers.common['Authorization'] = `Bearer ${window.userToken}`;
+
   useEffect(() => {
     async function fetchTrips() {
       try {
-        const res = await axios.get("/api/my-trips", {
-          headers: {
-            Authorization: `Bearer ${window.userToken}`,
-          },
-        });
+        const res = await axios.get("/api/my-trips");
         setTrips(res.data);
       } catch (err) {
         console.error("Error fetching trips:", err);
-        setError("ไม่สามารถโหลดข้อมูลทริปของคุณได้");
+        setError(
+          err.response && err.response.data && err.response.data.message
+            ? err.response.data.message
+            : "ไม่สามารถโหลดข้อมูลทริปของคุณได้"
+        );
       } finally {
         setLoading(false);
       }
@@ -32,24 +36,19 @@ export default function MyTrips() {
     fetchTrips();
   }, []);
 
-  // ฟังก์ชันกด join trip
   const handleJoinTrip = async (tripId) => {
     setJoining(tripId);
     setError(null);
     try {
-      await axios.post(
-        `/api/trips/${tripId}/join`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${window.userToken}`,
-          },
-        }
-      );
+      await axios.post(`/api/trips/${tripId}/join`, {});
       alert("เข้าร่วมทริปสำเร็จ!");
     } catch (err) {
       console.error("Error joining trip:", err);
-      setError(err.response?.data?.message || "เกิดข้อผิดพลาด");
+      setError(
+        err.response && err.response.data && err.response.data.message
+          ? err.response.data.message
+          : "เกิดข้อผิดพลาด"
+      );
     } finally {
       setJoining(null);
     }
@@ -86,7 +85,7 @@ export default function MyTrips() {
               </p>
 
               <button
-                onClick={() => navigate(`/trip/${trip.id}`)}
+                onClick={() => navigate(`/my-trips/${trip.id}`)}
                 style={{ marginRight: "10px" }}
               >
                 ดูรายละเอียด
@@ -104,7 +103,6 @@ export default function MyTrips() {
     </div>
   );
 }
-
 const container = document.getElementById("my_trips");
 const root = createRoot(container);
 
@@ -112,7 +110,7 @@ root.render(
   <BrowserRouter>
     <Routes>
       <Route path="/my-trips" element={<MyTrips />} />
-      <Route path="/trip/:tripId" element={<TripDetail />} />
+      <Route path="/my-trips/:tripId" element={<MyTripDetail />} />
     </Routes>
   </BrowserRouter>
 );

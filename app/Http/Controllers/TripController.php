@@ -12,6 +12,22 @@ use Illuminate\Support\Facades\DB;
 class TripController extends Controller
 {
     // ดึงรายการทริปทั้งหมด พร้อม tourist attractions ที่เกี่ยวข้อง
+                    public function myTripDetail($id, Request $request)
+                    {
+                        $userId = $request->user()->id;
+
+                        // ดึงทริปที่สร้างโดย user ที่ล็อกอิน พร้อมความสัมพันธ์ touristAttractions และ trip_guides กับ guide
+                        $trip = Trip::with(['touristAttractions', 'tripGuides.guide'])
+                            ->where('id', $id)
+                            ->where('created_by', $userId)
+                            ->first();
+ \Log::info('Trip Detail:', $trip ? $trip->toArray() : []);
+                        if (!$trip) {
+                            return response()->json(['message' => 'ไม่พบข้อมูลทริป หรือคุณไม่มีสิทธิ์เข้าถึง'], 404);
+                        }
+
+                        return response()->json($trip);
+                    }
 
             public function getTripsForGuide()
             {

@@ -71,3 +71,6 @@ Route::middleware('auth:sanctum')->get('/my-trips', [TripController::class, 'myT
 
 
 Route::post('/trip-guides', [TripController::class, 'offerPrice'])->middleware('auth:sanctum');
+
+Route::middleware('auth:sanctum')->get('/my-trips/{id}', [TripController::class, 'myTripDetail']);
+

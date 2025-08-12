@@ -29,4 +29,8 @@ class TripGuide extends Model
     {
         return $this->belongsTo(User::class, 'guide_id');
     }
+    public function tripGuides()
+        {
+            return $this->hasMany(TripGuide::class);
+        }
 }
