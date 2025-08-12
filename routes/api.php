@@ -56,6 +56,8 @@ Route::get('/tourist-attractions/{id}', function ($id) {
 //
 //
 //
+Route::get('/trips/guide', [TripController::class, 'getTripsForGuide']);
+//
 Route::get('/trips', [TripController::class, 'index']); // ดึง list
 Route::post('/trips', [TripController::class, 'store']);      // สร้างทริปใหม่
 Route::get('/trips/{id}', [TripController::class, 'show']); // ดู detail

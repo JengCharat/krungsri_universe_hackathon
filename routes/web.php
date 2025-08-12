@@ -118,3 +118,15 @@ Route::get('/all_chat', function () {
 
     return view('all_chat', compact('token', 'chatGroupId'));
 })->middleware('auth');
+
+
+
+Route::get('/all_trip_for_guide', function () {
+    if (!Auth::check()) {
+        return redirect('/login'); // หรือจะ return 403 ก็ได้
+    }
+
+    $token = Auth::user()->createToken('chat-token')->plainTextToken;
+
+    return view('all_trip_for_guide', compact('token'));
+})->middleware('auth');

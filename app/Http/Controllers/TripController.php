@@ -10,6 +10,18 @@ use Illuminate\Support\Facades\DB;
 class TripController extends Controller
 {
     // ดึงรายการทริปทั้งหมด พร้อม tourist attractions ที่เกี่ยวข้อง
+
+            public function getTripsForGuide()
+            {
+                $trips = Trip::with('touristAttractions')
+                    ->where(function ($query) {
+                        $query->where('needs_guide', true)
+                              ->orWhere('needs_driver', true);
+                    })
+                    ->get();
+
+                return response()->json($trips);
+            }
     public function index()
     {
         $trips = Trip::with('touristAttractions')->get();
