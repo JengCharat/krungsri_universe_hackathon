@@ -68,7 +68,7 @@ function ChatPage({ userToken }) {
 
   useEffect(() => {
     fetchMessages();
-    const interval = setInterval(fetchMessages, 3000);
+    const interval = setInterval(fetchMessages, 10);
     return () => clearInterval(interval);
   }, [chatGroupId, userToken]);
 
