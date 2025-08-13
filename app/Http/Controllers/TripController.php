@@ -304,7 +304,7 @@ class TripController extends Controller
                     $trip->guides()->updateExistingPivot($user->id, ['confirmed_end' => true]);
                 }
 
-                // ✅ Reload ความสัมพันธ์หลังจาก update pivot
+                // ✅ โหลดข้อมูล pivot ใหม่เพื่อให้ตรวจสอบได้ถูกต้อง
                 $trip->load(['users', 'guides']);
 
                 $allParticipantsConfirmed = $trip->users->every(fn($u) => $u->pivot->confirmed_end);
@@ -313,7 +313,12 @@ class TripController extends Controller
                 if ($allParticipantsConfirmed && $allGuidesConfirmed) {
                     $trip->status = 'ended';
                     $trip->save();
-                    return response()->json(['message' => 'ทุกคนยืนยันแล้ว ทริปจบเรียบร้อย']);
+
+                    // ✅ ถ้าคนนี้เป็นคนสุดท้ายก็ส่งข้อความจบทริปทันที
+                    return response()->json([
+                        'message' => 'ทุกคนยืนยันแล้ว ทริปจบเรียบร้อย',
+                        'trip_status' => $trip->status
+                    ]);
                 }
 
                 return response()->json(['message' => 'คุณได้ยืนยันจบทริปแล้ว รอคนอื่นยืนยัน']);

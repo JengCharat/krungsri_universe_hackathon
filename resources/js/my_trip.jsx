@@ -1,4 +1,4 @@
-// resources/js/my_trip.jsx
+// resources/js/my_trip.jsxmytr
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { createRoot } from "react-dom/client";
@@ -49,18 +49,19 @@ export default function MyTrips() {
   };
 
   // ยืนยันจบทริป
-  const handleEndTrip = async (tripId) => {
-    if (!window.confirm("ยืนยันการจบทริปนี้หรือไม่?")) return;
-    try {
-      await axios.post(`/api/trips/${tripId}/confirm-end`);
-      alert("คุณได้ยืนยันจบทริปแล้ว รอคนอื่นยืนยัน");
-      const res = await axios.get("/api/my-trips");
-      setTrips(res.data);
-    } catch (err) {
-      console.error("Error confirming end:", err);
-      alert(err.response?.data?.message || "เกิดข้อผิดพลาด");
-    }
-  };
+        // ยืนยันจบทริป
+        const handleEndTrip = async (tripId) => {
+          if (!window.confirm("ยืนยันการจบทริปนี้หรือไม่?")) return;
+          try {
+            const res = await axios.post(`/api/trips/${tripId}/confirm-end`);
+            alert(res.data?.message || "คุณได้ยืนยันจบทริปแล้ว");
+            const tripsRes = await axios.get("/api/my-trips");
+            setTrips(tripsRes.data);
+          } catch (err) {
+            console.error("Error confirming end:", err);
+            alert(err.response?.data?.message || "เกิดข้อผิดพลาด");
+          }
+        };
 
   if (loading) return <p>กำลังโหลดข้อมูล...</p>;
   if (error) return <p style={{ color: "red" }}>{error}</p>;
