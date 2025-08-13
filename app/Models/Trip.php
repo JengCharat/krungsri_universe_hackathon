@@ -12,16 +12,17 @@ class Trip extends Model
         'name',
         'description',
         'start_date',
+        'status',
         'end_date',
         'conditions',   // เพิ่มตรงนี้
         'max_people' ,   // เพิ่มตรงนี้
 'needs_guide', 'needs_driver'
     ];
 
-    public function users()
-    {
-        return $this->belongsToMany(User::class, 'trip_user')->withTimestamps();
-    }
+    // public function users()
+    // {
+    //     return $this->belongsToMany(User::class, 'trip_user')->withTimestamps();
+    // }
 
     public function attraction()
     {
@@ -53,5 +54,11 @@ class Trip extends Model
              public function tripGuides()
                 {
                     return $this->hasMany(TripGuide::class);
+                }
+            public function users()
+                {
+                    return $this->belongsToMany(User::class, 'trip_user')
+                                ->withPivot('confirmed_end')
+                                ->withTimestamps();
                 }
 }

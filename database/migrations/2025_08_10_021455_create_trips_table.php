@@ -16,8 +16,9 @@ return new class extends Migration {
             $table->text('conditions')->nullable();
             $table->integer('max_people')->default(1);
             $table->unsignedInteger('current_people')->default(0);
-            $table->boolean('needs_guide')->default(false);   // ✅ ต้องการไกด์
-            $table->boolean('needs_driver')->default(false);  // ✅ ต้องการคนขับ
+            $table->string('status')->default('ongoing'); // ongoing, ended
+            $table->boolean('needs_guide')->default(false);   // ต้องการไกด์
+            $table->boolean('needs_driver')->default(false);  // ต้องการคนขับ
             $table->timestamps();
         });
 
@@ -30,12 +31,13 @@ return new class extends Migration {
         });
 
         // ตาราง trip_user
-        // Schema::create('trip_user', function (Blueprint $table) {
-        //     $table->id();
-        //     $table->foreignId('trip_id')->constrained()->onDelete('cascade');
-        //     $table->foreignId('user_id')->constrained()->onDelete('cascade');
-        //     $table->timestamps();
-        // });
+        Schema::create('trip_user', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('trip_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
+            $table->boolean('confirmed_end')->default(false); // ยืนยันจบทริปหรือยัง
+            $table->timestamps();
+        });
 
         // ตาราง trip_guides
         Schema::create('trip_guides', function (Blueprint $table) {
@@ -44,6 +46,7 @@ return new class extends Migration {
             $table->foreignId('guide_id')->constrained('users')->onDelete('cascade');
             $table->decimal('price', 10, 2)->nullable();
             $table->enum('status', ['pending', 'selected', 'rejected'])->default('pending');
+            $table->boolean('confirmed_end')->default(false); // ยืนยันจบทริปหรือยัง
             $table->timestamps();
         });
     }

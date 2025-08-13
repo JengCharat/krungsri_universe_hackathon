@@ -247,4 +247,69 @@ class TripController extends Controller
 
         return response()->json(['message' => 'เข้าร่วมทริปสำเร็จและเข้ากลุ่มแชทแล้ว']);
     }
+
+            // public function endTrip(Request $request, Trip $trip)
+            // {
+            //     $user = $request->user();
+            //
+            //     // ตรวจสอบสิทธิ์: เจ้าของทริปเท่านั้นที่กดจบทริปจริงได้
+            //     if ($trip->created_by !== $user->id) {
+            //         return response()->json(['message' => 'คุณไม่มีสิทธิ์จบทริปนี้'], 403);
+            //     }
+            //
+            //     if ($trip->status === 'ended') {
+            //         return response()->json(['message' => 'ทริปนี้ได้ถูกจบไปแล้ว'], 400);
+            //     }
+            //
+            //     // เช็คว่าทุกคน confirm แล้วหรือยัง
+            //     $allUsersConfirmed = $trip->users()->wherePivot('confirmed_end', false)->count() === 0;
+            //     $allGuidesConfirmed = $trip->guides()->wherePivot('confirmed_end', false)->count() === 0;
+            //
+            //     if (!($allUsersConfirmed && $allGuidesConfirmed)) {
+            //         return response()->json(['message' => 'ยังมีสมาชิกหรือไกด์ที่ยังไม่ได้ยืนยันการจบทริป'], 400);
+            //     }
+            //
+            //     $trip->status = 'ended';
+            //     $trip->save();
+            //
+            //     return response()->json(['message' => 'จบทริปเรียบร้อยแล้ว']);
+            // }
+            public function confirmEndTrip(Request $request, Trip $trip)
+            {
+                $user = $request->user();
+                if (!$user) {
+                    return response()->json(['message' => 'Unauthorized'], 401);
+                }
+
+                $trip->load(['users', 'guides']); // โหลด pivot data
+
+                // ตรวจสอบว่าผู้ใช้เป็นสมาชิกทริปหรือไกด์
+                $isParticipant = $trip->users->contains($user->id);
+                $isGuide = $trip->guides->contains($user->id);
+
+                if (!($isParticipant || $isGuide || $trip->created_by === $user->id)) {
+                    return response()->json(['message' => 'คุณไม่ได้อยู่ในทริปนี้'], 403);
+                }
+
+                // บันทึกว่าผู้ใช้ยืนยันจบทริป
+                if ($isParticipant) {
+                    $trip->users()->updateExistingPivot($user->id, ['confirmed_end' => true]);
+                }
+
+                if ($isGuide) {
+                    $trip->guides()->updateExistingPivot($user->id, ['confirmed_end' => true]);
+                }
+
+                // ตรวจสอบว่าผู้เข้าร่วมทั้งหมดและไกด์ยืนยันครบ
+                $allParticipantsConfirmed = $trip->users->every(fn($u) => $u->pivot->confirmed_end);
+                $allGuidesConfirmed = $trip->guides->every(fn($g) => $g->pivot->confirmed_end);
+
+                if ($allParticipantsConfirmed && $allGuidesConfirmed) {
+                    $trip->status = 'ended';
+                    $trip->save();
+                    return response()->json(['message' => 'ทุกคนยืนยันแล้ว ทริปจบเรียบร้อย']);
+                }
+
+                return response()->json(['message' => 'คุณได้ยืนยันจบทริปแล้ว รอคนอื่นยืนยัน']);
+            }
 }

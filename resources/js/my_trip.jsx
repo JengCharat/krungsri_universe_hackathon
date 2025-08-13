@@ -1,12 +1,10 @@
-// MyTrips.jsx
+// resources/js/my_trip.jsx
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 import { createRoot } from "react-dom/client";
-import { BrowserRouter } from "react-router-dom";
-import { Routes } from "react-router-dom";
-import { Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
 import MyTripDetail from "./components/MyTripDetail";
+
 export default function MyTrips() {
   const [trips, setTrips] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -14,9 +12,10 @@ export default function MyTrips() {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  // ตั้งค่า Authorization header สำหรับทุก request (ถ้าต้องการ)
-  axios.defaults.headers.common['Authorization'] = `Bearer ${window.userToken}`;
+  // ตั้งค่า Authorization header สำหรับทุก request
+  axios.defaults.headers.common["Authorization"] = `Bearer ${window.userToken}`;
 
+  // โหลดข้อมูลทริป
   useEffect(() => {
     async function fetchTrips() {
       try {
@@ -24,11 +23,7 @@ export default function MyTrips() {
         setTrips(res.data);
       } catch (err) {
         console.error("Error fetching trips:", err);
-        setError(
-          err.response && err.response.data && err.response.data.message
-            ? err.response.data.message
-            : "ไม่สามารถโหลดข้อมูลทริปของคุณได้"
-        );
+        setError(err.response?.data?.message || "ไม่สามารถโหลดข้อมูลทริปของคุณได้");
       } finally {
         setLoading(false);
       }
@@ -36,21 +31,34 @@ export default function MyTrips() {
     fetchTrips();
   }, []);
 
+  // เข้าร่วมทริป
   const handleJoinTrip = async (tripId) => {
     setJoining(tripId);
     setError(null);
     try {
-      await axios.post(`/api/trips/${tripId}/join`, {});
+      await axios.post(`/api/trips/${tripId}/join`);
       alert("เข้าร่วมทริปสำเร็จ!");
+      const res = await axios.get("/api/my-trips");
+      setTrips(res.data);
     } catch (err) {
       console.error("Error joining trip:", err);
-      setError(
-        err.response && err.response.data && err.response.data.message
-          ? err.response.data.message
-          : "เกิดข้อผิดพลาด"
-      );
+      setError(err.response?.data?.message || "เกิดข้อผิดพลาด");
     } finally {
       setJoining(null);
+    }
+  };
+
+  // ยืนยันจบทริป
+  const handleEndTrip = async (tripId) => {
+    if (!window.confirm("ยืนยันการจบทริปนี้หรือไม่?")) return;
+    try {
+      await axios.post(`/api/trips/${tripId}/confirm-end`);
+      alert("คุณได้ยืนยันจบทริปแล้ว รอคนอื่นยืนยัน");
+      const res = await axios.get("/api/my-trips");
+      setTrips(res.data);
+    } catch (err) {
+      console.error("Error confirming end:", err);
+      alert(err.response?.data?.message || "เกิดข้อผิดพลาด");
     }
   };
 
@@ -59,9 +67,9 @@ export default function MyTrips() {
 
   return (
     <div style={{ padding: "20px" }}>
-      <h2>ทริปที่ฉันสร้าง</h2>
+      <h2>ทริปของฉัน</h2>
       {trips.length === 0 ? (
-        <p>คุณยังไม่ได้สร้างทริปใดๆ</p>
+        <p>คุณยังไม่ได้สร้างหรือเข้าร่วมทริปใดๆ</p>
       ) : (
         <div style={{ display: "grid", gap: "15px" }}>
           {trips.map((trip) => (
@@ -74,15 +82,9 @@ export default function MyTrips() {
               }}
             >
               <h3>{trip.name}</h3>
-              <p>
-                <strong>วันที่เริ่ม:</strong> {trip.start_date || "ไม่ระบุ"}
-              </p>
-              <p>
-                <strong>เงื่อนไข:</strong> {trip.conditions || "-"}
-              </p>
-              <p>
-                <strong>จำนวนคนที่ต้องการ:</strong> {trip.max_people}
-              </p>
+              <p><strong>วันที่เริ่ม:</strong> {trip.start_date || "-"}</p>
+              <p><strong>เงื่อนไข:</strong> {trip.conditions || "-"}</p>
+              <p><strong>จำนวนคนที่ต้องการ:</strong> {trip.max_people}</p>
 
               <button
                 onClick={() => navigate(`/my-trips/${trip.id}`)}
@@ -90,11 +92,20 @@ export default function MyTrips() {
               >
                 ดูรายละเอียด
               </button>
+
               <button
                 onClick={() => handleJoinTrip(trip.id)}
                 disabled={joining === trip.id}
+                style={{ marginRight: "10px" }}
               >
-                {joining === trip.id ? "กำลังเข้าร่วม..." : "Join Trip"}
+                {joining === trip.id ? "กำลังเข้าร่วม..." : "เข้าร่วมทริป"}
+              </button>
+
+              <button
+                onClick={() => handleEndTrip(trip.id)}
+                style={{ backgroundColor: "#e74c3c", color: "white" }}
+              >
+                ยืนยันจบทริป
               </button>
             </div>
           ))}
@@ -103,9 +114,10 @@ export default function MyTrips() {
     </div>
   );
 }
+
+// Render พร้อม Router
 const container = document.getElementById("my_trips");
 const root = createRoot(container);
-
 root.render(
   <BrowserRouter>
     <Routes>
