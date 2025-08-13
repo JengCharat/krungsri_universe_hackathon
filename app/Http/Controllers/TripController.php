@@ -15,7 +15,7 @@ class TripController extends Controller
             {
                 $userId = $request->user()->id;
 
-                // ตรวจสอบว่าทริปนี้เป็นของ user ที่ล็อกอิน
+                // ตรวจสอบว่าเจ้าของทริป
                 $trip = Trip::where('id', $tripId)
                             ->where('created_by', $userId)
                             ->first();
@@ -24,17 +24,13 @@ class TripController extends Controller
                     return response()->json(['message' => 'ไม่พบข้อมูลทริปหรือไม่มีสิทธิ์'], 404);
                 }
 
-                // อัปเดตสถานะ trip_guides ทั้งหมดของทริปเป็น rejected
+                // อัปเดตสถานะไกด์ทั้งหมดเป็น rejected
                 TripGuide::where('trip_id', $tripId)->update(['status' => 'rejected']);
 
-                // อัปเดตสถานะไกด์ที่ถูกเลือกเป็น selected
-                TripGuide::where('trip_id', $tripId)
-                         ->where('guide_id', $guideId)
-                         ->update(['status' => 'selected']);
-
-                // เช็คว่ามีไกด์นี้ในความสัมพันธ์ guides ของ trip หรือยัง (สมมติว่าใน Trip model มีความสัมพันธ์ guides())
-                if (!$trip->guides()->where('guide_id', $guideId)->exists()) {
-                    // ผูกไกด์เข้าทริป (ไม่เพิ่ม current_people)
+                // อัปเดตไกด์ที่ถูกเลือกเป็น selected หรือ attach ถ้ายังไม่มี
+                if ($trip->guides()->where('guide_id', $guideId)->exists()) {
+                    $trip->guides()->updateExistingPivot($guideId, ['status' => 'selected']);
+                } else {
                     $trip->guides()->attach($guideId, [
                         'status' => 'selected',
                         'created_at' => now(),
@@ -42,7 +38,7 @@ class TripController extends Controller
                     ]);
                 }
 
-                // หา chat group ของ trip นี้ ถ้าไม่มีให้สร้าง
+                // หา chat group ของ trip หรือสร้างใหม่
                 $chatGroup = \App\Models\ChatGroup::firstOrCreate(
                     ['name' => 'Chat Group for Trip: ' . $trip->name],
                     [
@@ -51,7 +47,7 @@ class TripController extends Controller
                     ]
                 );
 
-                // เพิ่มไกด์เข้า chat group (ถ้ายังไม่มี)
+                // เพิ่มไกด์เข้า chat group ถ้ายังไม่มี
                 $chatGroup->users()->syncWithoutDetaching([
                     $guideId => [
                         'role' => 'guide',
@@ -180,21 +176,30 @@ class TripController extends Controller
     }
 
 // TripController.php
-            public function myTrips(Request $request)
-            {
-                $userId = $request->user()->id;
+                public function myTrips(Request $request)
+                    {
+                        $userId = $request->user()->id;
 
-                $trips = Trip::with('touristAttractions')
-                    ->where(function ($query) use ($userId) {
-                        $query->where('created_by', $userId)
-                            ->orWhereHas('users', function ($q) use ($userId) {
-                                $q->where('user_id', $userId);
-                            });
-                    })
-                    ->get();
+                        // ดึงทริปที่ผู้ใช้สร้างหรือเข้าร่วม พร้อมโหลดความสัมพันธ์
+                        $trips = Trip::with([
+                                'touristAttractions',         // ข้อมูลสถานที่ท่องเที่ยว
+                                'users',                      // สมาชิกทริป
+                                'guides'                      // ไกด์
+                            ])
+                            ->where(function ($query) use ($userId) {
+                                $query->where('created_by', $userId)
+                                      ->orWhereHas('users', function ($q) use ($userId) {
+                                          $q->where('user_id', $userId);
+                                      })
+                                      ->orWhereHas('guides', function ($q) use ($userId) {
+                                          $q->where('guide_id', $userId);
+                                      });
+                            })
+                            ->get();
 
-                return response()->json($trips);
-            }
+                        // ส่งข้อมูลทริปพร้อมความสัมพันธ์ให้ frontend
+                        return response()->json($trips);
+                    }
 
 
 
@@ -281,7 +286,8 @@ class TripController extends Controller
                     return response()->json(['message' => 'Unauthorized'], 401);
                 }
 
-                $trip->load(['users', 'guides']); // โหลด pivot data
+                // โหลด pivot ของ users และ guides
+                $trip->load(['users', 'guides']);
 
                 // ตรวจสอบว่าผู้ใช้เป็นสมาชิกทริปหรือไกด์
                 $isParticipant = $trip->users->contains($user->id);
@@ -300,9 +306,11 @@ class TripController extends Controller
                     $trip->guides()->updateExistingPivot($user->id, ['confirmed_end' => true]);
                 }
 
-                // ตรวจสอบว่าผู้เข้าร่วมทั้งหมดและไกด์ยืนยันครบ
+                // ตรวจสอบว่าผู้เข้าร่วมทั้งหมดยืนยันครบ
                 $allParticipantsConfirmed = $trip->users->every(fn($u) => $u->pivot->confirmed_end);
-                $allGuidesConfirmed = $trip->guides->every(fn($g) => $g->pivot->confirmed_end);
+
+                // ถ้ามีไกด์ ให้ตรวจสอบไกด์ยืนยันครบ ถ้าไม่มีไกด์ ถือว่า ok
+                $allGuidesConfirmed = $trip->guides->isEmpty() || $trip->guides->every(fn($g) => $g->pivot->confirmed_end);
 
                 if ($allParticipantsConfirmed && $allGuidesConfirmed) {
                     $trip->status = 'ended';
