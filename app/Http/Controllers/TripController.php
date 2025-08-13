@@ -180,15 +180,21 @@ class TripController extends Controller
     }
 
 // TripController.php
-        public function myTrips(Request $request) {
-            $userId = $request->user()->id;
+            public function myTrips(Request $request)
+            {
+                $userId = $request->user()->id;
 
-            $trips = Trip::with('touristAttractions')
-                ->where('created_by', $userId)
-                ->get();
+                $trips = Trip::with('touristAttractions')
+                    ->where(function ($query) use ($userId) {
+                        $query->where('created_by', $userId)
+                            ->orWhereHas('users', function ($q) use ($userId) {
+                                $q->where('user_id', $userId);
+                            });
+                    })
+                    ->get();
 
-            return response()->json($trips);
-        }
+                return response()->json($trips);
+            }
 
 
 
