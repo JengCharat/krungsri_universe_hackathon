@@ -11,6 +11,27 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 class TripController extends Controller
 {
+            public function chooseGuide($tripId, $guideId, Request $request)
+            {
+                $userId = $request->user()->id;
+
+                // ตรวจสอบว่าทริปนี้เป็นของ user ที่ล็อกอิน
+                $trip = Trip::where('id', $tripId)
+                            ->where('created_by', $userId)
+                            ->first();
+
+                if (!$trip) {
+                    return response()->json(['message' => 'ไม่พบข้อมูลทริปหรือไม่มีสิทธิ์'], 404);
+                }
+
+                // อัปเดตสถานะ trip_guides (เลือกไกด์คนนี้เป็น accepted)
+                TripGuide::where('trip_id', $tripId)->update(['status' => 'rejected']);
+                TripGuide::where('trip_id', $tripId)
+                         ->where('guide_id', $guideId)
+                         ->update(['status' => 'selected']);
+
+                return response()->json(['message' => 'เลือกไกด์เรียบร้อย']);
+            }
     // ดึงรายการทริปทั้งหมด พร้อม tourist attractions ที่เกี่ยวข้อง
                     public function myTripDetail($id, Request $request)
                     {
