@@ -38,6 +38,13 @@ class Trip extends Model
                     return $this->belongsTo(User::class, 'guide_id');
                 }
 
+                public function guides()
+                {
+                    return $this->belongsToMany(User::class, 'trip_guides', 'trip_id', 'guide_id')
+                                ->withPivot(['price', 'status'])
+                                ->withTimestamps();
+                }
+
                 // ความสัมพันธ์กับ Trip (ถ้าต้องการ)
                 public function trip()
                 {

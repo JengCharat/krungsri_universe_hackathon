@@ -24,13 +24,44 @@ class TripController extends Controller
                     return response()->json(['message' => 'ไม่พบข้อมูลทริปหรือไม่มีสิทธิ์'], 404);
                 }
 
-                // อัปเดตสถานะ trip_guides (เลือกไกด์คนนี้เป็น accepted)
+                // อัปเดตสถานะ trip_guides ทั้งหมดของทริปเป็น rejected
                 TripGuide::where('trip_id', $tripId)->update(['status' => 'rejected']);
+
+                // อัปเดตสถานะไกด์ที่ถูกเลือกเป็น selected
                 TripGuide::where('trip_id', $tripId)
                          ->where('guide_id', $guideId)
                          ->update(['status' => 'selected']);
 
-                return response()->json(['message' => 'เลือกไกด์เรียบร้อย']);
+                // เช็คว่ามีไกด์นี้ในความสัมพันธ์ guides ของ trip หรือยัง (สมมติว่าใน Trip model มีความสัมพันธ์ guides())
+                if (!$trip->guides()->where('guide_id', $guideId)->exists()) {
+                    // ผูกไกด์เข้าทริป (ไม่เพิ่ม current_people)
+                    $trip->guides()->attach($guideId, [
+                        'status' => 'selected',
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ]);
+                }
+
+                // หา chat group ของ trip นี้ ถ้าไม่มีให้สร้าง
+                $chatGroup = \App\Models\ChatGroup::firstOrCreate(
+                    ['name' => 'Chat Group for Trip: ' . $trip->name],
+                    [
+                        'description' => 'กลุ่มแชทของทริป ' . $trip->name,
+                        'owner_id' => $trip->created_by ?? $userId
+                    ]
+                );
+
+                // เพิ่มไกด์เข้า chat group (ถ้ายังไม่มี)
+                $chatGroup->users()->syncWithoutDetaching([
+                    $guideId => [
+                        'role' => 'guide',
+                        'joined_at' => now(),
+                        'created_at' => now(),
+                        'updated_at' => now(),
+                    ],
+                ]);
+
+                return response()->json(['message' => 'เลือกไกด์เรียบร้อยและเพิ่มเข้าในทริปและกลุ่มแชทแล้ว']);
             }
     // ดึงรายการทริปทั้งหมด พร้อม tourist attractions ที่เกี่ยวข้อง
                     public function myTripDetail($id, Request $request)

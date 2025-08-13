@@ -19,7 +19,7 @@ return new class extends Migration
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
 
             // Extra Fields
-            $table->enum('role', ['owner', 'admin', 'member'])->default('member');
+            $table->enum('role', ['owner', 'admin', 'member','guide'])->default('member');
             $table->timestamp('joined_at')->useCurrent();
 
             $table->timestamps();
