@@ -62,6 +62,10 @@ export default function MyTripDetail() {
   if (error) return <p style={{ color: "red" }}>{error}</p>;
   if (!trip) return <p>ไม่พบข้อมูลทริป</p>;
 
+  // ถ้ามีไกด์ที่ถูกเลือกแล้ว ให้แสดงเฉพาะไกด์คนนั้น
+  const selectedGuide = trip.tripGuides?.find((g) => g.status === "selected");
+  const guidesToShow = selectedGuide ? [selectedGuide] : trip.tripGuides || [];
+
   return (
     <div style={{ padding: "20px" }}>
       <h2>{trip.name}</h2>
@@ -88,7 +92,7 @@ export default function MyTripDetail() {
       </ul>
 
       <h3>รายการไกด์ที่เสนอราคา</h3>
-      {trip.tripGuides && trip.tripGuides.length > 0 ? (
+      {guidesToShow.length > 0 ? (
         <table
           border="1"
           cellPadding="5"
@@ -104,19 +108,21 @@ export default function MyTripDetail() {
             </tr>
           </thead>
           <tbody>
-            {trip.tripGuides.map(({ id, guide, price, status, guide_id }) => (
+            {guidesToShow.map(({ id, guide, price, status, guide_id }) => (
               <tr key={id}>
                 <td>{guide?.name || "-"}</td>
                 <td>{guide?.email || "-"}</td>
                 <td>{price}</td>
                 <td>{status}</td>
                 <td>
-                  {status !== "accepted" ? (
+                  {status === "selected" ? (
+                    <span style={{ color: "green", fontWeight: "bold" }}>
+                      ✅ ไกด์ที่ถูกเลือก
+                    </span>
+                  ) : (
                     <button onClick={() => chooseGuide(guide_id)}>
                       เลือกไกด์คนนี้
                     </button>
-                  ) : (
-                    <span style={{ color: "green" }}>✅ เลือกแล้ว</span>
                   )}
                 </td>
               </tr>
