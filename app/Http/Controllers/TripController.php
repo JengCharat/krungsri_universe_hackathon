@@ -286,30 +286,28 @@ class TripController extends Controller
                     return response()->json(['message' => 'Unauthorized'], 401);
                 }
 
-                // โหลด pivot ของ users และ guides
                 $trip->load(['users', 'guides']);
 
-                // ตรวจสอบว่าผู้ใช้เป็นสมาชิกทริปหรือไกด์
                 $isParticipant = $trip->users->contains($user->id);
                 $isGuide = $trip->guides->contains($user->id);
+                $isOwner = $trip->created_by === $user->id;
 
-                if (!($isParticipant || $isGuide || $trip->created_by === $user->id)) {
+                if (!($isParticipant || $isGuide || $isOwner)) {
                     return response()->json(['message' => 'คุณไม่ได้อยู่ในทริปนี้'], 403);
                 }
 
-                // บันทึกว่าผู้ใช้ยืนยันจบทริป
+                // บันทึก confirm
                 if ($isParticipant) {
                     $trip->users()->updateExistingPivot($user->id, ['confirmed_end' => true]);
                 }
-
                 if ($isGuide) {
                     $trip->guides()->updateExistingPivot($user->id, ['confirmed_end' => true]);
                 }
 
-                // ตรวจสอบว่าผู้เข้าร่วมทั้งหมดยืนยันครบ
-                $allParticipantsConfirmed = $trip->users->every(fn($u) => $u->pivot->confirmed_end);
+                // ✅ Reload ความสัมพันธ์หลังจาก update pivot
+                $trip->load(['users', 'guides']);
 
-                // ถ้ามีไกด์ ให้ตรวจสอบไกด์ยืนยันครบ ถ้าไม่มีไกด์ ถือว่า ok
+                $allParticipantsConfirmed = $trip->users->every(fn($u) => $u->pivot->confirmed_end);
                 $allGuidesConfirmed = $trip->guides->isEmpty() || $trip->guides->every(fn($g) => $g->pivot->confirmed_end);
 
                 if ($allParticipantsConfirmed && $allGuidesConfirmed) {

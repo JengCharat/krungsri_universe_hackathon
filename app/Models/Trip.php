@@ -16,7 +16,7 @@ class Trip extends Model
         'end_date',
         'conditions',   // เพิ่มตรงนี้
         'max_people' ,   // เพิ่มตรงนี้
-'needs_guide', 'needs_driver'
+        'needs_guide', 'needs_driver'
     ];
 
     // public function users()
@@ -39,12 +39,12 @@ class Trip extends Model
                     return $this->belongsTo(User::class, 'guide_id');
                 }
 
-                public function guides()
-                {
-                    return $this->belongsToMany(User::class, 'trip_guides', 'trip_id', 'guide_id')
-                                ->withPivot(['price', 'status'])
-                                ->withTimestamps();
-                }
+            public function guides()
+            {
+                return $this->belongsToMany(User::class, 'trip_guides', 'trip_id', 'guide_id')
+                            ->withPivot(['price', 'status', 'confirmed_end']) // ✅ เพิ่ม confirmed_end
+                            ->withTimestamps();
+            }
 
                 // ความสัมพันธ์กับ Trip (ถ้าต้องการ)
                 public function trip()
