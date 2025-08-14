@@ -1,4 +1,3 @@
-// MyTripDetail.jsx
 import React, { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -58,82 +57,88 @@ export default function MyTripDetail() {
     }
   }
 
-  if (loading) return <p>กำลังโหลดข้อมูล...</p>;
-  if (error) return <p style={{ color: "red" }}>{error}</p>;
-  if (!trip) return <p>ไม่พบข้อมูลทริป</p>;
+  if (loading)
+    return <p className="p-5 text-lg text-center">กำลังโหลดข้อมูล...</p>;
+  if (error)
+    return <p className="p-5 text-lg text-red-600 text-center">{error}</p>;
+  if (!trip)
+    return <p className="p-5 text-lg text-center">ไม่พบข้อมูลทริป</p>;
 
-  // ถ้ามีไกด์ที่ถูกเลือกแล้ว ให้แสดงเฉพาะไกด์คนนั้น
   const selectedGuide = trip.tripGuides?.find((g) => g.status === "selected");
   const guidesToShow = selectedGuide ? [selectedGuide] : trip.tripGuides || [];
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h2>{trip.name}</h2>
-      <p>
-        <strong>วันที่เริ่ม:</strong> {trip.start_date || "ไม่ระบุ"}
-      </p>
-      <p>
-        <strong>เงื่อนไข:</strong> {trip.conditions || "-"}
-      </p>
-      <p>
-        <strong>จำนวนคนที่ต้องการ:</strong> {trip.max_people}
-      </p>
+    <div className="max-w-md mx-auto p-5 font-sans space-y-6">
+      <h2 className="text-2xl font-bold text-center">{trip.name}</h2>
 
-      <p>
-        <strong>สถานที่ท่องเที่ยว:</strong>
-      </p>
-      <ul>
-        {trip.touristAttractions?.map((attraction) => (
-          <li key={attraction.id}>
-            <div>คำอธิบาย: {attraction.description || "-"}</div>
-            <div>เวลาเปิด: {attraction.open_time || "-"}</div>
-          </li>
-        ))}
-      </ul>
+      <div className="text-lg space-y-1">
+        <p><strong>วันที่เริ่ม:</strong> {trip.start_date || "ไม่ระบุ"}</p>
+        <p><strong>เงื่อนไข:</strong> {trip.conditions || "-"}</p>
+        <p><strong>จำนวนคนที่ต้องการ:</strong> {trip.max_people}</p>
+      </div>
 
-      <h3>รายการไกด์ที่เสนอราคา</h3>
-      {guidesToShow.length > 0 ? (
-        <table
-          border="1"
-          cellPadding="5"
-          style={{ borderCollapse: "collapse", width: "100%" }}
-        >
-          <thead>
-            <tr>
-              <th>ชื่อไกด์</th>
-              <th>อีเมล</th>
-              <th>ราคาเสนอ (บาท)</th>
-              <th>สถานะ</th>
-              <th>จัดการ</th>
-            </tr>
-          </thead>
-          <tbody>
-            {guidesToShow.map(({ id, guide, price, status, guide_id }) => (
-              <tr key={id}>
-                <td>{guide?.name || "-"}</td>
-                <td>{guide?.email || "-"}</td>
-                <td>{price}</td>
-                <td>{status}</td>
-                <td>
-                  {status === "selected" ? (
-                    <span style={{ color: "green", fontWeight: "bold" }}>
-                      ✅ ไกด์ที่ถูกเลือก
-                    </span>
-                  ) : (
-                    <button onClick={() => chooseGuide(guide_id)}>
-                      เลือกไกด์คนนี้
-                    </button>
-                  )}
-                </td>
-              </tr>
+      <div>
+        <h3 className="text-xl font-semibold mb-2">สถานที่ท่องเที่ยว</h3>
+        {trip.touristAttractions && trip.touristAttractions.length > 0 ? (
+          <ul className="space-y-3">
+            {trip.touristAttractions.map((attraction) => (
+              <li key={attraction.id} className="p-3 bg-gray-100 rounded-lg shadow-sm">
+                <p><strong>คำอธิบาย:</strong> {attraction.description || "-"}</p>
+                <p><strong>เวลาเปิด:</strong> {attraction.open_time || "-"}</p>
+                {attraction.address && <p><strong>ที่อยู่:</strong> {attraction.address}</p>}
+              </li>
             ))}
-          </tbody>
-        </table>
-      ) : (
-        <p>ยังไม่มีไกด์เสนอราคา</p>
-      )}
+          </ul>
+        ) : (
+          <p>ยังไม่มีข้อมูลสถานที่ท่องเที่ยว</p>
+        )}
+      </div>
 
-      <button onClick={() => navigate(-1)} style={{ marginTop: "20px" }}>
+      <div>
+        <h3 className="text-xl font-semibold mb-2">รายการไกด์ที่เสนอราคา</h3>
+        {guidesToShow.length > 0 ? (
+          <table className="w-full text-sm border-collapse border border-gray-300">
+            <thead className="bg-blue-600 text-white">
+              <tr>
+                <th className="p-2 text-left">ชื่อไกด์</th>
+                <th className="p-2 text-left">อีเมล</th>
+                <th className="p-2 text-left">ราคาเสนอ (บาท)</th>
+                <th className="p-2 text-left">สถานะ</th>
+                <th className="p-2 text-left">จัดการ</th>
+              </tr>
+            </thead>
+            <tbody>
+              {guidesToShow.map(({ id, guide, price, status, guide_id }) => (
+                <tr key={id} className="border-b border-gray-300">
+                  <td className="p-2">{guide?.name || "-"}</td>
+                  <td className="p-2">{guide?.email || "-"}</td>
+                  <td className="p-2">{price}</td>
+                  <td className="p-2">{status}</td>
+                  <td className="p-2">
+                    {status === "selected" ? (
+                      <span className="text-green-600 font-bold">✅ ไกด์ที่ถูกเลือก</span>
+                    ) : (
+                      <button
+                        onClick={() => chooseGuide(guide_id)}
+                        className="px-4 py-2 text-white bg-blue-500 rounded-lg shadow hover:bg-blue-600 transition"
+                      >
+                        เลือกไกด์คนนี้
+                      </button>
+                    )}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <p>ยังไม่มีไกด์เสนอราคา</p>
+        )}
+      </div>
+
+      <button
+        onClick={() => navigate(-1)}
+        className="w-full max-w-xs mx-auto block px-6 py-4 text-lg font-bold text-white rounded-xl bg-gradient-to-r from-blue-500 to-cyan-400 shadow-lg transform transition-transform hover:scale-105 hover:shadow-2xl"
+      >
         กลับ
       </button>
     </div>
