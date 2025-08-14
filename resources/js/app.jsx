@@ -9,6 +9,8 @@ import TouristDetail from "./TouristDetail";
 import UploadTouristAttractionForm from "./components/Upload_place_form_component";
 import AllTrips from "./all_trip";
 import TripDetail from "./components/TripDetail";
+import MyTrips from "./my_trip";
+import MyTripDetail from "./components/MyTripDetail";
 
 // ---------- Error Boundary ----------
 class ErrorBoundary extends React.Component {
@@ -43,6 +45,7 @@ function BottomNav() {
   const navItems = [
     { path: "/test", label: "Map", icon: "🗺️" },
     { path: "/all_trip", label: "All Trips", icon: "🚌" },
+    { path: "/my-trips", label: "My Trips", icon: "🧳" },
     { path: "/upload", label: "Upload", icon: "📤" },
     { path: "/profile", label: "Profile", icon: "👤" },
   ];
@@ -69,7 +72,7 @@ function BottomNav() {
           to={item.path}
           style={{
             textDecoration: "none",
-            color: location.pathname === item.path ? "#007bff" : "#555",
+            color: location.pathname.startsWith(item.path) ? "#007bff" : "#555",
             fontSize: "14px",
             display: "flex",
             flexDirection: "column",
@@ -94,6 +97,8 @@ function App() {
           <Route path="/attraction/:id" element={<TouristDetail />} />
           <Route path="/all_trip" element={<AllTrips />} />
           <Route path="/trip/:tripId" element={<TripDetail />} />
+          <Route path="/my-trips" element={<MyTrips />} />
+          <Route path="/my-trips/:tripId" element={<MyTripDetail />} />
           <Route path="/upload" element={<UploadTouristAttractionForm />} />
           <Route path="/profile" element={<div style={{ padding: 20 }}>Profile Page</div>} />
         </Routes>
@@ -111,9 +116,6 @@ root.render(
     <App chatGroupId={window.chatGroupId} userToken={window.userToken} />
   </ErrorBoundary>
 );
-
-
-
 
 
 // import { createRoot } from 'react-dom/client';

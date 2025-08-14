@@ -1,8 +1,7 @@
-// resources/js/my_trip.jsxmytr
+// resources/js/MyTrips.jsx
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import { createRoot } from "react-dom/client";
-import { BrowserRouter, Routes, Route, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import MyTripDetail from "./components/MyTripDetail";
 
 export default function MyTrips() {
@@ -17,7 +16,7 @@ export default function MyTrips() {
 
   // โหลดข้อมูลทริป
   useEffect(() => {
-    async function fetchTrips() {
+    const fetchTrips = async () => {
       try {
         const res = await axios.get("/api/my-trips");
         setTrips(res.data);
@@ -27,7 +26,7 @@ export default function MyTrips() {
       } finally {
         setLoading(false);
       }
-    }
+    };
     fetchTrips();
   }, []);
 
@@ -49,25 +48,24 @@ export default function MyTrips() {
   };
 
   // ยืนยันจบทริป
-        // ยืนยันจบทริป
-        const handleEndTrip = async (tripId) => {
-          if (!window.confirm("ยืนยันการจบทริปนี้หรือไม่?")) return;
-          try {
-            const res = await axios.post(`/api/trips/${tripId}/confirm-end`);
-            alert(res.data?.message || "คุณได้ยืนยันจบทริปแล้ว");
-            const tripsRes = await axios.get("/api/my-trips");
-            setTrips(tripsRes.data);
-          } catch (err) {
-            console.error("Error confirming end:", err);
-            alert(err.response?.data?.message || "เกิดข้อผิดพลาด");
-          }
-        };
+  const handleEndTrip = async (tripId) => {
+    if (!window.confirm("ยืนยันการจบทริปนี้หรือไม่?")) return;
+    try {
+      const res = await axios.post(`/api/trips/${tripId}/confirm-end`);
+      alert(res.data?.message || "คุณได้ยืนยันจบทริปแล้ว");
+      const tripsRes = await axios.get("/api/my-trips");
+      setTrips(tripsRes.data);
+    } catch (err) {
+      console.error("Error confirming end:", err);
+      alert(err.response?.data?.message || "เกิดข้อผิดพลาด");
+    }
+  };
 
-  if (loading) return <p>กำลังโหลดข้อมูล...</p>;
-  if (error) return <p style={{ color: "red" }}>{error}</p>;
+  if (loading) return <p style={{ padding: 20 }}>กำลังโหลดข้อมูล...</p>;
+  if (error) return <p style={{ color: "red", padding: 20 }}>{error}</p>;
 
   return (
-    <div style={{ padding: "20px" }}>
+    <div style={{ padding: 20 }}>
       <h2>ทริปของฉัน</h2>
       {trips.length === 0 ? (
         <p>คุณยังไม่ได้สร้างหรือเข้าร่วมทริปใดๆ</p>
@@ -89,7 +87,7 @@ export default function MyTrips() {
 
               <button
                 onClick={() => navigate(`/my-trips/${trip.id}`)}
-                style={{ marginRight: "10px" }}
+                style={{ marginRight: 10 }}
               >
                 ดูรายละเอียด
               </button>
@@ -97,7 +95,7 @@ export default function MyTrips() {
               <button
                 onClick={() => handleJoinTrip(trip.id)}
                 disabled={joining === trip.id}
-                style={{ marginRight: "10px" }}
+                style={{ marginRight: 10 }}
               >
                 {joining === trip.id ? "กำลังเข้าร่วม..." : "เข้าร่วมทริป"}
               </button>
@@ -115,15 +113,3 @@ export default function MyTrips() {
     </div>
   );
 }
-
-// Render พร้อม Router
-const container = document.getElementById("my_trips");
-const root = createRoot(container);
-root.render(
-  <BrowserRouter>
-    <Routes>
-      <Route path="/my-trips" element={<MyTrips />} />
-      <Route path="/my-trips/:tripId" element={<MyTripDetail />} />
-    </Routes>
-  </BrowserRouter>
-);
