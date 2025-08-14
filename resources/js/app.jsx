@@ -1,21 +1,48 @@
 // App.jsx
-//
 import '../css/app.css';
 import React from "react";
-// import { BrowserRouter as Router, Routes, Route, Link, useLocation } from "react-router-dom";
+import { createRoot } from "react-dom/client";
+import { BrowserRouter as Router, Routes, Route, Link, useLocation } from "react-router-dom";
 
 import TouristAttractionMap from "./map_page";
 import TouristDetail from "./TouristDetail";
 import UploadTouristAttractionForm from "./components/Upload_place_form_component";
-import { createRoot } from "react-dom/client";
+import AllTrips from "./all_trip";
+import TripDetail from "./components/TripDetail";
 
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { useLocation } from "react-router-dom";
-import { Link } from "react-router-dom";
+// ---------- Error Boundary ----------
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = { hasError: false, error: null };
+  }
+
+  static getDerivedStateFromError(error) {
+    return { hasError: true, error };
+  }
+
+  componentDidCatch(error, errorInfo) {
+    console.error("Error caught by boundary:", error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div style={{ padding: 20, color: "red" }}>
+          Something went wrong: {this.state.error?.message}
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
+// ---------- Bottom Navigation ----------
 function BottomNav() {
   const location = useLocation();
   const navItems = [
     { path: "/test", label: "Map", icon: "🗺️" },
+    { path: "/all_trip", label: "All Trips", icon: "🚌" },
     { path: "/upload", label: "Upload", icon: "📤" },
     { path: "/profile", label: "Profile", icon: "👤" },
   ];
@@ -57,13 +84,16 @@ function BottomNav() {
   );
 }
 
-export default function App() {
+// ---------- Main App ----------
+function App() {
   return (
     <Router>
-      <div style={{ paddingBottom: "60px" /* กัน BottomNav ทับเนื้อหา */ }}>
+      <div style={{ paddingBottom: "60px" }}>
         <Routes>
           <Route path="/test" element={<TouristAttractionMap />} />
           <Route path="/attraction/:id" element={<TouristDetail />} />
+          <Route path="/all_trip" element={<AllTrips />} />
+          <Route path="/trip/:tripId" element={<TripDetail />} />
           <Route path="/upload" element={<UploadTouristAttractionForm />} />
           <Route path="/profile" element={<div style={{ padding: 20 }}>Profile Page</div>} />
         </Routes>
@@ -73,10 +103,13 @@ export default function App() {
   );
 }
 
+// ---------- Render with ErrorBoundary ----------
 const container = document.getElementById("app");
 const root = createRoot(container);
 root.render(
-  <App chatGroupId={window.chatGroupId} userToken={window.userToken} />
+  <ErrorBoundary>
+    <App chatGroupId={window.chatGroupId} userToken={window.userToken} />
+  </ErrorBoundary>
 );
 
 

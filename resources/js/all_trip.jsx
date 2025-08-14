@@ -1,19 +1,18 @@
+// AllTrips.jsx
 import React, { useEffect, useState } from "react";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { createRoot } from "react-dom/client";
-import TripDetail from "./components/TripDetail";
+import axios from "axios";
+
 export default function AllTrips() {
   const [trips, setTrips] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [joining, setJoining] = useState(null); // เก็บ id trip ที่กำลัง join
+  const [joining, setJoining] = useState(null);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  // ดึงข้อมูล trip ทั้งหมด
+  // โหลดข้อมูลทริป
   useEffect(() => {
-    async function fetchTrips() {
+    const fetchTrips = async () => {
       try {
         const res = await axios.get("/api/trips");
         setTrips(res.data);
@@ -23,31 +22,36 @@ export default function AllTrips() {
       } finally {
         setLoading(false);
       }
-    }
+    };
     fetchTrips();
   }, []);
 
-  // ฟังก์ชันกด join trip
-        const handleJoinTrip = async (tripId) => {
-          setJoining(tripId);
-          setError(null);
-          try {
-            await axios.post(`/api/trips/${tripId}/join`, {}, {
-              headers: {
-                Authorization: `Bearer ${window.userToken}`
-              }
-            });
-            alert("เข้าร่วมทริปสำเร็จ!");
-          } catch (err) {
-            console.error("Error joining trip:", err);
-            setError(err.response?.data?.message || "เกิดข้อผิดพลาด");
-          } finally {
-            setJoining(null);
-          }
-        };
+  // เข้าร่วมทริป
+  const handleJoinTrip = async (tripId) => {
+    setJoining(tripId);
+    setError(null);
+    try {
+      await axios.post(
+        `/api/trips/${tripId}/join`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${window.userToken}`,
+          },
+        }
+      );
+      alert("เข้าร่วมทริปสำเร็จ!");
+    } catch (err) {
+      console.error("Error joining trip:", err);
+      setError(err.response?.data?.message || "เกิดข้อผิดพลาด");
+    } finally {
+      setJoining(null);
+    }
+  };
 
-  if (loading) return <p>กำลังโหลดข้อมูล...</p>;
-  if (error) return <p style={{ color: "red" }}>{error}</p>;
+  // Loading / Error state
+  if (loading) return <p style={{ padding: "20px" }}>กำลังโหลดข้อมูล...</p>;
+  if (error) return <p style={{ color: "red", padding: "20px" }}>{error}</p>;
 
   return (
     <div style={{ padding: "20px" }}>
@@ -95,15 +99,3 @@ export default function AllTrips() {
     </div>
   );
 }
-
-const container = document.getElementById("all_trip");
-const root = createRoot(container);
-
-root.render(
-  <BrowserRouter>
-    <Routes>
-      <Route path="/all_trip" element={<AllTrips />} />
-      <Route path="/trip/:tripId" element={<TripDetail />} />
-    </Routes>
-  </BrowserRouter>
-);
