@@ -1,16 +1,74 @@
 // App.jsx
+//
+import '../css/app.css';
 import React from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+// import { BrowserRouter as Router, Routes, Route, Link, useLocation } from "react-router-dom";
+
 import TouristAttractionMap from "./map_page";
 import TouristDetail from "./TouristDetail";
+import UploadTouristAttractionForm from "./components/Upload_place_form_component";
 import { createRoot } from "react-dom/client";
+
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
+function BottomNav() {
+  const location = useLocation();
+  const navItems = [
+    { path: "/test", label: "Map", icon: "🗺️" },
+    { path: "/upload", label: "Upload", icon: "📤" },
+    { path: "/profile", label: "Profile", icon: "👤" },
+  ];
+
+  return (
+    <div
+      style={{
+        position: "fixed",
+        bottom: 0,
+        left: 0,
+        right: 0,
+        height: "60px",
+        background: "#fff",
+        borderTop: "1px solid #ddd",
+        display: "flex",
+        justifyContent: "space-around",
+        alignItems: "center",
+        zIndex: 1000,
+      }}
+    >
+      {navItems.map((item) => (
+        <Link
+          key={item.path}
+          to={item.path}
+          style={{
+            textDecoration: "none",
+            color: location.pathname === item.path ? "#007bff" : "#555",
+            fontSize: "14px",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          }}
+        >
+          <span style={{ fontSize: "20px" }}>{item.icon}</span>
+          {item.label}
+        </Link>
+      ))}
+    </div>
+  );
+}
+
 export default function App() {
   return (
     <Router>
-      <Routes>
-        <Route path="/test" element={<TouristAttractionMap />} />
-        <Route path="/attraction/:id" element={<TouristDetail />} />
-      </Routes>
+      <div style={{ paddingBottom: "60px" /* กัน BottomNav ทับเนื้อหา */ }}>
+        <Routes>
+          <Route path="/test" element={<TouristAttractionMap />} />
+          <Route path="/attraction/:id" element={<TouristDetail />} />
+          <Route path="/upload" element={<UploadTouristAttractionForm />} />
+          <Route path="/profile" element={<div style={{ padding: 20 }}>Profile Page</div>} />
+        </Routes>
+      </div>
+      <BottomNav />
     </Router>
   );
 }
