@@ -59,7 +59,7 @@ function BottomNav() {
         bottom: 0,
         left: 0,
         right: 0,
-        height: "60px",
+        height: "160px",
         background: "#fff",
         borderTop: "1px solid #ddd",
         display: "flex",
@@ -75,13 +75,13 @@ function BottomNav() {
           style={{
             textDecoration: "none",
             color: location.pathname.startsWith(item.path) ? "#007bff" : "#555",
-            fontSize: "14px",
+            fontSize: "1px",
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
           }}
         >
-          <span style={{ fontSize: "20px" }}>{item.icon}</span>
+          <span style={{ fontSize: "130px" }}>{item.icon}</span>
           {item.label}
         </Link>
       ))}
@@ -124,151 +124,3 @@ root.render(
     <App chatGroupId={window.chatGroupId} userToken={window.userToken} />
   </ErrorBoundary>
 );
-
-
-// import { createRoot } from 'react-dom/client';
-// import React, { useState, useEffect } from 'react';
-// import axios from 'axios';
-//
-// function App({ chatGroupId, userToken }) {
-//   const [messages, setMessages] = useState([]);
-//   const [text, setText] = useState("");
-//
-//   // ฟังก์ชันดึงข้อความ
-//   const fetchMessages = async () => {
-//     try {
-//       const res = await axios.get(
-//         `/api/chat-groups/${chatGroupId}/messages`,
-//         { headers: { Authorization: `Bearer ${userToken}` } }
-//       );
-//       setMessages(res.data);
-//     } catch (err) {
-//       console.error("Fetch error:", err);
-//     }
-//   };
-//
-//   // เรียกทุก 3 วินาที
-//   useEffect(() => {
-//     fetchMessages(); // โหลดครั้งแรก
-//     const interval = setInterval(fetchMessages, 3000);
-//     return () => clearInterval(interval);
-//   }, [chatGroupId, userToken]);
-//
-//   // ส่งข้อความ
-//   const sendMessage = async () => {
-//     if (!text.trim()) return;
-//     try {
-//       await axios.post(
-//         `/api/chat-groups/${chatGroupId}/messages`,
-//         { message: text },
-//         { headers: { Authorization: `Bearer ${userToken}` } }
-//       );
-//       setText("");
-//       fetchMessages(); // โหลดใหม่หลังส่ง
-//     } catch (err) {
-//       console.error("Send error:", err);
-//     }
-//   };
-//
-//   return (
-//     <div>
-//       <div style={{ height: 300, overflowY: "scroll", border: "1px solid #ccc" }}>
-//         {messages.map(msg => (
-//           <div key={msg.id}>
-//             <strong>{msg.user?.name}</strong>: {msg.message}
-//           </div>
-//         ))}
-//       </div>
-//
-//       <input
-//         value={text}
-//         onChange={e => setText(e.target.value)}
-//         placeholder="Type a message"
-//       />
-//       <button onClick={sendMessage}>Send</button>
-//     </div>
-//   );
-// }
-//
-// // รับค่าจาก Blade ผ่าน window
-// const container = document.getElementById("app");
-// const root = createRoot(container);
-// root.render(
-//   <App chatGroupId={window.chatGroupId} userToken={window.userToken} />
-// );
-
-
-
-
-
-
-// import { createRoot } from 'react-dom/client';
-// import React, { useState, useEffect } from 'react';
-// import axios from 'axios';
-//
-// function App({ chatGroupId, userToken }) {
-//   const [messages, setMessages] = useState([]);
-//   const [text, setText] = useState("");
-//
-//   // ฟังก์ชันดึงข้อความ
-//   const fetchMessages = async () => {
-//     try {
-//       const res = await axios.get(
-//         `/api/chat-groups/${chatGroupId}/messages`,
-//         { headers: { Authorization: `Bearer ${userToken}` } }
-//       );
-//       setMessages(res.data);
-//     } catch (err) {
-//       console.error("Fetch error:", err);
-//     }
-//   };
-//
-//   // เรียกทุก 3 วินาที
-//   useEffect(() => {
-//     fetchMessages(); // โหลดครั้งแรก
-//     const interval = setInterval(fetchMessages, 3000);
-//     return () => clearInterval(interval);
-//   }, [chatGroupId, userToken]);
-//
-//   // ส่งข้อความ
-//   const sendMessage = async () => {
-//     if (!text.trim()) return;
-//     try {
-//       await axios.post(
-//         `/api/chat-groups/${chatGroupId}/messages`,
-//         { message: text },
-//         { headers: { Authorization: `Bearer ${userToken}` } }
-//       );
-//       setText("");
-//       fetchMessages(); // โหลดใหม่หลังส่ง
-//     } catch (err) {
-//       console.error("Send error:", err);
-//     }
-//   };
-//
-//   return (
-//     <div>
-//       <div style={{ height: 300, overflowY: "scroll", border: "1px solid #ccc" }}>
-//         {messages.map(msg => (
-//           <div key={msg.id}>
-//             <strong>{msg.user?.name}</strong>: {msg.message}
-//           </div>
-//         ))}
-//       </div>
-//
-//       <input
-//         value={text}
-//         onChange={e => setText(e.target.value)}
-//         placeholder="Type a message"
-//       />
-//       <button onClick={sendMessage}>Send</button>
-//     </div>
-//   );
-// }
-//
-// // รับค่าจาก Blade ผ่าน window
-// const container = document.getElementById("app");
-// const root = createRoot(container);
-// root.render(
-//   <App chatGroupId={window.chatGroupId} userToken={window.userToken} />
-// );
