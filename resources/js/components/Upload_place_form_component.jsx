@@ -4,7 +4,6 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 
-// Fix default marker icon path
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl:
@@ -24,6 +23,8 @@ const UploadTouristAttractionForm = () => {
   const [closeTime, setCloseTime] = useState("");
   const [location, setLocation] = useState({ latitude: "", longitude: "" });
 
+  const scale = 2.5; // ขยายฟอนต์
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (!name || !tag || !location.latitude || !location.longitude) {
@@ -42,11 +43,10 @@ const UploadTouristAttractionForm = () => {
     images.forEach((image) => formData.append("images[]", image));
 
     try {
-      const response = await axios.post("/tourist-attractions", formData, {
+      await axios.post("/tourist-attractions", formData, {
         headers: { "Content-Type": "multipart/form-data" },
         withCredentials: true,
       });
-      console.log("Response:", response.data);
       setMessage("Tourist attraction created successfully!");
       setImages([]);
       setName("");
@@ -57,7 +57,6 @@ const UploadTouristAttractionForm = () => {
       setCloseTime("");
       setLocation({ latitude: "", longitude: "" });
     } catch (error) {
-      console.error("Error:", error);
       setMessage(
         "Error: " + (error.response?.data?.message || "Server error")
       );
@@ -89,16 +88,19 @@ const UploadTouristAttractionForm = () => {
   };
 
   return (
-    <div className="bg-white min-h-screen py-6 px-4 font-sans">
-      <div className="mx-auto w-full max-w-md sm:max-w-lg">
-        <h1 className="text-2xl sm:text-3xl font-bold text-center mb-6">
+    <div className="min-h-screen bg-gray-100 flex justify-center items-start py-10 px-4 font-sans">
+      <div className="bg-white rounded-3xl shadow-2xl w-full max-w-4xl p-10 space-y-8">
+        <h1
+          className="text-center font-extrabold"
+          style={{ fontSize: `${30 * scale}px` }}
+        >
           Upload Tourist Attraction
         </h1>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-8">
           {/* Name */}
           <div>
-            <label className="block text-sm font-medium mb-1">
+            <label className="block font-bold mb-2" style={{ fontSize: `${18 * scale}px` }}>
               Attraction Name
             </label>
             <input
@@ -106,19 +108,21 @@ const UploadTouristAttractionForm = () => {
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Eiffel Tower"
-              className="w-full px-3 py-2 text-base bg-gray-100 rounded-md focus:ring-2 focus:ring-blue-400"
+              className="w-full px-5 py-3 rounded-3xl bg-gray-100 focus:ring-2 focus:ring-blue-400 shadow-inner"
+              style={{ fontSize: `${16 * scale}px` }}
             />
           </div>
 
           {/* Tag */}
           <div>
-            <label className="block text-sm font-medium mb-1">
+            <label className="block font-bold mb-2" style={{ fontSize: `${18 * scale}px` }}>
               Category
             </label>
             <select
               value={tag}
               onChange={(e) => setTag(e.target.value)}
-              className="w-full px-3 py-2 text-base bg-gray-100 rounded-md focus:ring-2 focus:ring-blue-400"
+              className="w-full px-5 py-3 rounded-3xl bg-gray-100 focus:ring-2 focus:ring-blue-400 shadow-inner"
+              style={{ fontSize: `${16 * scale}px` }}
             >
               <option value="">Select a category</option>
               <option value="nature">Nature</option>
@@ -131,7 +135,7 @@ const UploadTouristAttractionForm = () => {
 
           {/* Entrance Fee */}
           <div>
-            <label className="block text-sm font-medium mb-1">
+            <label className="block font-bold mb-2" style={{ fontSize: `${18 * scale}px` }}>
               Entrance Fee (THB)
             </label>
             <input
@@ -139,69 +143,74 @@ const UploadTouristAttractionForm = () => {
               value={entranceFee}
               onChange={(e) => setEntranceFee(e.target.value)}
               placeholder="0"
-              className="w-full px-3 py-2 text-base bg-gray-100 rounded-md focus:ring-2 focus:ring-blue-400"
+              className="w-full px-5 py-3 rounded-3xl bg-gray-100 focus:ring-2 focus:ring-blue-400 shadow-inner"
+              style={{ fontSize: `${16 * scale}px` }}
             />
           </div>
 
           {/* Open/Close Time */}
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-6">
             <div>
-              <label className="block text-sm font-medium mb-1">
+              <label className="block font-bold mb-2" style={{ fontSize: `${18 * scale}px` }}>
                 Open Time
               </label>
               <input
                 type="time"
                 value={openTime}
                 onChange={(e) => setOpenTime(e.target.value)}
-                className="w-full px-3 py-2 text-base bg-gray-100 rounded-md focus:ring-2 focus:ring-blue-400"
+                className="w-full px-5 py-3 rounded-3xl bg-gray-100 focus:ring-2 focus:ring-blue-400 shadow-inner"
+                style={{ fontSize: `${16 * scale}px` }}
               />
             </div>
             <div>
-              <label className="block text-sm font-medium mb-1">
+              <label className="block font-bold mb-2" style={{ fontSize: `${18 * scale}px` }}>
                 Close Time
               </label>
               <input
                 type="time"
                 value={closeTime}
                 onChange={(e) => setCloseTime(e.target.value)}
-                className="w-full px-3 py-2 text-base bg-gray-100 rounded-md focus:ring-2 focus:ring-blue-400"
+                className="w-full px-5 py-3 rounded-3xl bg-gray-100 focus:ring-2 focus:ring-blue-400 shadow-inner"
+                style={{ fontSize: `${16 * scale}px` }}
               />
             </div>
           </div>
 
           {/* Description */}
           <div>
-            <label className="block text-sm font-medium mb-1">
+            <label className="block font-bold mb-2" style={{ fontSize: `${18 * scale}px` }}>
               Description
             </label>
             <textarea
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              rows="4"
+              rows="5"
               placeholder="A famous landmark located in..."
-              className="w-full px-3 py-2 text-base bg-gray-100 rounded-md focus:ring-2 focus:ring-blue-400 resize-none"
+              className="w-full px-5 py-3 rounded-3xl bg-gray-100 focus:ring-2 focus:ring-blue-400 resize-none shadow-inner"
+              style={{ fontSize: `${16 * scale}px` }}
             />
           </div>
 
-          {/* Upload Image */}
+          {/* Upload Images */}
           <div>
-            <label className="block text-sm font-medium mb-2">
-              Upload Image
+            <label className="block font-bold mb-2" style={{ fontSize: `${18 * scale}px` }}>
+              Upload Images
             </label>
             <input
               type="file"
               onChange={handleFileChange}
               accept="image/*"
               multiple
-              className="mb-3 block w-full text-sm"
+              className="mb-3 block w-full"
+              style={{ fontSize: `${16 * scale}px` }}
             />
-            <div className="grid grid-cols-3 sm:grid-cols-5 gap-3">
+            <div className="grid grid-cols-3 sm:grid-cols-5 gap-4">
               {images.map((img, i) => (
                 <img
                   key={i}
                   src={URL.createObjectURL(img)}
                   alt="preview"
-                  className="w-full h-24 object-cover rounded"
+                  className="w-full h-32 object-cover rounded-3xl shadow-lg"
                 />
               ))}
             </div>
@@ -209,10 +218,10 @@ const UploadTouristAttractionForm = () => {
 
           {/* Location */}
           <div>
-            <label className="block text-sm font-medium mb-2">
+            <label className="block font-bold mb-2" style={{ fontSize: `${18 * scale}px` }}>
               Location
             </label>
-            <div className="w-full h-56 rounded-lg overflow-hidden">
+            <div className="w-full h-80 rounded-3xl overflow-hidden shadow-lg">
               {location.latitude && location.longitude ? (
                 <MapContainer
                   center={[location.latitude, location.longitude]}
@@ -220,24 +229,21 @@ const UploadTouristAttractionForm = () => {
                   className="w-full h-full"
                 >
                   <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-                  <Marker
-                    position={[location.latitude, location.longitude]}
-                  >
+                  <Marker position={[location.latitude, location.longitude]}>
                     <Popup>{name}</Popup>
                   </Marker>
                 </MapContainer>
               ) : (
                 <div className="bg-gray-100 flex items-center justify-center h-full text-center text-gray-500">
                   <div>
-                    <p className="text-sm">
-                      Please get your current location
-                    </p>
+                    <p className="text-2xl mb-3">Please get your current location</p>
                     <button
                       type="button"
                       onClick={handleGetLocation}
-                      className="mt-2 px-4 py-2 bg-white border rounded-md text-sm"
+                      className="px-6 py-4 bg-white border rounded-3xl font-bold hover:bg-gray-50 shadow-md transition transform hover:scale-105"
+                      style={{ fontSize: `${16 * scale}px` }}
                     >
-                      Get Location Here
+                      Get Location
                     </button>
                   </div>
                 </div>
@@ -246,23 +252,24 @@ const UploadTouristAttractionForm = () => {
           </div>
 
           {/* Submit */}
-          <div className="text-center pt-4">
-            <button
-              type="submit"
-              className="px-6 py-3 w-full sm:w-auto bg-blue-500 text-white font-semibold rounded-lg hover:bg-blue-600"
-            >
-              Upload Attraction
-            </button>
-          </div>
+            <div className="text-center pt-6">
+              <button
+                type="submit"
+                className="px-16 py-6 bg-blue-500 text-white font-extrabold rounded-3xl hover:bg-blue-600 shadow-2xl text-4xl transition transform hover:scale-105"
+              >
+                Upload Attraction
+              </button>
+            </div>
         </form>
 
         {message && (
           <div
-            className={`mt-6 text-center p-3 rounded-md ${
+            className={`mt-8 text-center p-5 rounded-3xl ${
               message.startsWith("Error")
                 ? "bg-red-100 text-red-700"
                 : "bg-green-100 text-green-700"
             }`}
+            style={{ fontSize: `${16 * scale}px` }}
           >
             {message}
           </div>
