@@ -93,20 +93,16 @@ function BottomNav() {
 function App() {
   return (
     <Router>
-      <div style={{ paddingBottom: "60px" }}>
+      <div style={{ paddingBottom: "160px" }}> {/* ปรับให้เท่ากับความสูง BottomNav */}
         <Routes>
           <Route path="/test" element={<TouristAttractionMap />} />
           <Route path="/attraction/:id" element={<TouristDetail />} />
-
           <Route path="/all_trip" element={<AllTrips />} />
           <Route path="/trip/:tripId" element={<TripDetail />} />
-
           <Route path="/my-trips" element={<MyTrips />} />
           <Route path="/my-trips/:tripId" element={<MyTripDetail />} />
-
           <Route path="/all_chat" element={<AllChatGroups userToken={window.userToken} />} />
           <Route path="/chat-group/:id" element={<ChatPage userToken={window.userToken} />} />
-
           <Route path="/upload" element={<UploadTouristAttractionForm />} />
           <Route path="/profile" element={<div style={{ padding: 20 }}>Profile Page</div>} />
         </Routes>
