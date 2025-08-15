@@ -10,7 +10,8 @@ export default function AllTrips() {
   const [error, setError] = useState(null);
   const navigate = useNavigate();
 
-  // โหลดข้อมูลทริป
+  const scale = 1.45; // ขยายฟอนต์ 45%
+
   useEffect(() => {
     const fetchTrips = async () => {
       try {
@@ -26,7 +27,6 @@ export default function AllTrips() {
     fetchTrips();
   }, []);
 
-  // เข้าร่วมทริป
   const handleJoinTrip = async (tripId) => {
     setJoining(tripId);
     setError(null);
@@ -35,9 +35,7 @@ export default function AllTrips() {
         `/api/trips/${tripId}/join`,
         {},
         {
-          headers: {
-            Authorization: `Bearer ${window.userToken}`,
-          },
+          headers: { Authorization: `Bearer ${window.userToken}` },
         }
       );
       alert("เข้าร่วมทริปสำเร็จ!");
@@ -49,49 +47,69 @@ export default function AllTrips() {
     }
   };
 
-  // Loading / Error state
-  if (loading) return <p style={{ padding: "20px" }}>กำลังโหลดข้อมูล...</p>;
-  if (error) return <p style={{ color: "red", padding: "20px" }}>{error}</p>;
+  if (loading)
+    return (
+      <p className="text-center" style={{ padding: "20px", fontSize: `${20 * scale}px` }}>
+        กำลังโหลดข้อมูล...
+      </p>
+    );
+  if (error)
+    return (
+      <p
+        className="text-center text-red-600"
+        style={{ padding: "20px", fontSize: `${20 * scale}px` }}
+      >
+        {error}
+      </p>
+    );
 
   return (
-    <div style={{ padding: "20px" }}>
-      <h2>รายการ Trip ทั้งหมด</h2>
+    <div className="flex flex-col items-center p-8 space-y-8">
+      <h2 className="font-extrabold text-center" style={{ fontSize: `${32 * scale}px` }}>
+        รายการ Trip ทั้งหมด
+      </h2>
+
       {trips.length === 0 ? (
-        <p>ไม่มีทริปในระบบ</p>
+        <p className="text-center" style={{ fontSize: `${24 * scale}px` }}>
+          ไม่มีทริปในระบบ
+        </p>
       ) : (
-        <div style={{ display: "grid", gap: "15px" }}>
+        <div className="flex flex-col items-center gap-8 w-full max-w-4xl">
           {trips.map((trip) => (
             <div
               key={trip.id}
-              style={{
-                border: "1px solid #ccc",
-                borderRadius: "8px",
-                padding: "15px",
-              }}
+              className="w-full max-w-3xl bg-white rounded-3xl p-8 shadow-lg flex flex-col items-center space-y-4"
             >
-              <h3>{trip.name}</h3>
-              <p>
+              <h3 className="font-bold text-center" style={{ fontSize: `${28 * scale}px` }}>
+                {trip.name}
+              </h3>
+              <p style={{ fontSize: `${24 * scale}px` }}>
                 <strong>วันที่เริ่ม:</strong> {trip.start_date || "ไม่ระบุ"}
               </p>
-              <p>
+              <p style={{ fontSize: `${24 * scale}px` }}>
                 <strong>เงื่อนไข:</strong> {trip.conditions || "-"}
               </p>
-              <p>
+              <p style={{ fontSize: `${24 * scale}px` }}>
                 <strong>จำนวนคนที่ต้องการ:</strong> {trip.max_people}
               </p>
 
-              <button
-                onClick={() => navigate(`/trip/${trip.id}`)}
-                style={{ marginRight: "10px" }}
-              >
-                ดูรายละเอียด
-              </button>
-              <button
-                onClick={() => handleJoinTrip(trip.id)}
-                disabled={joining === trip.id}
-              >
-                {joining === trip.id ? "กำลังเข้าร่วม..." : "Join Trip"}
-              </button>
+              <div className="flex gap-4">
+                <button
+                  onClick={() => navigate(`/trip/${trip.id}`)}
+                  className="px-6 py-4 bg-blue-500 text-white rounded-3xl font-bold shadow-lg hover:bg-blue-600 transition transform hover:scale-105"
+                  style={{ fontSize: `${24 * scale}px` }}
+                >
+                  ดูรายละเอียด
+                </button>
+                <button
+                  onClick={() => handleJoinTrip(trip.id)}
+                  disabled={joining === trip.id}
+                  className="px-6 py-4 bg-green-500 text-white rounded-3xl font-bold shadow-lg hover:bg-green-600 transition transform hover:scale-105 disabled:opacity-50"
+                  style={{ fontSize: `${24 * scale}px` }}
+                >
+                  {joining === trip.id ? "กำลังเข้าร่วม..." : "เข้าร่วมทริป"}
+                </button>
+              </div>
             </div>
           ))}
         </div>
