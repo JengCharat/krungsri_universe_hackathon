@@ -56,45 +56,57 @@ export default function MyTrips() {
     }
   };
 
-  if (loading) return <p style={{ padding: 20, fontSize: 18 }}>กำลังโหลดข้อมูล...</p>;
-  if (error) return <p style={{ color: "red", padding: 20, fontSize: 18 }}>{error}</p>;
+  if (loading)
+    return <p style={{ padding: 20, fontSize: 28, textAlign: "center" }}>กำลังโหลดข้อมูล...</p>;
+  if (error)
+    return <p style={{ color: "red", padding: 20, fontSize: 28, textAlign: "center" }}>{error}</p>;
 
   return (
-    <div style={{ padding: "20px", maxWidth: "420px", margin: "0 auto" }}>
-      <h2 style={{ fontSize: "26px", marginBottom: "20px", textAlign: "center" }}>ทริปของฉัน</h2>
+    <div style={{ padding: "20px", display: "flex", flexDirection: "column", alignItems: "center" }}>
+      <h2 style={{ fontSize: "48px", marginBottom: "30px", textAlign: "center" }}>ทริปของฉัน</h2>
       {trips.length === 0 ? (
-        <p style={{ fontSize: 18, textAlign: "center" }}>คุณยังไม่ได้สร้างหรือเข้าร่วมทริปใดๆ</p>
+        <p style={{ fontSize: 32, textAlign: "center" }}>คุณยังไม่ได้สร้างหรือเข้าร่วมทริปใดๆ</p>
       ) : (
-        <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "30px", width: "100%", alignItems: "center" }}>
           {trips.map((trip) => (
             <div
               key={trip.id}
               style={{
                 border: "1px solid #ccc",
-                borderRadius: "16px",
-                padding: "20px",
-                boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+                borderRadius: "20px",
+                padding: "30px",
+                boxShadow: "0 6px 16px rgba(0,0,0,0.15)",
                 background: "#fff",
+                width: "95vw",
+                maxWidth: "800px",
+                textAlign: "center",
               }}
             >
-              <h3 style={{ fontSize: "22px", marginBottom: "12px" }}>{trip.name}</h3>
-              <p style={{ fontSize: 16 }}><strong>วันที่เริ่ม:</strong> {trip.start_date || "-"}</p>
-              <p style={{ fontSize: 16 }}><strong>เงื่อนไข:</strong> {trip.conditions || "-"}</p>
-              <p style={{ fontSize: 16 }}><strong>จำนวนคนที่ต้องการ:</strong> {trip.max_people}</p>
+              <h3 style={{ fontSize: "40px", marginBottom: "20px" }}>{trip.name}</h3>
+              <p style={{ fontSize: 32, margin: "10px 0" }}><strong>วันที่เริ่ม:</strong> {trip.start_date || "-"}</p>
+              <p style={{ fontSize: 32, margin: "10px 0" }}><strong>เงื่อนไข:</strong> {trip.conditions || "-"}</p>
+              <p style={{ fontSize: 32, margin: "10px 0" }}><strong>จำนวนคนที่ต้องการ:</strong> {trip.max_people}</p>
 
-              <div style={{ display: "flex", flexDirection: "column", gap: "12px", marginTop: "16px" }}>
+              {/* ปรับปุ่มให้เรียงแนวนอนและ center */}
+              <div style={{
+                display: "flex",
+                justifyContent: "center",
+                gap: "20px",
+                marginTop: "25px",
+                flexWrap: "wrap"
+              }}>
                 <button
                   onClick={() => navigate(`/my-trips/${trip.id}`)}
                   style={{
-                    padding: "16px",
-                    fontSize: "18px",
+                    padding: "20px 30px",
+                    fontSize: "28px",
                     fontWeight: "bold",
-                    borderRadius: "12px",
+                    borderRadius: "16px",
                     border: "none",
                     background: "linear-gradient(90deg, #007bff, #00c6ff)",
                     color: "#fff",
                     cursor: "pointer",
-                    boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
+                    boxShadow: "0 6px 16px rgba(0,0,0,0.25)",
                     transition: "transform 0.2s",
                   }}
                   onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
@@ -107,15 +119,15 @@ export default function MyTrips() {
                   onClick={() => handleJoinTrip(trip.id)}
                   disabled={joining === trip.id}
                   style={{
-                    padding: "16px",
-                    fontSize: "18px",
+                    padding: "20px 30px",
+                    fontSize: "28px",
                     fontWeight: "bold",
-                    borderRadius: "12px",
+                    borderRadius: "16px",
                     border: "none",
                     background: "#28a745",
                     color: "#fff",
                     cursor: "pointer",
-                    boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
+                    boxShadow: "0 6px 16px rgba(0,0,0,0.25)",
                     transition: "transform 0.2s",
                   }}
                   onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
@@ -127,15 +139,15 @@ export default function MyTrips() {
                 <button
                   onClick={() => handleEndTrip(trip.id)}
                   style={{
-                    padding: "16px",
-                    fontSize: "18px",
+                    padding: "20px 30px",
+                    fontSize: "28px",
                     fontWeight: "bold",
-                    borderRadius: "12px",
+                    borderRadius: "16px",
                     border: "none",
                     background: "#e74c3c",
                     color: "#fff",
                     cursor: "pointer",
-                    boxShadow: "0 4px 12px rgba(0,0,0,0.2)",
+                    boxShadow: "0 6px 16px rgba(0,0,0,0.25)",
                     transition: "transform 0.2s",
                   }}
                   onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
