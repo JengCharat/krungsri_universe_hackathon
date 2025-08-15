@@ -73,7 +73,6 @@ export function ChatPage({ userToken }) {
         headers: { Authorization: `Bearer ${userToken}` },
       });
       setMessages(res.data);
-      scrollRef.current?.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
     } catch (err) {
       console.error("Fetch error:", err);
     }
@@ -103,25 +102,25 @@ export function ChatPage({ userToken }) {
   return (
     <div className="flex flex-col h-screen bg-gray-100">
       {/* Header */}
-      <div className="flex items-center justify-between bg-blue-600 text-white p-4 shadow text-xl">
+      <div className="flex items-center justify-between bg-blue-600 text-white p-10 shadow">
         <button
           onClick={() => navigate(-1)}
-          className="px-3 py-1 bg-blue-500 rounded-lg hover:bg-blue-700 transition text-lg"
+          className="px-10 py-6 bg-blue-500 rounded-3xl hover:bg-blue-700 transition text-4xl font-extrabold"
         >
           กลับ
         </button>
-        <h2 className="font-bold text-2xl">Chat Group {chatGroupId}</h2>
-        <div className="w-16"></div> {/* Spacer */}
+        <h2 className="font-extrabold text-7xl">Chat Group {chatGroupId}</h2>
+        <div className="w-28"></div> {/* Spacer */}
       </div>
 
       {/* Messages */}
       <div
         ref={scrollRef}
-        className="flex-1 overflow-y-auto p-4 space-y-3"
+        className="flex-1 overflow-y-auto p-10 space-y-8"
         style={{ scrollbarWidth: "thin" }}
       >
         {messages.length === 0 ? (
-          <p className="text-gray-500 text-center mt-10 text-lg">ยังไม่มีข้อความ</p>
+          <p className="text-gray-500 text-center mt-10 text-5xl">ยังไม่มีข้อความ</p>
         ) : (
           messages.map((msg) => {
             const isMe = msg.user?.id === window.userId;
@@ -131,15 +130,19 @@ export function ChatPage({ userToken }) {
                 className={`flex ${isMe ? "justify-end" : "justify-start"}`}
               >
                 <div
-                  className={`max-w-xs px-4 py-2 rounded-lg break-words text-lg ${
-                    isMe
-                      ? "bg-blue-500 text-white rounded-br-none"
-                      : "bg-gray-200 text-gray-900 rounded-bl-none"
-                  }`}
+                  className={`px-16 py-10 break-words rounded-3xl max-w-[80%] text-4xl
+                    ${isMe
+                      ? "bg-blue-500 text-white rounded-br-none self-end"
+                      : "bg-gray-200 text-gray-900 rounded-bl-none self-start"}`
+                  }
                 >
-                  <span className="font-semibold text-lg">{msg.user?.name}</span>
-                  <p className="mt-1">{msg.message}</p>
-                  <span className="text-xs text-gray-400 block mt-1 text-right">
+                  {!isMe && (
+                    <span className="font-extrabold text-4xl">{msg.user?.name}</span>
+                  )}
+                  <p className={`mt-5 text-5xl ${isMe ? "text-white" : "text-gray-900"}`}>
+                    {msg.message}
+                  </p>
+                  <span className="text-xl text-gray-400 block mt-4 text-right">
                     {new Date(msg.created_at).toLocaleTimeString()}
                   </span>
                 </div>
@@ -150,18 +153,18 @@ export function ChatPage({ userToken }) {
       </div>
 
       {/* Input */}
-      <div className="flex p-3 border-t border-gray-300 bg-white space-x-2">
+      <div className="flex p-8 border-t border-gray-300 bg-white space-x-6">
         <input
           type="text"
           value={text}
           onChange={(e) => setText(e.target.value)}
           placeholder="พิมพ์ข้อความ..."
-          className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 text-lg"
+          className="flex-1 px-12 py-6 border border-gray-300 rounded-3xl focus:outline-none focus:ring-2 focus:ring-blue-400 text-4xl"
           onKeyDown={(e) => e.key === "Enter" && sendMessage()}
         />
         <button
           onClick={sendMessage}
-          className="px-5 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 font-semibold transition text-lg"
+          className="px-12 py-6 bg-blue-500 text-white rounded-3xl hover:bg-blue-600 font-extrabold text-4xl transition"
         >
           ส่ง
         </button>
