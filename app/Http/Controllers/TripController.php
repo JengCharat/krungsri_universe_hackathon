@@ -176,30 +176,32 @@ class TripController extends Controller
     }
 
 // TripController.php
-                public function myTrips(Request $request)
-                    {
-                        $userId = $request->user()->id;
+            public function myTrips(Request $request)
+            {
+                $userId = $request->user()->id;
 
-                        // ดึงทริปที่ผู้ใช้สร้างหรือเข้าร่วม พร้อมโหลดความสัมพันธ์
-                        $trips = Trip::with([
-                                'touristAttractions',         // ข้อมูลสถานที่ท่องเที่ยว
-                                'users',                      // สมาชิกทริป
-                                'guides'                      // ไกด์
-                            ])
-                            ->where(function ($query) use ($userId) {
-                                $query->where('created_by', $userId)
-                                      ->orWhereHas('users', function ($q) use ($userId) {
-                                          $q->where('user_id', $userId);
-                                      })
-                                      ->orWhereHas('guides', function ($q) use ($userId) {
-                                          $q->where('guide_id', $userId);
-                                      });
-                            })
-                            ->get();
+                // ดึงทริปที่ผู้ใช้สร้าง/เข้าร่วม/เป็นไกด์
+                $trips = Trip::with([
+                        'touristAttractions',
+                        'users',
+                        'guides'
+                    ])
+                    ->where(function ($query) use ($userId) {
+                        $query->where('created_by', $userId)
+                              ->orWhereHas('users', function ($q) use ($userId) {
+                                  $q->where('user_id', $userId);
+                              })
+                              ->orWhereHas('guides', function ($q) use ($userId) {
+                                  $q->where('guide_id', $userId);
+                              });
+                    })
+                    ->get();
 
-                        // ส่งข้อมูลทริปพร้อมความสัมพันธ์ให้ frontend
-                        return response()->json($trips);
-                    }
+                // ถ้าในตาราง trips มีคอลัมน์ ended (boolean) จะสะดวกต่อ frontend
+                // ถ้าไม่มี ให้เพิ่ม field เช่น is_ended จาก logic ของคุณ
+
+                return response()->json($trips);
+            }
 
 
 
