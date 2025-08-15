@@ -24,10 +24,12 @@ Route::middleware([
 
 
 Route::get('/test', function () {
-    $token = Auth::user()->createToken('chat-token')->plainTextToken;
+    $user = Auth::user();
+    $token = $user->createToken('chat-token')->plainTextToken;
     $chatGroupId = 1; // ตัวอย่าง
+    $role = $user->role; // ต้องมีคอลัมน์ role ใน users table
 
-    return view('app', compact('token', 'chatGroupId'));
+    return view('app', compact('token', 'chatGroupId', 'role'));
 })->middleware('auth');
 
 

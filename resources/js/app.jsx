@@ -12,7 +12,7 @@ import TripDetail from "./components/TripDetail";
 import MyTrips from "./my_trip";
 import MyTripDetail from "./components/MyTripDetail";
 import { AllChatGroups, ChatPage } from './all_chat'; // import ทั้งสองหน้า
-
+import AllTripsForGuide from './AllTripsForGuide';
 // ---------- Error Boundary ----------
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -97,7 +97,10 @@ function App() {
         <Routes>
           <Route path="/test" element={<TouristAttractionMap />} />
           <Route path="/attraction/:id" element={<TouristDetail />} />
-          <Route path="/all_trip" element={<AllTrips />} />
+        <Route
+            path="/all_trip"
+            element={userRole === "guide" ? <AllTripsForGuide /> : <AllTrips />}
+          />
           <Route path="/trip/:tripId" element={<TripDetail />} />
           <Route path="/my-trips" element={<MyTrips />} />
           <Route path="/my-trips/:tripId" element={<MyTripDetail />} />
@@ -117,6 +120,7 @@ const container = document.getElementById("app");
 const root = createRoot(container);
 root.render(
   <ErrorBoundary>
-    <App chatGroupId={window.chatGroupId} userToken={window.userToken} />
+    <App chatGroupId={window.chatGroupId} userToken={window.userToken} userRole={window.userRole} />
+
   </ErrorBoundary>
 );

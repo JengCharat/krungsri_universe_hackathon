@@ -8,6 +8,7 @@
     <script>
         window.userToken = @json($token);
         window.chatGroupId = @json($chatGroupId);
+        window.userRole = @json($role); // ✅ เพิ่มบรรทัดนี้
     </script>
     <div id="app"></div>
 </body>
