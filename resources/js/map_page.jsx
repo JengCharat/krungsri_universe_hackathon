@@ -133,17 +133,17 @@ return (
 
   <div className="flex flex-col h-screen w-screen py-8 px-4 md:px-12">
     {/* Header + Radius controls */}
-    <div className="w-full h-[300px] bg-white flex flex-col justify-center px-4 md:px-12 py-5 mt-12">
+    <div className="w-full h-[350px] bg-white flex flex-col justify-center px-4 md:px-12 py-5 mt-12">
       {/* Top row */}
       <div className="flex items-center justify-between mb-4">
-        <div className="inline-flex items-center gap-4 text-blue-800 bg-blue-200 px-5 py-3 rounded-full text-lg font-bold">
+        <div className="inline-flex items-center gap-4 text-[#7f4534ff] bg-[#fecb00] px-5 py-3 rounded-full text-3xl font-bold">
           <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
             <path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7Zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5Z" />
           </svg>
           ที่เที่ยวใกล้ฉัน
         </div>
 
-        <div className="text-lg text-green-900 bg-green-200 px-5 py-3 rounded-full font-bold">
+        <div className=" text-green-900 bg-green-200 px-5 py-3 rounded-full font-bold text-3xl">
           ระยะรัศมี: {radiusKm.toFixed(1)} กม.
         </div>
       </div> 
@@ -154,29 +154,70 @@ return (
       </h1>
 
       {/* Sub note */}
-      <p className="text-2xl text-slate-700 mb-6">
+      <p className="text-3xl text-slate-700 mb-6">
         ปรับระยะเพื่อดูพื้นที่ใกล้เคียงให้อ่านง่ายและชัดเจน
       </p>
+       {/* Slider */}
+      <input
+        type="range"
+        min="0.1"
+        max="20"
+        step="0.1"
+        value={radiusKm}
+        onChange={(e) => setRadiusKm(parseFloat(e.target.value))}
+        className="slider"
+      />
 
-      {/* Slider */}
-      <div className="flex flex-col items-center gap-3 px-2 md:px-0">
-        <input
-          type="range"
-          min="0.1"
-          max="20"
-          step="0.1"
-          value={radiusKm}
-          onChange={(e) => setRadiusKm(parseFloat(e.target.value))}
-          className="w-full accent-indigo-400"
-        />
-        <div className="flex justify-between w-full text-2xl text-slate-700 px-3">
-          <span>0.1 กม.</span>
-          <span className="font-extrabold">{radiusKm.toFixed(1)} กม.</span>
-          <span>20 กม.</span>
-        </div>
+      {/* Labels */}
+      <div className="flex justify-between w-full text-2xl text-slate-700 px-3 mt-6">
+        <span>0.1 กม.</span>
+        <span className="font-extrabold">{radiusKm.toFixed(1)} กม.</span>
+        <span>20 กม.</span>
       </div>
-    </div>
 
+<style>
+{`
+.slider {
+  -webkit-appearance: none;
+  width: 100%;
+  max-width: 1000px;
+  height: 12px;
+  background: #e5e7eb;
+  border-radius: 6px;
+  outline: none;
+  cursor: pointer;
+
+}
+
+/* Chrome, Safari, Edge */
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 60px;
+  height: 60px;
+  background: #facc15;
+  border: 8px solid white;
+  border-radius: 50%;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  cursor: pointer;
+  margin-top: 0; /* เลิกใช้ -74px */
+}
+
+/* Firefox */
+.slider::-moz-range-thumb {
+  width: 60px;
+  height: 60px;
+  background: #facc15;
+  border: 8px solid white;
+  border-radius: 50%;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.3);
+  cursor: pointer;
+  border: none;
+}
+`}
+</style>
+
+      /</div>
     {/* Map */}
     <div className="flex-1 mt-4 mb-12">
       <MapContainer

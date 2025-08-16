@@ -72,11 +72,12 @@ export default function AllTrips() {
     <div className="pointer-events-none absolute -bottom-12 -left-10 w-32 h-32 rounded-full bg-emerald-100/30 blur-2xl"></div>
 
     {/* Top row */}
-    <div className="flex items-center justify-between mb-4">
-      <div className="inline-flex items-center gap-4 text-blue-800 bg-blue-200 px-5 py-3 rounded-full text-lg font-bold">
-        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
-          <path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7Zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5Z" />
-        </svg>
+  
+      <div className="flex items-center justify-between mb-4">
+        <div className="inline-flex items-center gap-4 text-[#7f4534ff] bg-[#fecb00] px-5 py-3 rounded-full text-3xl font-bold">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7Zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5Z" />
+          </svg>
         ทริปทั้งหมด
       </div>
     </div>
@@ -123,7 +124,7 @@ export default function AllTrips() {
           <div className="flex flex-col gap-6 w-full justify-center mt-4">
             <button
               onClick={() => navigate(`/trip/${trip.id}`)}
-              className="flex-1 px-8 py-5 bg-blue-600 text-white rounded-3xl font-semibold shadow hover:bg-blue-700 transition transform hover:scale-105 text-4xl"
+              className="flex-1 px-8 py-5 bg-[#6b7280] text-white rounded-3xl font-semibold shadow hover:bg-blue-700 transition transform hover:scale-105 text-4xl"
             >
               ดูรายละเอียด
             </button>
@@ -131,7 +132,7 @@ export default function AllTrips() {
             <button
               onClick={() => handleJoinTrip(trip.id)}
               disabled={joining === trip.id}
-              className="flex-1 px-8 py-5 bg-green-600 text-white rounded-3xl font-semibold shadow hover:bg-green-700 transition transform hover:scale-105 disabled:opacity-50 text-4xl"
+              className="flex-1 px-8 py-5 bg-[#fecb00] text-[#7f4534ff] rounded-3xl font-semibold shadow hover:bg-green-700 transition transform hover:scale-105 disabled:opacity-50 text-4xl"
             >
               {joining === trip.id ? "กำลังเข้าร่วม..." : "เข้าร่วมทริป"}
             </button>

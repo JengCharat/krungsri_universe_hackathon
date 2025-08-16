@@ -57,7 +57,7 @@ function BottomNav() {
     left: 0,
     right: 0,
     height: "160px",
-    background: "#ffffff",
+     backgroundColor: "#fecb00",
     borderTop: "1px solid #e5e7eb",
     display: "flex",
     justifyContent: "space-around",
@@ -88,7 +88,7 @@ function BottomNav() {
         const active =
           location.pathname === item.path ||
           location.pathname.startsWith(item.path + "/");
-        const color = active ? "#2563eb" : "#6b7280";
+        const color = active ? "#7f4534ff" : "#6b7280";
         return (
           <Link
             key={item.path}
