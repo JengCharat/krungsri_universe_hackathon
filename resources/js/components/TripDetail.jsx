@@ -63,7 +63,7 @@ export default function MyTripDetail() {
 
         {/* Top row */}
         <div className="flex items-center justify-between mb-4">
-          <div className="inline-flex items-center gap-4 text-blue-800 bg-blue-200 px-5 py-3 rounded-full text-lg font-bold">
+          <div className="inline-flex items-center gap-4 text-[#7f4534ff] bg-[#fecb00] px-5 py-3 rounded-full text-3xl font-bold">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
               <path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7Zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5Z" />
             </svg>
@@ -138,7 +138,7 @@ export default function MyTripDetail() {
         {/* ปุ่มกลับ */}
         <button
           onClick={() => navigate(-1)}
-          className=" px-10 py-6 md:px-12 md:py-7 text-white rounded-3xl bg-gradient-to-r from-blue-500 to-cyan-400 font-extrabold shadow-xl transform transition-transform hover:scale-110 hover:shadow-2xl text-2xl md:text-3xl mt-6"
+          className=" px-10 py-6 md:px-12 md:py-7 bg-gray-500 text-white rounded-3xl font-extrabold shadow-xl transform transition-transform hover:scale-110 hover:shadow-2xl text-2xl md:text-3xl mt-6"
         >
           กลับ
         </button>

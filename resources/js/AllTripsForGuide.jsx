@@ -84,7 +84,7 @@ export default function AllTripsForGuide() {
 
     {/* Top row */}
     <div className="flex items-center justify-between mb-4">
-      <div className="inline-flex items-center gap-4 text-blue-800 bg-blue-200 px-5 py-3 rounded-full text-lg font-bold">
+      <div className="inline-flex items-center gap-4 text-[#7f4534ff] bg-[#fecb00] px-5 py-3 rounded-full text-3xl font-bold">
         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
           <path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7Zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5Z" />
         </svg>
@@ -108,11 +108,11 @@ export default function AllTripsForGuide() {
       ไม่มีทริปที่ต้องการไกด์หรือคนขับรถในขณะนี้
     </p>
   ) : (
-    <div className="flex flex-col gap-10 w-full items-center">
+    <div className="w-full bg-gradient-to-r from-blue-50 to-blue-75 rounded-3xl p-6 md:p-12 shadow-md flex flex-col space-y-6 mb-20">
       {trips.map((trip) => (
         <div
           key={trip.id}
-           className="border border-gray-300 rounded-3xl p-8 shadow-lg bg-white w-full max-w-4xl text-center"
+           
                 >
           <h3 className="text-2xl md:text-6xl font-bold text-slate-900 text-center mb-2">{trip.name}</h3>
            <div className="w-full flex flex-col gap-4 text-slate-700 text-2xl md:text-4xl mb-6 text-start">
@@ -126,23 +126,23 @@ export default function AllTripsForGuide() {
                   <div className="flex flex-col gap-6 w-full justify-center mt-4">
             <button
               onClick={() => navigate(`/trip/${trip.id}`)}
-              className="flex-1 px-8 py-5 bg-blue-600 text-white rounded-3xl font-semibold shadow hover:bg-blue-700 transition transform hover:scale-105 text-4xl"
+className="flex-1 px-8 py-5 bg-gray-500 text-white rounded-3xl font-semibold shadow hover:bg-gray-400 transition transform hover:scale-105 text-4xl"
                 >
               ดูรายละเอียด
             </button>
             <button
               onClick={() => handleJoinTrip(trip.id)}
               disabled={joining === trip.id}
-                className="flex-1 px-8 py-5 bg-green-600 text-white rounded-3xl font-semibold shadow hover:bg-green-700 transition transform hover:scale-105 text-4xl"
+              className="flex-1 px-8 py-5 bg-[#fecb00] text-[#7f4534ff] rounded-3xl font-semibold shadow hover:bg-yello-700 transition transform hover:scale-105 disabled:opacity-50 text-4xl"
                 >
-              {joining === trip.id ? "⏳ กำลังเข้าร่วม..." : "เข้าร่วมทริป"}
+              {joining === trip.id ? "กำลังเข้าร่วม..." : "เข้าร่วมทริป"}
             </button>
             <button
               onClick={() => handleOfferPrice(trip.id)}
               disabled={joining === trip.id}
               className="flex-1 px-8 py-5 bg-red-600 text-white rounded-3xl font-semibold shadow hover:bg-red-700 transition transform hover:scale-105 text-4xl"
                 >
-              {joining === trip.id ? "💬 กำลังส่งราคา..." : "เสนอราคา"}
+              {joining === trip.id ? "กำลังส่งราคา..." : "เสนอราคา"}
             </button>
           </div>
         </div>
