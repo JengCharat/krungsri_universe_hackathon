@@ -38,7 +38,7 @@ export function AllChatGroups() {
       <div className="flex-w-full h-[300px] bg-white flex flex-col justify-center px-6 md:px-12 py-5 relative overflow-hidden sticky top-0 z-10 w-full bg-white flex flex-col justify-center px-6 md:px-12 py-5 sticky top-0 z-10 ">
         {/* Top row */}
         <div className="flex items-center justify-between mb-4">
-          <div className="inline-flex items-center gap-4 text-blue-800 bg-blue-200 px-5 py-3 rounded-full text-lg font-bold">
+          <div className="inline-flex items-center gap-4 text-[#7f4534ff] bg-[#fecb00] px-5 py-3 rounded-full text-3xl font-bold">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
               <path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7Zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5Z" />
             </svg>
@@ -60,13 +60,15 @@ export function AllChatGroups() {
       onClick={() => navigate(`/chat-group/${group.id}`)}
     >
       <div>
-        <h3 className="text-5xl md:text-6xl font-extrabold text-blue-800">{group.name}</h3>
+        <h3 className="text-5xl md:text-6xl font-extrabold text-[#7f4534ff]">{group.name}</h3>
         <p className="text-3xl md:text-4xl text-gray-700 mt-2 line-clamp-2">
           {group.description || "ไม่มีคำอธิบาย"}
         </p>
       </div>
       <div className="mt-4 flex justify-end">
-        <button  className="mt-6 flex-1 px-8 py-5 bg-green-600 text-white rounded-3xl font-semibold shadow hover:bg-green-700 transition transform hover:scale-105 text-4xl">
+        <button  
+              className="flex-1 px-8 py-5 bg-[#fecb00] text-[#7f4534ff] rounded-3xl font-semibold shadow hover:bg-yello-700 transition transform hover:scale-105 disabled:opacity-50 text-4xl"
+        >
           เข้าไปดูแชท
         </button>
       </div>

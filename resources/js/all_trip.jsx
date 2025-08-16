@@ -124,7 +124,7 @@ export default function AllTrips() {
           <div className="flex flex-col gap-6 w-full justify-center mt-4">
             <button
               onClick={() => navigate(`/trip/${trip.id}`)}
-              className="flex-1 px-8 py-5 bg-[#6b7280] text-white rounded-3xl font-semibold shadow hover:bg-blue-700 transition transform hover:scale-105 text-4xl"
+className="flex-1 px-8 py-5 bg-gray-500 text-white rounded-3xl font-semibold shadow hover:bg-gray-400 transition transform hover:scale-105 text-4xl"
             >
               ดูรายละเอียด
             </button>
@@ -132,7 +132,7 @@ export default function AllTrips() {
             <button
               onClick={() => handleJoinTrip(trip.id)}
               disabled={joining === trip.id}
-              className="flex-1 px-8 py-5 bg-[#fecb00] text-[#7f4534ff] rounded-3xl font-semibold shadow hover:bg-green-700 transition transform hover:scale-105 disabled:opacity-50 text-4xl"
+              className="flex-1 px-8 py-5 bg-[#fecb00] text-[#7f4534ff] rounded-3xl font-semibold shadow hover:bg-yell-700 transition transform hover:scale-105 disabled:opacity-50 text-4xl"
             >
               {joining === trip.id ? "กำลังเข้าร่วม..." : "เข้าร่วมทริป"}
             </button>

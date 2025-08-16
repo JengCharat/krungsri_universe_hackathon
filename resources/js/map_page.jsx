@@ -158,7 +158,6 @@ return (
         ปรับระยะเพื่อดูพื้นที่ใกล้เคียงให้อ่านง่ายและชัดเจน
       </p>
        {/* Slider */}
-       <h1>test Jeng</h1>
       <input
         type="range"
         min="0.1"
@@ -172,7 +171,7 @@ return (
       <div className="flex justify-between w-full text-2xl text-slate-700 px-3 mt-6">
         <span>0.1 กม.</span>
         <span className="font-extrabold">{radiusKm.toFixed(1)} กม.</span>
-        <span>20 กม.</span>
+        <span>200 กม.</span>
       </div>
 
 <style>

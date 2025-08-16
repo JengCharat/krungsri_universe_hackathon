@@ -81,39 +81,41 @@ export default function MyTrips() {
           <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
             <path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7Zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5Z" />
           </svg>
-            ทริปทั้งหมด
+            ทริปของฉัน
           </div>
 
-          {/* แถบเลือกสถานะ */}
-          <div className="flex gap-4">
-            {role === "guide"
-              ? ["pending", "selected", "rejected"].map((status) => (
-                  <button
-                    key={status}
-                    onClick={() => setTab(status)}
-                    className={`px-6 py-2 rounded-xl text-lg font-bold text-white ${
-                      tab === status ? "bg-blue-600" : "bg-gray-400"
-                    }`}
-                  >
-                    {status === "pending" ? "กำลังพิจารณา" : status === "selected" ? "ยืนยันแล้ว" : "ปฏิเสธ"}
-                  </button>
-                ))
-              : ["ongoing", "ended"].map((status) => (
-                  <button
-                    key={status}
-                    onClick={() => setTab(status)}
-                    className={`px-6 py-2 rounded-xl text-lg font-bold text-white ${
-                      tab === status
-                        ? status === "ongoing"
-                          ? "bg-blue-600"
-                          : "bg-green-600"
-                        : "bg-gray-400"
-                    }`}
-                  >
-                    {status === "ongoing" ? "ยังไม่จบ" : "จบแล้ว"}
-                  </button>
-                ))}
-          </div>
+{/* แถบเลือกสถานะ */}
+<div className="flex gap-4">
+  {role === "guide"
+    ? ["pending", "selected", "rejected"].map((status) => (
+        <button
+          key={status}
+          onClick={() => setTab(status)}
+          className={`px-10 py-4 rounded-2xl text-3xl font-bold text-white ${
+            tab === status ? "bg-yellow-500 hover:bg-yellow-600" : "bg-gray-400 hover:bg-gray-500"
+          } transition-colors`}
+        >
+          {status === "pending"
+            ? "กำลังพิจารณา"
+            : status === "selected"
+            ? "ยืนยันแล้ว"
+            : "ปฏิเสธ"}
+        </button>
+      ))
+    : ["ongoing", "ended"].map((status) => (
+        <button
+          key={status}
+          onClick={() => setTab(status)}
+          className={`px-10 py-4 rounded-2xl text-3xl font-bold text-white ${
+            tab === status ? "bg-yellow-500 hover:bg-yellow-600" : "bg-gray-400 hover:bg-gray-500"
+          } transition-colors`}
+        >
+          {status === "ongoing" ? "ยังไม่จบ" : "จบแล้ว"}
+        </button>
+      ))}
+</div>
+
+
         </div>
 
         <h1 className="text-6xl font-extrabold text-slate-900 mb-4 mt-5">ทริปของฉัน</h1>
@@ -125,19 +127,20 @@ export default function MyTrips() {
         {filteredTrips.length === 0 ? (
           <p className="text-3xl text-center">ไม่มีทริปสำหรับสถานะนี้</p>
         ) : (
-          <div className="flex flex-col gap-10 w-full items-center">
+          <div className="w-full bg-gradient-to-r from-blue-50 to-blue-75 rounded-3xl p-6 md:p-12 shadow-md flex flex-col space-y-6 mb-20"
+>
             {filteredTrips.map((item) => {
               const trip = getTrip(item);
               return (
                 <div
                   key={trip.id}
-                  className="border border-gray-300 rounded-3xl p-8 shadow-lg bg-white w-full max-w-4xl text-center"
+                  
                 >
                   {/* Trip Name */}
-                  <h3 className="text-2xl md:text-6xl font-bold text-slate-900 text-center mb-2">{trip.name}</h3>
+                  <h3 class="text-2xl md:text-6xl font-bold text-slate-900 text-center mb-2">{trip.name}</h3>
 
                   {/* Trip Info */}
-                  <div className="w-full flex flex-col gap-4 text-slate-700 text-2xl md:text-4xl mb-6 text-start">
+                  <div className="w-full flex flex-col gap-4 text-slate-700 text-2xl md:text-4xl mb-6">
                     <p>
                       <strong>วันที่เริ่ม:</strong> {trip.start_date || "-"}
                     </p>
@@ -150,11 +153,11 @@ export default function MyTrips() {
                   </div>
 
                   {/* Action Buttons */}
-                  <div className="flex flex-col gap-6 w-full justify-center mt-4">
+          <div className="flex flex-col gap-6 w-full justify-center mt-4">
                     <button
                       onClick={() => navigate(`/my-trips/${trip.id}`)}
-                     className="flex-1 px-8 py-5 bg-blue-600 text-white rounded-3xl font-semibold shadow hover:bg-blue-700 transition transform hover:scale-105 text-4xl"
-                >
+className="flex-1 px-8 py-5 bg-gray-500 text-white rounded-3xl font-semibold shadow hover:bg-gray-400 transition transform hover:scale-105 text-4xl"
+            >
                       ดูรายละเอียด
                     </button>
 
@@ -163,8 +166,8 @@ export default function MyTrips() {
                         <button
                           onClick={() => handleJoinTrip(trip.id)}
                           disabled={joining === trip.id}
-                          className="flex-1 px-8 py-5 bg-green-600 text-white rounded-3xl font-semibold shadow hover:bg-green-700 transition transform hover:scale-105 text-4xl"
-                >
+              className="flex-1 px-8 py-5 bg-[#fecb00] text-[#7f4534ff] rounded-3xl font-semibold shadow hover:bg-yello-700 transition transform hover:scale-105 disabled:opacity-50 text-4xl"
+            >
                           {joining === trip.id ? "กำลังเข้าร่วม..." : "เข้าร่วมทริป"}
                         </button>
 
