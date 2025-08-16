@@ -6,7 +6,11 @@ export default function MyTripDetail() {
   const { tripId } = useParams();
   const navigate = useNavigate();
 
-  const [trip, setTrip] = useState(null);
+  const [trip, setTrip] = useState({
+    tripGuides: [],
+    touristAttractions: [],
+    users: []
+  });
   const [isOwner, setIsOwner] = useState(false);
   const [selectedGuide, setSelectedGuide] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -20,7 +24,12 @@ export default function MyTripDetail() {
         const res = await axios.get(`/api/my-trips/${tripId}`);
         const data = res.data;
 
-        setTrip(data.trip || null);
+        setTrip({
+          ...data.trip,
+          tripGuides: data.trip?.tripGuides || [],
+          touristAttractions: data.trip?.touristAttractions || [],
+          users: data.trip?.users || []
+        });
         setIsOwner(data.is_owner || false);
         setSelectedGuide(data.selected_guide || null);
       } catch (err) {
@@ -41,7 +50,12 @@ export default function MyTripDetail() {
       alert("เลือกไกด์เรียบร้อย");
 
       const res = await axios.get(`/api/my-trips/${tripId}`);
-      setTrip(res.data.trip || null);
+      setTrip({
+        ...res.data.trip,
+        tripGuides: res.data.trip?.tripGuides || [],
+        touristAttractions: res.data.trip?.touristAttractions || [],
+        users: res.data.trip?.users || []
+      });
       setIsOwner(res.data.is_owner || false);
       setSelectedGuide(res.data.selected_guide || null);
     } catch (err) {
@@ -53,14 +67,9 @@ export default function MyTripDetail() {
     return <p className="p-8 text-center text-4xl">กำลังโหลดข้อมูล...</p>;
   if (error)
     return <p className="p-8 text-center text-red-600 text-4xl">{error}</p>;
-  if (!trip)
-    return <p className="p-8 text-center text-4xl">ไม่พบข้อมูลทริป</p>;
+  if (!trip) return <p className="p-8 text-center text-4xl">ไม่พบข้อมูลทริป</p>;
 
-  const guidesToShow = isOwner
-    ? selectedGuide
-      ? [selectedGuide]
-      : trip.tripGuides || []
-    : [];
+const guidesToShow = isOwner ? trip.trip_guides || [] : [];
 
   return (
     <div className="flex flex-col h-screen w-screen bg-white text-slate-900 px-4 md:px-12 mt-12">
@@ -91,7 +100,7 @@ export default function MyTripDetail() {
           {/* สถานที่ท่องเที่ยว */}
           <div className="flex flex-col items-start w-full">
             <h3 className="text-3xl md:text-4xl font-bold mb-6">สถานที่ท่องเที่ยว</h3>
-            {trip.touristAttractions?.length > 0 ? (
+            {trip.touristAttractions.length > 0 ? (
               <ul className="flex flex-col items-center gap-6 w-full">
                 {trip.touristAttractions.map((attraction) => (
                   <li key={attraction.id} className="p-6 md:p-8 bg-gray-100 rounded-3xl shadow-md w-full max-w-4xl text-center text-2xl md:text-3xl">
@@ -109,7 +118,7 @@ export default function MyTripDetail() {
           {/* สมาชิกทริป */}
           <div className="w-full mt-12">
             <h3 className="text-4xl md:text-4xl font-bold mb-6">สมาชิกในทริป</h3>
-            {trip.users?.length > 0 ? (
+            {trip.users.length > 0 ? (
               <ul className="flex flex-col gap-4 text-2xl md:text-3xl">
                 {trip.users.map((user) => (
                   <li key={user.id} className="p-4 bg-gray-200 rounded-xl shadow">
@@ -142,7 +151,7 @@ export default function MyTripDetail() {
                       <tr key={id} className="border-b border-gray-300">
                         <td className="p-4">{guide?.name || "-"}</td>
                         <td className="p-4">{guide?.email || "-"}</td>
-                        <td className="p-4">{price}</td>
+                        <td className="p-4">{price || "-"}</td>
                         <td className="p-4">{status}</td>
                         <td className="p-4">
                           {status === "selected" ? (
