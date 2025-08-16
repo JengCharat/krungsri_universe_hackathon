@@ -128,170 +128,106 @@ export default function TouristAttractionMapMobile() {
 
   const clusters = clusterAttractions(filteredMarkers);
 
-  return (
-    <div style={{ height: "100vh", display: "flex", flexDirection: "column" }}>
-      {/* Mobile-friendly control */}
-      <div style={{
-        padding: "20px",
-        background: "#fff",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        zIndex: 1000,
-        boxShadow: "0 4px 16px rgba(0,0,0,0.3)"
-      }}>
-        <label style={{ fontSize: "50px", fontWeight: "bold", marginBottom: "16px" }}>
-          ระยะรัศมี: {radiusKm} กม.
-        </label>
+  
+return (
+
+  <div className="flex flex-col h-screen w-screen py-8 px-4 md:px-12">
+    {/* Header + Radius controls */}
+    <div className="w-full h-[300px] bg-white flex flex-col justify-center px-4 md:px-12 py-5 mt-12">
+      {/* Top row */}
+      <div className="flex items-center justify-between mb-4">
+        <div className="inline-flex items-center gap-4 text-blue-800 bg-blue-200 px-5 py-3 rounded-full text-lg font-bold">
+          <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7Zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5Z" />
+          </svg>
+          ที่เที่ยวใกล้ฉัน
+        </div>
+
+        <div className="text-lg text-green-900 bg-green-200 px-5 py-3 rounded-full font-bold">
+          ระยะรัศมี: {radiusKm.toFixed(1)} กม.
+        </div>
+      </div> 
+
+      {/* Title */}
+      <h1 className="text-6xl font-extrabold text-slate-900 mb-4 mt-5">
+        สถานที่เที่ยวใกล้ฉัน
+      </h1>
+
+      {/* Sub note */}
+      <p className="text-2xl text-slate-700 mb-6">
+        ปรับระยะเพื่อดูพื้นที่ใกล้เคียงให้อ่านง่ายและชัดเจน
+      </p>
+
+      {/* Slider */}
+      <div className="flex flex-col items-center gap-3 px-2 md:px-0">
         <input
           type="range"
-          min="1"
-          max="200"
+          min="0.1"
+          max="20"
+          step="0.1"
           value={radiusKm}
-          onChange={(e) => setRadiusKm(Number(e.target.value))}
-          style={{
-            width: "95%",
-            height: "32px", // track สูงขึ้น
-            borderRadius: "16px",
-            accentColor: "#007bff",
-            cursor: "pointer",
-            WebkitAppearance: "none",
-            background: "#ddd",
-          }}
+          onChange={(e) => setRadiusKm(parseFloat(e.target.value))}
+          className="w-full accent-indigo-400"
         />
-
-        <style>
-        {`
-        input[type="range"]::-webkit-slider-thumb {
-          -webkit-appearance: none;
-          height: 40px;
-          width: 40px;
-          background: #007bff;
-          border-radius: 50%;
-          border: 3px solid #fff;
-          cursor: pointer;
-          box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-          margin-top: -6px; /* ปรับให้ thumb อยู่ตรงกลาง track */
-        }
-
-        input[type="range"]::-moz-range-thumb {
-          height: 40px;
-          width: 40px;
-          background: #007bff;
-          border-radius: 50%;
-          border: 3px solid #fff;
-          cursor: pointer;
-          box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-        }
-
-        input[type="range"]::-ms-thumb {
-          height: 40px;
-          width: 40px;
-          background: #007bff;
-          border-radius: 50%;
-          border: 3px solid #fff;
-          cursor: pointer;
-          box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-        }
-        `}
-        </style>
-
-      </div>
-
-      {/* Map */}
-      <div style={{ flex: 1 }}>
-        <MapContainer
-          center={userLocation || [13.7367, 100.5231]}
-          zoom={14}
-          style={{ height: "100%", width: "100%" }}
-        >
-          <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-          {userLocation && <MapUpdater center={userLocation} zoom={14} />}
-          {userLocation && (
-            <Circle
-              center={userLocation}
-              radius={radiusKm * 1000}
-              pathOptions={{ color: "blue", fillColor: "blue", fillOpacity: 0.15 }}
-            />
-          )}
-
-          {clusters.map((cluster, idx) => {
-            const count = cluster.members.length;
-            return (
-              <Marker
-                key={idx}
-                position={[cluster.centroidLat, cluster.centroidLon]}
-                icon={createClusterIcon(count)}
-              >
-                <Popup>
-                <style>
-                {`
-                /* ขยายปุ่มปิด popup ให้ใหญ่และกดง่าย */
-                .leaflet-popup-close-button {
-                  width: 50px !important;
-                  height: 50px !important;
-                  font-size: 24px !important;
-                  line-height: 40px !important;
-                  top: 8px !important;
-                  right: 8px !important;
-                  color: #fff !important;
-                  background: #007bff !important;
-                  border-radius: 50% !important;
-                  text-align: center !important;
-                  box-shadow: 0 4px 12px rgba(0,0,0,0.4) !important;
-                }
-                .leaflet-popup-close-button:hover {
-                  background: #00c6ff !important;
-                }
-                `}
-                </style>
-                  <div style={{
-                    fontSize: "50px",
-                    fontWeight: "bold",
-                    textAlign: "center",
-                    padding: "50px"
-                  }}>
-                    มีสถานที่ท่องเที่ยว {count} แห่ง
-                    <br />
-                    <button
-                      style={{
-                        marginTop: "16px",
-                        padding: "18px 30px",
-                        fontSize: "30px",
-                        fontWeight: "bold",
-                        background: "linear-gradient(90deg, #007bff, #00c6ff)",
-                        color: "#fff",
-                        border: "none",
-                        borderRadius: "12px",
-                        cursor: "pointer",
-                        width: "100%",
-                        maxWidth: "280px",
-                        boxShadow: "0 6px 18px rgba(0,0,0,0.35)",
-                        transition: "transform 0.2s, box-shadow 0.2s"
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.transform = "scale(1.05)";
-                        e.currentTarget.style.boxShadow = "0 10px 24px rgba(0,0,0,0.45)";
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.transform = "scale(1)";
-                        e.currentTarget.style.boxShadow = "0 6px 18px rgba(0,0,0,0.35)";
-                      }}
-                      onClick={() =>
-                        navigate(`/attraction/${cluster.members[0].id}`, {
-                          state: { details: cluster.members },
-                        })
-                      }
-                    >
-                      ดูทั้งหมด
-                    </button>
-                  </div>
-                </Popup>
-              </Marker>
-            );
-          })}
-        </MapContainer>
+        <div className="flex justify-between w-full text-2xl text-slate-700 px-3">
+          <span>0.1 กม.</span>
+          <span className="font-extrabold">{radiusKm.toFixed(1)} กม.</span>
+          <span>20 กม.</span>
+        </div>
       </div>
     </div>
-  );
+
+    {/* Map */}
+    <div className="flex-1 mt-4 mb-12">
+      <MapContainer
+        center={userLocation || [13.7367, 100.5231]}
+        zoom={14}
+        style={{ height: "100%", width: "100%" }}
+      >
+        <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+        {userLocation && <MapUpdater center={userLocation} zoom={14} />}
+        {userLocation && (
+          <Circle
+            center={userLocation}
+            radius={radiusKm * 1000}
+            pathOptions={{ color: "blue", fillColor: "blue", fillOpacity: 0.15 }}
+          />
+        )}
+
+        {clusters.map((cluster, idx) => {
+          const count = cluster.members.length;
+          return (
+            <Marker
+              key={idx}
+              position={[cluster.centroidLat, cluster.centroidLon]}
+              icon={createClusterIcon(count)}
+            >
+              <Popup>
+                <div className="flex flex-col items-center justify-center text-center p-4">
+                  <span className="text-2xl font-bold mb-4">
+                    มีสถานที่ท่องเที่ยว {count} แห่ง
+                  </span>
+                  <button
+                    className="bg-gradient-to-r from-blue-600 to-cyan-500 text-white font-extrabold py-4 px-8 rounded-2xl w-full max-w-xs text-3xl shadow-2xl"
+                    onClick={() =>
+                      navigate(`/attraction/${cluster.members[0].id}`, {
+                        state: { details: cluster.members },
+                      })
+                    }
+                  >
+                    ดูทั้งหมด
+                  </button>
+                </div>
+              </Popup>
+            </Marker>
+          );
+        })}
+      </MapContainer>
+    </div>
+  </div>
+);
+
+
+
+
 }

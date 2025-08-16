@@ -33,29 +33,51 @@ export function AllChatGroups() {
     return <p className="p-5 text-center text-xl">คุณยังไม่มีสมาชิกในกลุ่มแชทใดๆ</p>;
 
   return (
-    <div className="w-full max-w-4xl mx-auto p-4 space-y-4">
-      <h2 className="text-5xl font-extrabold text-center mb-4">กลุ่มแชททั้งหมด</h2>
-      <ul className="space-y-3">
-        {chatGroups.map((group) => (
-          <li
-            key={group.id}
-            className="border border-gray-300 rounded-lg p-6 shadow hover:shadow-xl transition cursor-pointer bg-white flex flex-col justify-between"
-            style={{ height: "15vh", width: "95vw", maxWidth: "800px" }}
-            onClick={() => navigate(`/chat-group/${group.id}`)}
-          >
-            <div>
-              <h3 className="text-5xl font-extrabold">{group.name}</h3>
-              <p className="text-3xl text-gray-700 mt-2">{group.description || "ไม่มีคำอธิบาย"}</p>
-            </div>
-            <div className="mt-3 flex justify-end">
-              <button className="px-6 py-4 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition font-extrabold text-3xl">
-                เข้าไปดูแชท
-              </button>
-            </div>
-          </li>
-        ))}
-      </ul>
+     <div className="flex flex-col h-screen w-screen bg-white text-slate-900 px-4 md:px-12 mt-12">
+      {/* Header */}
+      <div className="flex-w-full h-[300px] bg-white flex flex-col justify-center px-6 md:px-12 py-5 relative overflow-hidden sticky top-0 z-10 w-full bg-white flex flex-col justify-center px-6 md:px-12 py-5 sticky top-0 z-10 ">
+        {/* Top row */}
+        <div className="flex items-center justify-between mb-4">
+          <div className="inline-flex items-center gap-4 text-blue-800 bg-blue-200 px-5 py-3 rounded-full text-lg font-bold">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7Zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5Z" />
+            </svg>
+            กลุ่มแชททั้งหมด
+          </div>
+        </div>
+
+      <h1 className="text-6xl font-extrabold text-slate-900 mb-4 mt-5">กลุ่มแชททั้งหมด</h1>
+      <p className="text-2xl text-slate-700 mb-6">
+          พูดคุยกับเพื่อนร่วมทริปของคุณ
+        </p>
+        </div>
+
+      <ul className="flex-1 overflow-auto flex flex-col items-center gap-6 w-full py-6">
+  {chatGroups.map((group) => (
+    <li
+      key={group.id}
+     className="w-full max-w-4xl bg-gradient-to-r from-blue-50 to-blue-75 rounded-3xl p-6 md:p-12 shadow-md flex flex-col space-y-6"
+      onClick={() => navigate(`/chat-group/${group.id}`)}
+    >
+      <div>
+        <h3 className="text-5xl md:text-6xl font-extrabold text-blue-800">{group.name}</h3>
+        <p className="text-3xl md:text-4xl text-gray-700 mt-2 line-clamp-2">
+          {group.description || "ไม่มีคำอธิบาย"}
+        </p>
+      </div>
+      <div className="mt-4 flex justify-end">
+        <button  className="mt-6 flex-1 px-8 py-5 bg-green-600 text-white rounded-3xl font-semibold shadow hover:bg-green-700 transition transform hover:scale-105 text-4xl">
+          เข้าไปดูแชท
+        </button>
+      </div>
+    </li>
+  ))}
+</ul>
+
+
     </div>
+    
+   
   );
 }
 

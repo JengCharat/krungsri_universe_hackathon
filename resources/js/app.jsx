@@ -12,7 +12,8 @@ import TripDetail from "./components/TripDetail";
 import MyTrips from "./my_trip";
 import MyTripDetail from "./components/MyTripDetail";
 import { AllChatGroups, ChatPage } from './all_chat'; // import ทั้งสองหน้า
-import AllTripsForGuide from './AllTripsForGuide';
+import { FaMapMarkedAlt, FaBus, FaSuitcaseRolling, FaComments, FaUpload, FaUser } from 'react-icons/fa';
+
 // ---------- Error Boundary ----------
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -39,55 +40,74 @@ class ErrorBoundary extends React.Component {
     return this.props.children;
   }
 }
-
-// ---------- Bottom Navigation ----------
 function BottomNav() {
   const location = useLocation();
   const navItems = [
-    { path: "/test", label: "Map", icon: "🗺️" },
-    { path: "/all_trip", label: "All Trips", icon: "🚌" },
-    { path: "/my-trips", label: "My Trips", icon: "🧳" },
-    { path: "/all_chat", label: "Chat", icon: "💬" }, // ✅ Chat
-    { path: "/upload", label: "Upload", icon: "📤" },
-    { path: "/profile", label: "Profile", icon: "👤" },
+    { path: "/test", label: "Map", icon: <FaMapMarkedAlt /> },
+    { path: "/all_trip", label: "All Trips", icon: <FaBus /> },
+    { path: "/my-trips", label: "My Trips", icon: <FaSuitcaseRolling /> },
+    { path: "/all_chat", label: "Chat", icon: <FaComments /> },
+    { path: "/upload", label: "Upload", icon: <FaUpload /> },
+    { path: "/profile", label: "Profile", icon: <FaUser /> },
   ];
 
+  const containerStyle = {
+    position: "fixed",
+    bottom: 0,
+    left: 0,
+    right: 0,
+    height: "160px",
+    background: "#ffffff",
+    borderTop: "1px solid #e5e7eb",
+    display: "flex",
+    justifyContent: "space-around",
+    alignItems: "center",
+    zIndex: 1000,
+    paddingBottom: "env(safe-area-inset-bottom)",
+    boxShadow: "0 -6px 24px rgba(0,0,0,0.08)",
+  };
+
+  const linkBaseStyle = {
+    textDecoration: "none",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    gap: "4px",
+    padding: "8px 10px",
+    borderRadius: "12px",
+    transition: "all 160ms ease",
+    fontWeight: 600,
+  };
+
+  const iconStyle = { fontSize: "60px", lineHeight: 1 };
+  const labelStyle = { fontSize: "25px", letterSpacing: "0.2px" };
+
   return (
-    <div
-      style={{
-        position: "fixed",
-        bottom: 0,
-        left: 0,
-        right: 0,
-        height: "160px",
-        background: "#fff",
-        borderTop: "1px solid #ddd",
-        display: "flex",
-        justifyContent: "space-around",
-        alignItems: "center",
-        zIndex: 1000,
-      }}
-    >
-      {navItems.map((item) => (
-        <Link
-          key={item.path}
-          to={item.path}
-          style={{
-            textDecoration: "none",
-            color: location.pathname.startsWith(item.path) ? "#007bff" : "#555",
-            fontSize: "1px",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <span style={{ fontSize: "130px" }}>{item.icon}</span>
-          {item.label}
-        </Link>
-      ))}
+    <div style={containerStyle}>
+      {navItems.map((item) => {
+        const active =
+          location.pathname === item.path ||
+          location.pathname.startsWith(item.path + "/");
+        const color = active ? "#2563eb" : "#6b7280";
+        return (
+          <Link
+            key={item.path}
+            to={item.path}
+            style={{
+              ...linkBaseStyle,
+              color,
+              background: active ? "rgba(37,99,235,0.08)" : "transparent",
+            }}
+          >
+            <span style={iconStyle}>{item.icon}</span>
+            <span style={labelStyle}>{item.label}</span>
+          </Link>
+        );
+      })}
     </div>
   );
 }
+
 
 // ---------- Main App ----------
 function App() {

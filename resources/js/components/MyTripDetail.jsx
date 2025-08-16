@@ -65,90 +65,112 @@ export default function MyTripDetail() {
   const scale = 1.45;
 
   return (
-    <div className="max-w-4xl mx-auto p-8 flex flex-col items-center space-y-8 text-center">
-      <h2 className="font-extrabold" style={{ fontSize: `${32 * scale}px` }}>
+
+    <div className="flex flex-col h-screen w-screen bg-white text-slate-900 px-4 md:px-12 mt-12"> 
+    {/* Header */} 
+    <div className="w-full h-[300px] bg-white flex flex-col justify-center px-6 md:px-12 py-5 relative overflow-hidden"> 
+      {/* Decorative blobs */} 
+      <div className="pointer-events-none absolute -top-10 -right-10 w-36 h-36 rounded-full bg-indigo-100/30 blur-2xl"></div> 
+      <div className="pointer-events-none absolute -bottom-12 -left-10 w-32 h-32 rounded-full bg-emerald-100/30 blur-2xl"></div>
+     {/* Top row */} 
+     <div className="flex items-center justify-between mb-4"> 
+      <div className="inline-flex items-center gap-4 text-blue-800 bg-blue-200 px-5 py-3 rounded-full text-lg font-bold"> 
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="currentColor"> 
+        <path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7Zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5Z" /> 
+        </svg> รายละเอียด
+        </div> 
+        </div>
+        <h1 className="text-6xl font-extrabold text-slate-900 mb-4 mt-5"> รายละเอียดทริปของฉัน </h1>
+         <p className="text-2xl text-slate-700 mb-6"> รายละเอียดเพิ่มเติมเกี่ยวกับทริปนี้ </p> </div>
+
+    
+
+    <div className="flex-1 overflow-auto flex flex-col items-center gap-8 w-full max-w-5xl mx-auto py-4">
+      {/* Card รายละเอียดทริป */}
+      
+      <div  className="w-full bg-gradient-to-r from-blue-50 to-blue-100 rounded-3xl p-8 md:p-10 shadow-lg flex flex-col space-y-8 text-2xl md:text-3xl items-start">
+         <h1 className="text-5xl md:text-6xl font-extrabold text-slate-900 text-center">
         {trip.name}
-      </h2>
+      </h1>
+      <div className="flex flex-col items-start space-y-6">
+          <p><strong>วันที่เริ่ม:</strong> {trip.start_date || "-"}</p>
+          <p><strong>เงื่อนไข:</strong> {trip.conditions || "-"}</p>
+          <p><strong>จำนวนคนที่ต้องการ:</strong> {trip.max_people}</p>
+        </div>
 
-      <div className="flex flex-col items-center space-y-4" style={{ fontSize: `${28 * scale}px` }}>
-        <p><strong>วันที่เริ่ม:</strong> {trip.start_date || "ไม่ระบุ"}</p>
-        <p><strong>เงื่อนไข:</strong> {trip.conditions || "-"}</p>
-        <p><strong>จำนวนคนที่ต้องการ:</strong> {trip.max_people}</p>
-      </div>
-
-      <div className="w-full flex flex-col items-center">
-        <h3 className="font-extrabold mb-4" style={{ fontSize: `${28 * scale}px` }}>
-          สถานที่ท่องเที่ยว
-        </h3>
-        {trip.touristAttractions && trip.touristAttractions.length > 0 ? (
-          <ul className="flex flex-col items-center gap-6 w-full">
-            {trip.touristAttractions.map((attraction) => (
-              <li
-                key={attraction.id}
-                className="p-6 bg-gray-100 rounded-3xl shadow-md w-full max-w-3xl"
-                style={{ fontSize: `${24 * scale}px` }}
-              >
-                <p className="text-center"><strong>คำอธิบาย:</strong> {attraction.description || "-"}</p>
-                <p className="text-center"><strong>เวลาเปิด:</strong> {attraction.open_time || "-"}</p>
-                {attraction.address && <p className="text-center"><strong>ที่อยู่:</strong> {attraction.address}</p>}
-              </li>
-            ))}
-          </ul>
-        ) : (
-          <p className="text-center" style={{ fontSize: `${24 * scale}px` }}>ยังไม่มีข้อมูลสถานที่ท่องเที่ยว</p>
-        )}
-      </div>
-
-      <div className="w-full flex flex-col items-center">
-        <h3 className="font-extrabold mb-4" style={{ fontSize: `${28 * scale}px` }}>
-          รายการไกด์ที่เสนอราคา
-        </h3>
-        {guidesToShow.length > 0 ? (
-          <table className="border-collapse border border-gray-300 text-center" style={{ fontSize: `${24 * scale}px`, maxWidth: "90%" }}>
-            <thead className="bg-blue-600 text-white">
-              <tr>
-                <th className="p-4">ชื่อไกด์</th>
-                <th className="p-4">อีเมล</th>
-                <th className="p-4">ราคาเสนอ (บาท)</th>
-                <th className="p-4">สถานะ</th>
-                <th className="p-4">จัดการ</th>
-              </tr>
-            </thead>
-            <tbody>
-              {guidesToShow.map(({ id, guide, price, status, guide_id }) => (
-                <tr key={id} className="border-b border-gray-300">
-                  <td className="p-4">{guide?.name || "-"}</td>
-                  <td className="p-4">{guide?.email || "-"}</td>
-                  <td className="p-4">{price}</td>
-                  <td className="p-4">{status}</td>
-                  <td className="p-4">
-                    {status === "selected" ? (
-                      <span className="text-green-600 font-bold">✅ ไกด์ที่ถูกเลือก</span>
-                    ) : (
-                      <button
-                        onClick={() => chooseGuide(guide_id)}
-                        className="px-6 py-4 text-white bg-blue-500 rounded-3xl shadow hover:bg-blue-600 transition font-extrabold text-2xl"
-                      >
-                        เลือกไกด์คนนี้
-                      </button>
-                    )}
-                  </td>
-                </tr>
+        {/* สถานที่ท่องเที่ยว */}
+        <div className="flex flex-col items-start w-full">
+          <h3 className="text-3xl md:text-4xl font-bold mb-6">สถานที่ท่องเที่ยว</h3>
+          {trip.touristAttractions && trip.touristAttractions.length > 0 ? (
+            <ul className="flex flex-col items-center gap-6 w-full">
+              {trip.touristAttractions.map((attraction) => (
+                <li
+                  key={attraction.id}
+                  className="p-6 md:p-8 bg-gray-100 rounded-3xl shadow-md w-full max-w-4xl text-center text-2xl md:text-3xl"
+                >
+                  <p><strong>คำอธิบาย:</strong> {attraction.description || "-"}</p>
+                  <p><strong>เวลาเปิด:</strong> {attraction.open_time || "-"}</p>
+                  {attraction.address && <p><strong>ที่อยู่:</strong> {attraction.address}</p>}
+                </li>
               ))}
-            </tbody>
-          </table>
-        ) : (
-          <p className="text-center" style={{ fontSize: `${24 * scale}px` }}>ยังไม่มีไกด์เสนอราคา</p>
-        )}
+            </ul>
+          ) : (
+            <p className="text-center text-2xl md:text-3xl">ยังไม่มีข้อมูลสถานที่ท่องเที่ยว</p>
+          )}
+        </div>
+
+        {/* รายการไกด์ */}
+        <div className="w-full flex flex-col items-center ">
+          <h3 className="text-4xl md:text-4xl font-bold mb-6 mt-12">รายการไกด์ที่เสนอราคา</h3>
+          {guidesToShow.length > 0 ? (
+            <table className="border-collapse border border-gray-300 text-center w-full md:max-w-5xl text-2xl md:text-3xl">
+              <thead className="bg-blue-600 text-white">
+                <tr>
+                  <th className="p-4">ชื่อไกด์</th>
+                  <th className="p-4">อีเมล</th>
+                  <th className="p-4">ราคาเสนอ (บาท)</th>
+                  <th className="p-4">สถานะ</th>
+                  <th className="p-4">จัดการ</th>
+                </tr>
+              </thead>
+              <tbody>
+                {guidesToShow.map(({ id, guide, price, status, guide_id }) => (
+                  <tr key={id} className="border-b border-gray-300">
+                    <td className="p-4">{guide?.name || "-"}</td>
+                    <td className="p-4">{guide?.email || "-"}</td>
+                    <td className="p-4">{price}</td>
+                    <td className="p-4">{status}</td>
+                    <td className="p-4">
+                      {status === "selected" ? (
+                        <span className="text-green-600 font-bold text-2xl">✅ ไกด์ที่ถูกเลือก</span>
+                      ) : (
+                        <button
+                          onClick={() => chooseGuide(guide_id)}
+                          className="px-6 py-4 md:px-8 md:py-5 text-white bg-blue-500 rounded-3xl shadow-lg hover:bg-blue-600 transition font-extrabold text-2xl md:text-3xl"
+                        >
+                          เลือกไกด์คนนี้
+                        </button>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          ) : (
+            <p className="text-center text-2xl md:text-3xl">ยังไม่มีไกด์เสนอราคา</p>
+          )}
+        </div>
       </div>
 
+      {/* ปุ่มกลับ */}
       <button
         onClick={() => navigate(-1)}
-        className="px-8 py-6 text-white rounded-3xl bg-gradient-to-r from-blue-500 to-cyan-400 font-extrabold shadow-lg transform transition-transform hover:scale-105 hover:shadow-2xl"
-        style={{ fontSize: `${28 * scale}px` }}
+        className="px-10 py-6 md:px-12 md:py-7 text-white rounded-3xl bg-gradient-to-r from-blue-500 to-cyan-400 font-extrabold shadow-xl transform transition-transform hover:scale-110 hover:shadow-2xl text-2xl md:text-3xl mt-6"
       >
         กลับ
       </button>
     </div>
-  );
+  </div>
+);
+
 }

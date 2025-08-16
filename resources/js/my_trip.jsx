@@ -83,152 +83,84 @@ export default function MyTrips() {
   const getTrip = (item) => (role === "guide" ? item.trip : item);
 
   return (
-    <div style={{ padding: "20px", display: "flex", flexDirection: "column", alignItems: "center" }}>
-      <h2 style={{ fontSize: "48px", marginBottom: "30px", textAlign: "center" }}>ทริปของฉัน</h2>
+<div className="flex flex-col h-screen w-screen bg-white text-slate-900 px-4 md:px-12 mt-12">
+  {/* Header */}
+  <div className="w-full h-[300px] bg-white flex flex-col justify-center px-6 md:px-12 py-5 relative overflow-hidden sticky top-0 z-10">
+    {/* Decorative blobs */}
+    <div className="pointer-events-none absolute -top-10 -right-10 w-36 h-36 rounded-full bg-indigo-100/30 blur-2xl"></div>
+    <div className="pointer-events-none absolute -bottom-12 -left-10 w-32 h-32 rounded-full bg-emerald-100/30 blur-2xl"></div>
 
-      {/* แถบเลือกสถานะ */}
-      <div style={{ display: "flex", gap: "20px", justifyContent: "center", marginBottom: "30px" }}>
-        {role === "guide" ? (
-          ["pending", "selected", "rejected"].map((status) => (
-            <button
-              key={status}
-              onClick={() => setTab(status)}
-              style={{
-                padding: "10px 20px",
-                fontSize: 24,
-                fontWeight: tab === status ? "bold" : "normal",
-                background: tab === status ? "#007bff" : "#ccc",
-                color: "#fff",
-                borderRadius: "12px",
-                cursor: "pointer",
-              }}
-            >
-              {status === "pending" ? "กำลังพิจารณา" : status === "selected" ? "ยืนยันแล้ว" : "ปฏิเสธ"}
-            </button>
-          ))
+    {/* Top row */}
+    <div className="flex items-center justify-between mb-4">
+      <div className="inline-flex items-center gap-4 text-blue-800 bg-blue-200 px-5 py-3 rounded-full text-lg font-bold">
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7Zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5Z" />
+        </svg>
+        ทริปของฉัน
+      </div>
+    </div>
+
+    <h1 className="text-6xl font-extrabold text-slate-900 mb-4 mt-5">
+      ทริปของฉัน
+    </h1>
+    <p className="text-2xl text-slate-700 mb-6">
+      ดูและจัดการทริปของคุณทั้งหมด
+    </p>
+  </div>
+
+
+      {/* Trip List */}
+      <div className="flex-1 overflow-auto flex flex-col items-center gap-6 w-full py-6">
+        {trips.length === 0 ? (
+          <p className="text-2xl md:text-3xl text-center text-slate-700 mt-10">
+            คุณยังไม่ได้สร้างหรือเข้าร่วมทริปใดๆ
+          </p>
         ) : (
-          ["ongoing", "ended"].map((status) => (
-            <button
-              key={status}
-              onClick={() => setTab(status)}
-              style={{
-                padding: "10px 20px",
-                fontSize: 24,
-                fontWeight: tab === status ? "bold" : "normal",
-                background: tab === status ? (status === "ongoing" ? "#007bff" : "#28a745") : "#ccc",
-                color: "#fff",
-                borderRadius: "12px",
-                cursor: "pointer",
-              }}
+          trips.map((trip) => (
+            <div
+              key={trip.id}
+              className="w-full max-w-4xl bg-gradient-to-r from-blue-50 to-blue-75 rounded-3xl p-6 md:p-12 shadow-md flex flex-col space-y-6"
             >
-              {status === "ongoing" ? "ยังไม่จบ" : "จบแล้ว"}
-            </button>
+              {/* Trip Name */}
+              <h3 className="text-2xl md:text-6xl font-bold text-slate-900 text-center mb-2">
+                {trip.name}
+              </h3>
+
+              {/* Trip Info */}
+              <div className="w-full flex flex-col gap-4 text-slate-700 text-2xl md:text-4xl mb-6">
+                <p><strong>วันที่เริ่ม:</strong> {trip.start_date || "-"}</p>
+                <p><strong>เงื่อนไข:</strong> {trip.conditions || "-"}</p>
+                <p><strong>จำนวนคนที่ต้องการ:</strong> {trip.max_people}</p>
+              </div>
+
+              {/* Action Buttons */}
+              <div className="flex flex-col gap-6 w-full justify-center mt-4">
+                <button
+                  onClick={() => navigate(`/my-trips/${trip.id}`)}
+                  className="flex-1 px-8 py-5 bg-blue-600 text-white rounded-3xl font-semibold shadow hover:bg-blue-700 transition transform hover:scale-105 text-4xl"
+                >
+                  ดูรายละเอียด
+                </button>
+
+                <button
+                  onClick={() => handleJoinTrip(trip.id)}
+                  disabled={joining === trip.id}
+                  className="flex-1 px-8 py-5 bg-green-600 text-white rounded-3xl font-semibold shadow hover:bg-green-700 transition transform hover:scale-105 text-4xl"
+                >
+                  {joining === trip.id ? "กำลังเข้าร่วม..." : "เข้าร่วมทริป"}
+                </button>
+
+                <button
+                  onClick={() => handleEndTrip(trip.id)}
+                  className="flex-1 px-8 py-5 bg-red-600 text-white rounded-3xl font-semibold shadow hover:bg-red-700 transition transform hover:scale-105 text-4xl"
+                >
+                  ยืนยันจบทริป
+                </button>
+              </div>
+            </div>
           ))
         )}
       </div>
-
-      {filteredTrips.length === 0 ? (
-        <p style={{ fontSize: 32, textAlign: "center" }}>ไม่มีทริปสำหรับสถานะนี้</p>
-      ) : (
-        <div style={{ display: "flex", flexDirection: "column", gap: "30px", width: "100%", alignItems: "center" }}>
-          {filteredTrips.map((item) => {
-            const trip = getTrip(item);
-            return (
-              <div
-                key={trip.id}
-                style={{
-                  border: "1px solid #ccc",
-                  borderRadius: "20px",
-                  padding: "30px",
-                  boxShadow: "0 6px 16px rgba(0,0,0,0.15)",
-                  background: "#fff",
-                  width: "95vw",
-                  maxWidth: "800px",
-                  textAlign: "center",
-                }}
-              >
-                <h3 style={{ fontSize: "40px", marginBottom: "20px" }}>{trip.name}</h3>
-                <p style={{ fontSize: 32, margin: "10px 0" }}><strong>วันที่เริ่ม:</strong> {trip.start_date || "-"}</p>
-                <p style={{ fontSize: 32, margin: "10px 0" }}><strong>เงื่อนไข:</strong> {trip.conditions || "-"}</p>
-                <p style={{ fontSize: 32, margin: "10px 0" }}><strong>จำนวนคนที่ต้องการ:</strong> {trip.max_people}</p>
-
-                <div style={{ display: "flex", justifyContent: "center", gap: "20px", marginTop: "25px", flexWrap: "wrap" }}>
-                  <button
-                    onClick={() => navigate(`/my-trips/${trip.id}`)}
-                    style={{
-                      padding: "20px 30px",
-                      fontSize: "28px",
-                      fontWeight: "bold",
-                      borderRadius: "16px",
-                      border: "none",
-                      background: "linear-gradient(90deg, #007bff, #00c6ff)",
-                      color: "#fff",
-                      cursor: "pointer",
-                      boxShadow: "0 6px 16px rgba(0,0,0,0.25)",
-                      transition: "transform 0.2s",
-                    }}
-                    onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
-                    onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
-                  >
-                    ดูรายละเอียด
-                  </button>
-
-                  {role === "user" && tab === "ongoing" && (
-                    <>
-                      <button
-                        onClick={() => handleJoinTrip(trip.id)}
-                        disabled={joining === trip.id}
-                        style={{
-                          padding: "20px 30px",
-                          fontSize: "28px",
-                          fontWeight: "bold",
-                          borderRadius: "16px",
-                          border: "none",
-                          background: "#28a745",
-                          color: "#fff",
-                          cursor: "pointer",
-                          boxShadow: "0 6px 16px rgba(0,0,0,0.25)",
-                          transition: "transform 0.2s",
-                        }}
-                        onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
-                        onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
-                      >
-                        {joining === trip.id ? "กำลังเข้าร่วม..." : "เข้าร่วมทริป"}
-                      </button>
-
-                      <button
-                        onClick={() => handleEndTrip(trip.id)}
-                        style={{
-                          padding: "20px 30px",
-                          fontSize: "28px",
-                          fontWeight: "bold",
-                          borderRadius: "16px",
-                          border: "none",
-                          background: "#e74c3c",
-                          color: "#fff",
-                          cursor: "pointer",
-                          boxShadow: "0 6px 16px rgba(0,0,0,0.25)",
-                          transition: "transform 0.2s",
-                        }}
-                        onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
-                        onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
-                      >
-                        ยืนยันจบทริป
-                      </button>
-                    </>
-                  )}
-
-                  {role === "guide" && (
-                    <p style={{ fontSize: 28, fontWeight: "bold" }}>
-                      สถานะ: {item.status === "pending" ? "กำลังพิจารณา" : item.status === "selected" ? "ยืนยันแล้ว" : "ปฏิเสธ"}
-                    </p>
-                  )}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      )}
     </div>
   );
 }
