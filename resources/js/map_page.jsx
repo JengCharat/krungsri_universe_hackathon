@@ -158,11 +158,11 @@ return (
         ปรับระยะเพื่อดูพื้นที่ใกล้เคียงให้อ่านง่ายและชัดเจน
       </p>
        {/* Slider */}
+       <h1>test Jeng</h1>
       <input
         type="range"
         min="0.1"
-        max="20"
-        step="0.1"
+        max="200"
         value={radiusKm}
         onChange={(e) => setRadiusKm(parseFloat(e.target.value))}
         className="slider"
