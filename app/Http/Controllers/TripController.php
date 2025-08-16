@@ -178,29 +178,33 @@ class TripController extends Controller
 // TripController.php
             public function myTrips(Request $request)
             {
-                $userId = $request->user()->id;
+                $user = $request->user();
+                $role = $user->role ?? 'user'; // สมมติมีคอลัมน์ role
 
-                // ดึงทริปที่ผู้ใช้สร้าง/เข้าร่วม/เป็นไกด์
-                $trips = Trip::with([
-                        'touristAttractions',
-                        'users',
-                        'guides'
-                    ])
-                    ->where(function ($query) use ($userId) {
-                        $query->where('created_by', $userId)
-                              ->orWhereHas('users', function ($q) use ($userId) {
-                                  $q->where('user_id', $userId);
-                              })
-                              ->orWhereHas('guides', function ($q) use ($userId) {
-                                  $q->where('guide_id', $userId);
-                              });
-                    })
-                    ->get();
+                if ($role === 'guide') {
+                    // ดึง trip_guides ของ guide พร้อม trip info
+                    $trips = TripGuide::with('trip')
+                        ->where('guide_id', $user->id)
+                        ->get();
+                } else {
+                    // ดึงทริปที่ผู้ใช้สร้างหรือเข้าร่วม
+                    $trips = Trip::with([
+                            'touristAttractions',
+                            'users',
+                        ])
+                        ->where(function ($query) use ($user) {
+                            $query->where('created_by', $user->id)
+                                  ->orWhereHas('users', function ($q) use ($user) {
+                                      $q->where('user_id', $user->id);
+                                  });
+                        })
+                        ->get();
+                }
 
-                // ถ้าในตาราง trips มีคอลัมน์ ended (boolean) จะสะดวกต่อ frontend
-                // ถ้าไม่มี ให้เพิ่ม field เช่น is_ended จาก logic ของคุณ
-
-                return response()->json($trips);
+                return response()->json([
+                    'role' => $role,
+                    'trips' => $trips,
+                ]);
             }
 
 
