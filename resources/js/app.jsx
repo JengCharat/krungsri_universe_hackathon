@@ -13,7 +13,7 @@ import MyTrips from "./my_trip";
 import MyTripDetail from "./components/MyTripDetail";
 import { AllChatGroups, ChatPage } from './all_chat'; // import ทั้งสองหน้า
 import { FaMapMarkedAlt, FaBus, FaSuitcaseRolling, FaComments, FaUpload, FaUser } from 'react-icons/fa';
-
+import AllTripsForGuide from './AllTripsForGuide';
 // ---------- Error Boundary ----------
 class ErrorBoundary extends React.Component {
   constructor(props) {
