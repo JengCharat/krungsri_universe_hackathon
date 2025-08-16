@@ -64,8 +64,11 @@ public function myTripDetail($id, Request $request)
 {
     $userId = $request->user()->id;
 
-    // ดึงทริปพร้อม touristAttractions
-    $trip = Trip::with('touristAttractions')->find($id);
+    // ดึงทริปพร้อม touristAttractions และ users ที่เข้าร่วม
+    $trip = Trip::with([
+        'touristAttractions',
+        'users' // ความสัมพันธ์ผู้เข้าร่วม
+    ])->find($id);
 
     if (!$trip) {
         return response()->json(['message' => 'ไม่พบข้อมูลทริป'], 404);
@@ -79,10 +82,15 @@ public function myTripDetail($id, Request $request)
         $trip->load('tripGuides.guide');
     }
 
-    // ส่ง is_owner ไปด้วย
+    // แยกไกด์ที่ถูกเลือก
+    $selectedGuide = $isOwner
+        ? $trip->tripGuides->firstWhere('status', 'selected')
+        : null;
+
     return response()->json([
         'trip' => $trip,
-        'is_owner' => $isOwner
+        'is_owner' => $isOwner,
+        'selected_guide' => $selectedGuide
     ]);
 }
 
