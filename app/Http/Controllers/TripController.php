@@ -83,7 +83,8 @@ public function myTripDetail($id, Request $request)
     return response()->json([
         'trip' => $trip,
         'is_owner' => $isOwner,
-        'trip_guides' => $guides
+        // 'trip_guides' => $guides
+        'tripGuides' => $guides
     ]);
 }
 

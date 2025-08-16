@@ -6,18 +6,19 @@ export default function MyTripDetail() {
   const { tripId } = useParams();
   const navigate = useNavigate();
 
+  // กำหนด state เริ่มต้น
   const [trip, setTrip] = useState({
     tripGuides: [],
     touristAttractions: [],
-    users: []
+    users: [],
   });
   const [isOwner, setIsOwner] = useState(false);
-  const [selectedGuide, setSelectedGuide] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
   axios.defaults.headers.common["Authorization"] = `Bearer ${window.userToken}`;
 
+  // ฟังก์ชันโหลดข้อมูลทริป
   useEffect(() => {
     async function fetchTrip() {
       try {
@@ -26,12 +27,11 @@ export default function MyTripDetail() {
 
         setTrip({
           ...data.trip,
-          tripGuides: data.trip?.tripGuides || [],
+          tripGuides: data.tripGuides || [],
           touristAttractions: data.trip?.touristAttractions || [],
-          users: data.trip?.users || []
+          users: data.trip?.users || [],
         });
         setIsOwner(data.is_owner || false);
-        setSelectedGuide(data.selected_guide || null);
       } catch (err) {
         console.error("Error fetching trip:", err);
         setError(err.response?.data?.message || "ไม่สามารถโหลดข้อมูลทริปได้");
@@ -39,9 +39,11 @@ export default function MyTripDetail() {
         setLoading(false);
       }
     }
+
     fetchTrip();
   }, [tripId]);
 
+  // ฟังก์ชันเลือกไกด์
   async function chooseGuide(guideId) {
     if (!window.confirm("ยืนยันการเลือกไกด์คนนี้?")) return;
 
@@ -49,15 +51,15 @@ export default function MyTripDetail() {
       await axios.post(`/api/my-trips/${tripId}/choose-guide/${guideId}`);
       alert("เลือกไกด์เรียบร้อย");
 
+      // รีเฟรชข้อมูลทริปหลังเลือกไกด์
       const res = await axios.get(`/api/my-trips/${tripId}`);
       setTrip({
         ...res.data.trip,
-        tripGuides: res.data.trip?.tripGuides || [],
+        tripGuides: res.data.tripGuides || [],
         touristAttractions: res.data.trip?.touristAttractions || [],
-        users: res.data.trip?.users || []
+        users: res.data.trip?.users || [],
       });
       setIsOwner(res.data.is_owner || false);
-      setSelectedGuide(res.data.selected_guide || null);
     } catch (err) {
       alert(err.response?.data?.message || "เกิดข้อผิดพลาด");
     }
@@ -67,9 +69,16 @@ export default function MyTripDetail() {
     return <p className="p-8 text-center text-4xl">กำลังโหลดข้อมูล...</p>;
   if (error)
     return <p className="p-8 text-center text-red-600 text-4xl">{error}</p>;
-  if (!trip) return <p className="p-8 text-center text-4xl">ไม่พบข้อมูลทริป</p>;
+  if (!trip)
+    return <p className="p-8 text-center text-4xl">ไม่พบข้อมูลทริป</p>;
 
-const guidesToShow = isOwner ? trip.trip_guides || [] : [];
+  // หาไกด์ที่ถูกเลือกแล้ว
+  const selectedGuide = trip.tripGuides.find(g => g.status === "selected");
+  const guidesToShow = isOwner
+    ? selectedGuide
+      ? [selectedGuide]
+      : trip.tripGuides || []
+    : [];
 
   return (
     <div className="flex flex-col h-screen w-screen bg-white text-slate-900 px-4 md:px-12 mt-12">
