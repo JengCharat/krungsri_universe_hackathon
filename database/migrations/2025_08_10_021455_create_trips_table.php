@@ -13,6 +13,7 @@ return new class extends Migration {
             $table->string('name');
             $table->foreignId('created_by')->constrained('users')->onDelete('cascade');
             $table->date('start_date')->nullable();
+            $table->time('start_time')->nullable();
             $table->text('conditions')->nullable();
             $table->integer('max_people')->default(1);
             $table->unsignedInteger('current_people')->default(0);

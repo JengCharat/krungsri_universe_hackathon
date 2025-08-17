@@ -143,6 +143,7 @@ public function myTripDetail($id, Request $request)
                         'created_by'   => $userId,
                         'name'         => $request->input('name', 'My Trip'),
                         'start_date'   => $request->input('start_date'),
+                         'start_time'   => $request->input('start_time'),
                         'conditions'   => $request->input('conditions', ''),
                         'max_people'   => $request->input('max_people', 1),
                         'needs_guide'  => $request->boolean('needs_guide', false),

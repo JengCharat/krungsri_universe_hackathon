@@ -20,6 +20,8 @@ export default function TouristDetail() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
+    const [startTime, setStartTime] = useState("");
+
   // เลือกโพสต์
   const [selectedDetailId, setSelectedDetailId] = useState(null);
 
@@ -150,6 +152,7 @@ export default function TouristDetail() {
         {
           name: tripName,
           start_date: startDate || null,
+        start_time: startTime || null,
           conditions,
           max_people: maxPeople,
           needs_guide,
@@ -201,7 +204,7 @@ export default function TouristDetail() {
         <p className="text-lg md:text-2xl text-slate-700">ค้นหา/เลือกโพสต์ด้านบนเพื่อดูรายละเอียด</p>
       </div>
 
-      
+
 
         {/* การ์ดรายละเอียดโพสต์ที่เลือก */}
         <div className="w-full bg-gradient-to-r from-blue-50 to-blue-75 rounded-3xl p-6 md:p-8 shadow-md flex flex-col space-y-4">
@@ -336,6 +339,16 @@ export default function TouristDetail() {
             </label>
 
             <label className="flex flex-col">
+              เวลาเริ่มต้น:
+              <input
+                type="time"
+                value={startTime}
+                onChange={(e) => setStartTime(e.target.value)}
+                className="mt-1 p-2 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-400"
+              />
+            </label>
+
+            <label className="flex flex-col">
               เงื่อนไข:
               <textarea
                 value={conditions}
@@ -402,6 +415,6 @@ export default function TouristDetail() {
           {error && <p className="text-red-600 text-center">{error}</p>}
         </div>
       </div>
-    
+
   );
 }
