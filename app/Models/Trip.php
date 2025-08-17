@@ -61,4 +61,5 @@ class Trip extends Model
                                 ->withPivot('confirmed_end')
                                 ->withTimestamps();
                 }
+
 }

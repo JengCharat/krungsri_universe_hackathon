@@ -60,22 +60,33 @@ class TripController extends Controller
                 return response()->json(['message' => 'เลือกไกด์เรียบร้อยและเพิ่มเข้าในทริปและกลุ่มแชทแล้ว']);
             }
     // ดึงรายการทริปทั้งหมด พร้อม tourist attractions ที่เกี่ยวข้อง
-                    public function myTripDetail($id, Request $request)
-                    {
-                        $userId = $request->user()->id;
+public function myTripDetail($id, Request $request)
+{
+    $userId = $request->user()->id;
 
-                        // ดึงทริปที่สร้างโดย user ที่ล็อกอิน พร้อมความสัมพันธ์ touristAttractions และ trip_guides กับ guide
-                        $trip = Trip::with(['touristAttractions', 'tripGuides.guide'])
-                            ->where('id', $id)
-                            ->where('created_by', $userId)
-                            ->first();
- \Log::info('Trip Detail:', $trip ? $trip->toArray() : []);
-                        if (!$trip) {
-                            return response()->json(['message' => 'ไม่พบข้อมูลทริป หรือคุณไม่มีสิทธิ์เข้าถึง'], 404);
-                        }
+    // ดึงทริปพร้อม touristAttractions, users, และ tripGuides กับ guide
+    $trip = Trip::with([
+        'touristAttractions',
+        'users',
+        'tripGuides.guide'
+    ])->find($id);
 
-                        return response()->json($trip);
-                    }
+    if (!$trip) {
+        return response()->json(['message' => 'ไม่พบข้อมูลทริป'], 404);
+    }
+
+    $isOwner = $trip->created_by === $userId;
+
+    // เอา tripGuides ทั้งหมด ไม่กรองสถานะ
+    $guides = $trip->tripGuides;
+
+    return response()->json([
+        'trip' => $trip,
+        'is_owner' => $isOwner,
+        // 'trip_guides' => $guides
+        'tripGuides' => $guides
+    ]);
+}
 
             public function getTripsForGuide()
             {
