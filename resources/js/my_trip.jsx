@@ -1,4 +1,3 @@
-// resources/js/MyTrips.jsx
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -8,8 +7,8 @@ export default function MyTrips() {
   const [loading, setLoading] = useState(true);
   const [joining, setJoining] = useState(null);
   const [error, setError] = useState(null);
-  const [tab, setTab] = useState("ongoing"); // default user tab
-  const [role, setRole] = useState("user"); // "user" หรือ "guide"
+  const [tab, setTab] = useState("ongoing");
+  const [role, setRole] = useState("user");
   const navigate = useNavigate();
 
   axios.defaults.headers.common["Authorization"] = `Bearer ${window.userToken}`;
@@ -70,11 +69,9 @@ export default function MyTrips() {
     <div className="flex flex-col h-screen w-screen bg-white text-slate-900 px-4 md:px-12 mt-6">
       {/* Header */}
       <div className="w-full h-auto bg-white flex flex-col justify-center px-6 md:px-12 py-5 relative overflow-hidden">
-        {/* Decorative blobs */}
         <div className="pointer-events-none absolute -top-10 -right-10 w-36 h-36 rounded-full bg-indigo-100/30 blur-2xl"></div>
         <div className="pointer-events-none absolute -bottom-12 -left-10 w-32 h-32 rounded-full bg-emerald-100/30 blur-2xl"></div>
 
-        {/* Top row */}
         <div className="flex items-center justify-between mb-4 mt-12">
           <div className="inline-flex items-center gap-4 text-[#7f4534ff] bg-[#fecb00] px-5 py-3 rounded-full text-3xl font-bold">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
@@ -87,7 +84,6 @@ export default function MyTrips() {
         <h1 className="text-6xl font-extrabold text-slate-900 mb-4 mt-5">ทริปของฉัน</h1>
         <p className="text-2xl text-slate-700 mb-6">ทริปทั้งหมดของฉัน</p>
 
-        {/* แถบเลือกสถานะ */}
         <div className="flex gap-4 items-center justify-center m-auto">
           {role === "guide"
             ? ["pending", "selected", "rejected"].map((status) => (
@@ -126,30 +122,25 @@ export default function MyTrips() {
         ) : (
           filteredTrips.map((item) => {
             const trip = getTrip(item);
+            const isDanger = trip.is_danger;
+
             return (
               <div
                 key={trip.id}
-                className="w-full bg-gradient-to-r from-blue-50 to-blue-75 rounded-3xl p-6 md:p-12 shadow-md flex flex-col space-y-6 mb-20"
+                className={`w-full rounded-3xl p-6 md:p-12 shadow-md flex flex-col space-y-6 mb-20 ${
+                  isDanger ? "border-4 border-red-600" : "bg-gradient-to-r from-blue-50 to-blue-75"
+                }`}
               >
-                {/* Trip Name */}
                 <h3 className="text-2xl md:text-6xl font-bold text-slate-900 text-center mb-2">
                   {trip.name}
                 </h3>
 
-                {/* Trip Info */}
                 <div className="w-full flex flex-col gap-4 text-slate-700 text-2xl md:text-4xl mb-6">
-                  <p>
-                    <strong>วันที่เริ่ม:</strong> {trip.start_date || "-"}
-                  </p>
-                  <p>
-                    <strong>เงื่อนไข:</strong> {trip.conditions || "-"}
-                  </p>
-                  <p>
-                    <strong>จำนวนคนที่ต้องการ:</strong> {trip.max_people}
-                  </p>
+                  <p><strong>วันที่เริ่ม:</strong> {trip.start_date || "-"}</p>
+                  <p><strong>เงื่อนไข:</strong> {trip.conditions || "-"}</p>
+                  <p><strong>จำนวนคนที่ต้องการ:</strong> {trip.max_people}</p>
                 </div>
 
-                {/* Action Buttons */}
                 <div className="flex flex-col gap-6 w-full justify-center mt-4">
                   <button
                     onClick={() => navigate(`/my-trips/${trip.id}`)}
