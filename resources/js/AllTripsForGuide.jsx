@@ -102,18 +102,19 @@ export default function AllTripsForGuide() {
   </div>
 
 
- <div className="flex flex-col items-center px-6 py-10">
+ <div className="flex-1 overflow-auto flex flex-col items-center gap-6 w-full max-w-6xl mx-auto py-6">
   {trips.length === 0 ? (
     <p className="text-3xl text-center">
       ไม่มีทริปที่ต้องการไกด์หรือคนขับรถในขณะนี้
     </p>
   ) : (
-    <div className="w-full bg-gradient-to-r from-blue-50 to-blue-75 rounded-3xl p-6 md:p-12 shadow-md flex flex-col space-y-6 mb-20">
+    <div className="w-full  rounded-3xl p-6 md:p-12 shadow-md flex flex-col space-y-6 mb-20">
       {trips.map((trip) => (
         <div
           key={trip.id}
-           
+                     className="w-full bg-gradient-to-r from-blue-50 to-blue-75 rounded-3xl p-6 md:p-12 shadow-md flex flex-col space-y-6 mb-20"
                 >
+                  <div>
           <h3 className="text-2xl md:text-6xl font-bold text-slate-900 text-center mb-2">{trip.name}</h3>
            <div className="w-full flex flex-col gap-4 text-slate-700 text-2xl md:text-4xl mb-6 text-start">
           <p><strong>วันที่เริ่ม:</strong> {trip.start_date || "ไม่ระบุ"}</p>
@@ -145,6 +146,7 @@ className="flex-1 px-8 py-5 bg-gray-500 text-white rounded-3xl font-semibold sha
               {joining === trip.id ? "กำลังส่งราคา..." : "เสนอราคา"}
             </button>
           </div>
+        </div>
         </div>
       ))}
     </div>

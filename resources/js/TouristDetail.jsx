@@ -182,7 +182,7 @@ export default function TouristDetail() {
         <div className="pointer-events-none absolute -bottom-12 -left-10 w-32 h-32 rounded-full bg-emerald-100/30 blur-2xl"></div>
 
         <div className="flex items-center justify-between mb-4">
-          <div className="inline-flex items-center gap-4 text-blue-800 bg-blue-200 px-5 py-3 rounded-full text-lg font-bold">
+          <div className="inline-flex items-center gap-4 text-[#7f4534ff] bg-[#fecb00] px-5 py-3 rounded-full text-3xl font-bold">
             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
               <path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7Zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5Z" />
             </svg>
@@ -201,100 +201,10 @@ export default function TouristDetail() {
         <p className="text-lg md:text-2xl text-slate-700">ค้นหา/เลือกโพสต์ด้านบนเพื่อดูรายละเอียด</p>
       </div>
 
-      {/* Content */}
-      <div className="flex-1 overflow-auto flex flex-col items-center gap-6 w-full max-w-5xl mx-auto py-4">
-
-        {/* Search + Stats + Pagination */}
-        <div className="w-full bg-white/60 rounded-2xl border border-slate-200 p-4 shadow-sm">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-3 items-center">
-            {/* Search */}
-            <div className="col-span-1">
-              <label className="block text-sm font-medium text-slate-700 mb-1">ค้นหาโพสต์</label>
-              <input
-                type="text"
-                placeholder="พิมพ์คำค้น เช่น ชื่อ, แท็ก, เวลาเปิดปิด, ติดต่อ"
-                value={search}
-                onChange={(e) => {
-                  setSearch(e.target.value);
-                  setPage(1); // รีเซ็ตหน้าเมื่อค้นหา
-                }}
-                className="w-full px-3 py-2 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-400"
-              />
-            </div>
-
-            {/* Stats */}
-            <div className="col-span-1 flex flex-col md:items-center">
-              <span className="text-sm text-slate-500">ทั้งหมด: {details.length.toLocaleString()} โพสต์</span>
-              <span className="text-sm text-slate-700 font-semibold">
-                พบ: {filteredDetails.length.toLocaleString()} โพสต์
-              </span>
-              <span className="text-sm text-slate-500">
-                หน้าที่ {currentPage} / {totalPages}
-              </span>
-            </div>
-
-            {/* Pagination Controls */}
-            <div className="col-span-1 flex gap-2 justify-end">
-              <button
-                onClick={() => setPage(1)}
-                disabled={currentPage === 1}
-                className="px-3 py-2 rounded-lg border disabled:opacity-40"
-              >
-                « หน้าแรก
-              </button>
-              <button
-                onClick={() => setPage((p) => Math.max(1, p - 1))}
-                disabled={currentPage === 1}
-                className="px-3 py-2 rounded-lg border disabled:opacity-40"
-              >
-                ‹ ก่อนหน้า
-              </button>
-              <button
-                onClick={() => setPage((p) => Math.min(totalPages, p + 1))}
-                disabled={currentPage === totalPages}
-                className="px-3 py-2 rounded-lg border disabled:opacity-40"
-              >
-                ถัดไป ›
-              </button>
-              <button
-                onClick={() => setPage(totalPages)}
-                disabled={currentPage === totalPages}
-                className="px-3 py-2 rounded-lg border disabled:opacity-40"
-              >
-                หน้าสุดท้าย »
-              </button>
-            </div>
-          </div>
-
-          {/* รายการปุ่มเลือกโพสต์ (เฉพาะหน้าปัจจุบัน) */}
-          <div className="mt-4 flex flex-wrap gap-2">
-            {paginatedDetails.length === 0 ? (
-              <div className="text-slate-500">ไม่พบผลลัพธ์ตามคำค้น</div>
-            ) : (
-              paginatedDetails.map((detail) => {
-                const isActive = selectedDetailId === detail?.id;
-                const label = detail?.description
-                  ? (detail.description.length > 30 ? detail.description.slice(0, 30) + "..." : detail.description)
-                  : "ไม่มีคำอธิบาย";
-                return (
-                  <button
-                    key={detail?.id ?? Math.random()}
-                    onClick={() => setSelectedDetailId(detail?.id)}
-                    className={`px-3 py-2 rounded-xl border text-sm transition ${
-                      isActive ? "bg-blue-600 text-white border-blue-600" : "bg-blue-50 text-blue-800 border-blue-200 hover:bg-blue-100"
-                    }`}
-                    title={detail?.description || ""}
-                  >
-                    {label}
-                  </button>
-                );
-              })
-            )}
-          </div>
-        </div>
+      
 
         {/* การ์ดรายละเอียดโพสต์ที่เลือก */}
-        <div className="w-full bg-gradient-to-r from-blue-50 to-blue-100 rounded-3xl p-6 md:p-8 shadow-md flex flex-col space-y-4">
+        <div className="w-full bg-gradient-to-r from-blue-50 to-blue-75 rounded-3xl p-6 md:p-8 shadow-md flex flex-col space-y-4">
           <h2 className="text-2xl md:text-3xl font-bold text-slate-900 text-center">
             {selectedDetail?.description || "-"}
           </h2>
@@ -321,8 +231,87 @@ export default function TouristDetail() {
           )}
         </div>
 
+      {/* Content */}
+<div className=" mt-6 mb-6">
+
+  {/* Search + Stats + Pagination */}
+  <div className="w-full bg-white/80 rounded-2xl border border-slate-200 p-6 shadow-md">
+    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
+
+      {/* Search */}
+      <div className="col-span-1">
+        <label className="block text-base font-semibold text-slate-700 mb-2">ค้นหาโพสต์</label>
+        <input
+          type="text"
+          placeholder="พิมพ์คำค้น เช่น ชื่อ, แท็ก, เวลาเปิดปิด, ติดต่อ"
+          value={search}
+          onChange={(e) => {
+            setSearch(e.target.value);
+            setPage(1);
+          }}
+          className="w-full px-4 py-3 rounded-2xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-400 text-lg"
+        />
+      </div>
+
+      {/* Stats */}
+      <div className="col-span-1 flex flex-col md:items-center gap-1 text-sm md:text-base">
+        <span className="text-slate-500">ทั้งหมด: {details.length.toLocaleString()} โพสต์</span>
+        <span className="text-slate-700 font-semibold">
+          พบ: {filteredDetails.length.toLocaleString()} โพสต์
+        </span>
+        <span className="text-slate-500">
+          หน้าที่ {currentPage} / {totalPages}
+        </span>
+      </div>
+
+      {/* Pagination Controls */}
+      <div className="col-span-1 flex flex-wrap gap-2 justify-end">
+        {[["« หน้าแรก", 1], ["‹ ก่อนหน้า", Math.max(1, currentPage - 1)], ["ถัดไป ›", Math.min(totalPages, currentPage + 1)], ["หน้าสุดท้าย »", totalPages]].map(([label, pageNum], idx) => (
+          <button
+            key={idx}
+            onClick={() => setPage(pageNum)}
+            disabled={(label.includes("หน้าแรก") || label.includes("ก่อนหน้า")) ? currentPage === 1 : currentPage === totalPages}
+            className="px-4 py-2 rounded-2xl border bg-gray-200 text-gray-700 disabled:opacity-40 hover:bg-yellow-400 hover:text-white transition-colors text-base"
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+    </div>
+
+    {/* รายการปุ่มเลือกโพสต์ */}
+    <div className="mt-6 flex flex-wrap gap-3">
+      {paginatedDetails.length === 0 ? (
+        <div className="text-slate-500 text-lg">ไม่พบผลลัพธ์ตามคำค้น</div>
+      ) : (
+        paginatedDetails.map((detail) => {
+          const isActive = selectedDetailId === detail?.id;
+          const label = detail?.description
+            ? (detail.description.length > 30 ? detail.description.slice(0, 30) + "..." : detail.description)
+            : "ไม่มีคำอธิบาย";
+          return (
+            <button
+              key={detail?.id ?? Math.random()}
+              onClick={() => setSelectedDetailId(detail?.id)}
+              className={`px-5 py-3 rounded-2xl border text-base font-semibold transition ${
+                isActive
+                  ? "bg-yellow-500 text-white border-yellow-500"
+                  : "bg-gray-200 text-gray-800 border-gray-300 hover:bg-yellow-400 hover:text-white"
+              }`}
+              title={detail?.description || ""}
+            >
+              {label}
+            </button>
+          );
+        })
+      )}
+    </div>
+  </div>
+</div>
+
+
         {/* ฟอร์มสร้าง Trip */}
-        <div className="w-full bg-gradient-to-r from-green-50 to-green-100 rounded-3xl p-6 md:p-8 shadow-md flex flex-col space-y-4">
+        <div className="w-full bg-gradient-to-r from-blue-50 to-blue-75 rounded-3xl p-6 md:p-8 shadow-md flex flex-col space-y-4">
           <h3 className="text-2xl md:text-3xl font-semibold text-center mb-2">สร้าง Trip ใหม่โดยใช้สถานที่นี้</h3>
           <form onSubmit={handleCreateTrip} className="flex flex-col gap-4 text-base md:text-xl">
             <label className="flex flex-col">
@@ -404,7 +393,7 @@ export default function TouristDetail() {
             <button
               type="submit"
               disabled={loading}
-              className="px-6 py-3 bg-green-600 text-white rounded-3xl font-semibold shadow hover:bg-green-700 transition transform hover:scale-105"
+        className="w-full px-8 py-5 bg-[#fecb00] text-[#7f4534ff] rounded-3xl font-semibold shadow hover:bg-blue-700 transition transform hover:scale-105 text-4xl"
             >
               {loading ? "กำลังสร้าง..." : "สร้าง Trip"}
             </button>
@@ -413,6 +402,6 @@ export default function TouristDetail() {
           {error && <p className="text-red-600 text-center">{error}</p>}
         </div>
       </div>
-    </div>
+    
   );
 }

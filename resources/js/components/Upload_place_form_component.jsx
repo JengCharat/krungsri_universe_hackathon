@@ -113,7 +113,8 @@ const UploadTouristAttractionForm = () => {
   </div>
 
   {/* Form */}
-  <form onSubmit={handleSubmit} className="flex flex-col gap-8 w-full max-w-4xl mx-auto py-6">
+  <form onSubmit={handleSubmit} 
+  className="flex flex-col gap-8 w-full max-w-4xl mx-auto py-6">
     {/* Card wrapper for inputs */}
     <div className="bg-gradient-to-r from-blue-50 to-blue-75 bg-white p-8 rounded-3xl shadow-md space-y-6">
       {/* Name */}

@@ -97,6 +97,7 @@ export default function AllTrips() {
         ไม่มีทริปในระบบ
       </p>
     ) : (
+      
       trips.map((trip) => (
         <div
           key={trip.id}

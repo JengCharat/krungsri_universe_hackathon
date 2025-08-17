@@ -84,8 +84,16 @@ export default function MyTrips() {
             ทริปของฉัน
           </div>
 
+
+
+
+        </div>
+
+        <h1 className="text-6xl font-extrabold text-slate-900 mb-4 mt-5">ทริปของฉัน</h1>
+        <p className="text-2xl text-slate-700 mb-6">ทริปทั้งหมดของฉัน</p>
+
 {/* แถบเลือกสถานะ */}
-<div className="flex gap-4">
+<div className="flex gap-4 items-center justify-center m-auto">
   {role === "guide"
     ? ["pending", "selected", "rejected"].map((status) => (
         <button
@@ -115,26 +123,22 @@ export default function MyTrips() {
       ))}
 </div>
 
-
-        </div>
-
-        <h1 className="text-6xl font-extrabold text-slate-900 mb-4 mt-5">ทริปของฉัน</h1>
-        <p className="text-2xl text-slate-700 mb-6">ทริปทั้งหมดของฉัน</p>
       </div>
 
       {/* Main content */}
-      <div className="flex flex-col items-center px-6 py-10">
+      <div className="flex flex-col items-center px-6 py-">
         {filteredTrips.length === 0 ? (
           <p className="text-3xl text-center">ไม่มีทริปสำหรับสถานะนี้</p>
         ) : (
-          <div className="w-full bg-gradient-to-r from-blue-50 to-blue-75 rounded-3xl p-6 md:p-12 shadow-md flex flex-col space-y-6 mb-20"
+          <div className="w-full  rounded-3xl p-6 md:p-12 bg-gradient-to-r from-blue-50 to-blue-75 shadow-md flex flex-col space-y-6 mb-20"
 >
             {filteredTrips.map((item) => {
               const trip = getTrip(item);
               return (
                 <div
                   key={trip.id}
-                  
+                  className=" p-6 md:p-12 flex flex-col space-y-6 mb-20"
+
                 >
                   {/* Trip Name */}
                   <h3 class="text-2xl md:text-6xl font-bold text-slate-900 text-center mb-2">{trip.name}</h3>

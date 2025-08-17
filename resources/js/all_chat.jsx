@@ -126,10 +126,10 @@ export function ChatPage({ userToken }) {
   return (
     <div className="flex flex-col h-screen bg-gray-100">
       {/* Header */}
-      <div className="flex items-center justify-between bg-blue-600 text-white p-10 shadow">
+      <div className="flex items-center justify-between bg-[#fecb00] text-white p-10 shadow">
         <button
           onClick={() => navigate(-1)}
-          className="px-10 py-6 bg-blue-500 rounded-3xl hover:bg-blue-700 transition text-4xl font-extrabold"
+          className="px-10 py-6 bg-[#fecb00] rounded-3xl hover:bg-blue-700 transition text-4xl font-extrabold"
         >
           กลับ
         </button>

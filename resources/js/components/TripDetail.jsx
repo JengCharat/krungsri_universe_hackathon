@@ -77,7 +77,7 @@ export default function MyTripDetail() {
 
       {/* Card รายละเอียดทริป */}
       <div className="flex-1 overflow-auto flex flex-col items-center gap-8 w-full max-w-5xl mx-auto py-4">
-        <div className="w-full bg-gradient-to-r from-blue-50 to-blue-100 rounded-3xl p-8 md:p-10 shadow-lg flex flex-col space-y-8 text-2xl md:text-3xl items-start">
+        <div className="w-full bg-gradient-to-r from-blue-50 to-blue-75 rounded-3xl p-8 md:p-10 shadow-lg flex flex-col space-y-8 text-2xl md:text-3xl items-start">
           <h1 className="text-5xl md:text-6xl font-extrabold text-slate-900">{trip.name}</h1>
 
           <div className="flex flex-col items-start space-y-6">
