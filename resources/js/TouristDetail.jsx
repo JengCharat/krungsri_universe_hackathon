@@ -206,44 +206,43 @@ export default function TouristDetail() {
 
 
 
-        {/* การ์ดรายละเอียดโพสต์ที่เลือก */}
-        <div className="w-full bg-gradient-to-r from-blue-50 to-blue-75 rounded-3xl p-6 md:p-8 shadow-md flex flex-col space-y-4">
-          <h2 className="text-2xl md:text-3xl font-bold text-slate-900 text-center">
-            {selectedDetail?.description || "-"}
-          </h2>
-          <div className="flex flex-col gap-2 text-base md:text-xl text-slate-700">
-            <p><strong>เปิด:</strong> {selectedDetail?.open_time || "-"}</p>
-            <p><strong>ปิด:</strong> {selectedDetail?.close_time || "-"}</p>
-            <p><strong>ค่าเข้า:</strong> {selectedDetail?.entry_fee ? `${selectedDetail.entry_fee} บาท` : "-"}</p>
-            <p><strong>หมวดหมู่:</strong> {selectedDetail?.tag || "-"}</p>
-            <p><strong>ติดต่อ:</strong> {selectedDetail?.contact_info || "-"}</p>
-          </div>
+        {/* การ์ด 2: ข้อมูลโพสต์ที่เลือก */}
+  <div className="w-full bg-gradient-to-r from-blue-50 to-blue-75 rounded-3xl p-6 md:p-8 shadow-md flex flex-col space-y-4">
+    <h2 className="text-3xl md:text-4xl font-bold text-slate-900 text-center">
+      {selectedDetail?.description || "-"}
+    </h2>
+    <div className="flex flex-col gap-3 text-xl md:text-2xl text-slate-700">
+      <p><strong>เปิด:</strong> {selectedDetail?.open_time || "-"}</p>
+      <p><strong>ปิด:</strong> {selectedDetail?.close_time || "-"}</p>
+      <p><strong>ค่าเข้า:</strong> {selectedDetail?.entry_fee ? `${selectedDetail.entry_fee} บาท` : "-"}</p>
+      <p><strong>หมวดหมู่:</strong> {selectedDetail?.tag || "-"}</p>
+      <p><strong>ติดต่อ:</strong> {selectedDetail?.contact_info || "-"}</p>
+    </div>
 
-          {/* แกลเลอรีรูปภาพของโพสต์ที่เลือก */}
-          {allImages.length > 0 && (
-            <div className="flex flex-wrap justify-center gap-4 mt-4">
-              {allImages.map((src, i) => (
-                <img
-                  key={`${src}-${i}`}
-                  src={src}
-                  alt={`Attraction Image ${i + 1}`}
-                  className="w-[200px] h-[150px] md:w-[250px] md:h-[180px] object-cover rounded-2xl shadow"
-                />
-              ))}
-            </div>
-          )}
-        </div>
+    {allImages.length > 0 && (
+      <div className="flex flex-wrap justify-center gap-4 mt-4">
+        {allImages.map((src, i) => (
+          <img
+            key={`${src}-${i}`}
+            src={src}
+            alt={`Attraction Image ${i + 1}`}
+            className="w-[200px] h-[150px] md:w-[250px] md:h-[180px] object-cover rounded-2xl shadow"
+          />
+        ))}
+      </div>
+    )}
+  </div>
 
       {/* Content */}
 <div className=" mt-6 mb-6">
 
   {/* Search + Stats + Pagination */}
-  <div className="w-full bg-white/80 rounded-2xl border border-slate-200 p-6 shadow-md">
+  {/* Search + Stats + Pagination */}
+  <div className="w-full bg-white/80 rounded-2xl border border-slate-200 p-6 shadow-md flex flex-col space-y-4">
     <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-center">
-
       {/* Search */}
       <div className="col-span-1">
-        <label className="block text-base font-semibold text-slate-700 mb-2">ค้นหาโพสต์</label>
+        <label className="block text-xl md:text-2xl font-semibold text-slate-700 mb-2">ค้นหาโพสต์</label>
         <input
           type="text"
           placeholder="พิมพ์คำค้น เช่น ชื่อ, แท็ก, เวลาเปิดปิด, ติดต่อ"
@@ -252,12 +251,12 @@ export default function TouristDetail() {
             setSearch(e.target.value);
             setPage(1);
           }}
-          className="w-full px-4 py-3 rounded-2xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-400 text-lg"
+          className="w-full px-4 py-3 rounded-2xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-yellow-400 text-xl md:text-2xl"
         />
       </div>
 
       {/* Stats */}
-      <div className="col-span-1 flex flex-col md:items-center gap-1 text-sm md:text-base">
+      <div className="col-span-1 flex flex-col md:items-center gap-1 text-xl md:text-2xl">
         <span className="text-slate-500">ทั้งหมด: {details.length.toLocaleString()} โพสต์</span>
         <span className="text-slate-700 font-semibold">
           พบ: {filteredDetails.length.toLocaleString()} โพสต์
@@ -269,12 +268,17 @@ export default function TouristDetail() {
 
       {/* Pagination Controls */}
       <div className="col-span-1 flex flex-wrap gap-2 justify-end">
-        {[["« หน้าแรก", 1], ["‹ ก่อนหน้า", Math.max(1, currentPage - 1)], ["ถัดไป ›", Math.min(totalPages, currentPage + 1)], ["หน้าสุดท้าย »", totalPages]].map(([label, pageNum], idx) => (
+        {[
+          ["« หน้าแรก", 1],
+          ["‹ ก่อนหน้า", Math.max(1, currentPage - 1)],
+          ["ถัดไป ›", Math.min(totalPages, currentPage + 1)],
+          ["หน้าสุดท้าย »", totalPages]
+        ].map(([label, pageNum], idx) => (
           <button
             key={idx}
             onClick={() => setPage(pageNum)}
             disabled={(label.includes("หน้าแรก") || label.includes("ก่อนหน้า")) ? currentPage === 1 : currentPage === totalPages}
-            className="px-4 py-2 rounded-2xl border bg-gray-200 text-gray-700 disabled:opacity-40 hover:bg-yellow-400 hover:text-white transition-colors text-base"
+            className="px-4 py-2 rounded-2xl border bg-gray-200 text-gray-700 disabled:opacity-40 hover:bg-yellow-400 hover:text-white transition-colors text-xl md:text-2xl"
           >
             {label}
           </button>
@@ -285,7 +289,7 @@ export default function TouristDetail() {
     {/* รายการปุ่มเลือกโพสต์ */}
     <div className="mt-6 flex flex-wrap gap-3">
       {paginatedDetails.length === 0 ? (
-        <div className="text-slate-500 text-lg">ไม่พบผลลัพธ์ตามคำค้น</div>
+        <div className="text-slate-500 text-xl md:text-2xl">ไม่พบผลลัพธ์ตามคำค้น</div>
       ) : (
         paginatedDetails.map((detail) => {
           const isActive = selectedDetailId === detail?.id;
@@ -296,7 +300,7 @@ export default function TouristDetail() {
             <button
               key={detail?.id ?? Math.random()}
               onClick={() => setSelectedDetailId(detail?.id)}
-              className={`px-5 py-3 rounded-2xl border text-base font-semibold transition ${
+              className={`px-5 py-3 rounded-2xl border font-semibold transition text-xl md:text-2xl ${
                 isActive
                   ? "bg-yellow-500 text-white border-yellow-500"
                   : "bg-gray-200 text-gray-800 border-gray-300 hover:bg-yellow-400 hover:text-white"
@@ -314,106 +318,111 @@ export default function TouristDetail() {
 
 
         {/* ฟอร์มสร้าง Trip */}
-        <div className="w-full bg-gradient-to-r from-blue-50 to-blue-75 rounded-3xl p-6 md:p-8 shadow-md flex flex-col space-y-4">
-          <h3 className="text-2xl md:text-3xl font-semibold text-center mb-2">สร้าง Trip ใหม่โดยใช้สถานที่นี้</h3>
-          <form onSubmit={handleCreateTrip} className="flex flex-col gap-4 text-base md:text-xl">
-            <label className="flex flex-col">
-              ชื่อทริป:
-              <input
-                type="text"
-                value={tripName}
-                onChange={(e) => setTripName(e.target.value)}
-                required
-                className="mt-1 p-2 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-400"
-              />
-            </label>
+<div className="w-full bg-gradient-to-r from-blue-50 to-blue-75 rounded-3xl p-8 md:p-12 shadow-md flex flex-col space-y-6">
+  <h3 className="text-3xl md:text-4xl font-extrabold text-center mb-4">สร้าง Trip ใหม่โดยใช้สถานที่นี้</h3>
+  <form onSubmit={handleCreateTrip} className="flex flex-col gap-6 text-xl md:text-2xl">
 
-            <label className="flex flex-col">
-              วันที่เริ่มต้น:
-              <input
-                type="date"
-                value={startDate}
-                onChange={(e) => setStartDate(e.target.value)}
-                className="mt-1 p-2 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-400"
-              />
-            </label>
+    <label className="flex flex-col">
+      ชื่อทริป:
+      <input
+        type="text"
+        value={tripName}
+        onChange={(e) => setTripName(e.target.value)}
+        required
+        className="mt-2 p-4 rounded-2xl border border-gray-300 focus:outline-none focus:ring-4 focus:ring-green-400 text-2xl"
+      />
+    </label>
 
-            <label className="flex flex-col">
-              เวลาเริ่มต้น:
-              <input
-                type="time"
-                value={startTime}
-                onChange={(e) => setStartTime(e.target.value)}
-                className="mt-1 p-2 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-400"
-              />
-            </label>
+    <label className="flex flex-col">
+      วันที่เริ่มต้น:
+      <input
+        type="date"
+        value={startDate}
+        onChange={(e) => setStartDate(e.target.value)}
+        className="mt-2 p-4 rounded-2xl border border-gray-300 focus:outline-none focus:ring-4 focus:ring-green-400 text-2xl"
+      />
+    </label>
 
-            <label className="flex flex-col">
-              เงื่อนไข:
-              <textarea
-                value={conditions}
-                onChange={(e) => setConditions(e.target.value)}
-                className="mt-1 p-2 rounded-xl border border-gray-300 w-full h-24 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-400"
-              />
-            </label>
+    <label className="flex flex-col">
+      เวลาเริ่มต้น:
+      <input
+        type="time"
+        value={startTime}
+        onChange={(e) => setStartTime(e.target.value)}
+        className="mt-2 p-4 rounded-2xl border border-gray-300 focus:outline-none focus:ring-4 focus:ring-green-400 text-2xl"
+      />
+    </label>
 
-            <label className="flex flex-col">
-              จำนวนคนที่ต้องการ:
-              <input
-                type="number"
-                min="1"
-                value={maxPeople}
-                onChange={(e) => setMaxPeople(Number(e.target.value))}
-                className="mt-1 p-2 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-green-400"
-              />
-            </label>
+    <label className="flex flex-col">
+      เงื่อนไข:
+      <textarea
+        value={conditions}
+        onChange={(e) => setConditions(e.target.value)}
+        className="mt-2 p-4 rounded-2xl border border-gray-300 focus:outline-none focus:ring-4 focus:ring-green-400 h-36 text-2xl"
+      />
+    </label>
 
-            {/* เลือกประเภทการเดินทาง */}
-            <div className="flex flex-col gap-2">
-              <p className="font-medium">เลือกประเภทการเดินทาง:</p>
-              <label className="inline-flex gap-2 items-center">
-                <input
-                  type="radio"
-                  name="travelOption"
-                  value="guide"
-                  checked={travelOption === "guide"}
-                  onChange={(e) => setTravelOption(e.target.value)}
-                />
-                <span>อยากได้ไกด์ที่พาเที่ยวด้วย</span>
-              </label>
-              <label className="inline-flex gap-2 items-center">
-                <input
-                  type="radio"
-                  name="travelOption"
-                  value="driver"
-                  checked={travelOption === "driver"}
-                  onChange={(e) => setTravelOption(e.target.value)}
-                />
-                <span>ต้องการแค่คนไปส่ง</span>
-              </label>
-              <label className="inline-flex gap-2 items-center">
-                <input
-                  type="radio"
-                  name="travelOption"
-                  value="none"
-                  checked={travelOption === "none"}
-                  onChange={(e) => setTravelOption(e.target.value)}
-                />
-                <span>ไม่ต้องการเลย</span>
-              </label>
-            </div>
+    <label className="flex flex-col">
+      จำนวนคนที่ต้องการ:
+      <input
+        type="number"
+        min="1"
+        value={maxPeople}
+        onChange={(e) => setMaxPeople(Number(e.target.value))}
+        className="mt-2 p-4 rounded-2xl border border-gray-300 focus:outline-none focus:ring-4 focus:ring-green-400 text-2xl"
+      />
+    </label>
 
-            <button
-              type="submit"
-              disabled={loading}
-        className="w-full px-8 py-5 bg-[#fecb00] text-[#7f4534ff] rounded-3xl font-semibold shadow hover:bg-blue-700 transition transform hover:scale-105 text-4xl"
-            >
-              {loading ? "กำลังสร้าง..." : "สร้าง Trip"}
-            </button>
-          </form>
+    {/* เลือกประเภทการเดินทาง */}
+    <div className="flex flex-col gap-3 text-2xl md:text-2xl">
+      <p className="font-semibold">เลือกประเภทการเดินทาง:</p>
+      <label className="inline-flex gap-4 items-center">
+        <input
+          type="radio"
+          name="travelOption"
+          value="guide"
+          checked={travelOption === "guide"}
+          onChange={(e) => setTravelOption(e.target.value)}
+          className="w-6 h-6"
+        />
+        <span>อยากได้ไกด์ที่พาเที่ยวด้วย</span>
+      </label>
+      <label className="inline-flex gap-4 items-center">
+        <input
+          type="radio"
+          name="travelOption"
+          value="driver"
+          checked={travelOption === "driver"}
+          onChange={(e) => setTravelOption(e.target.value)}
+          className="w-6 h-6"
+        />
+        <span>ต้องการแค่คนไปส่ง</span>
+      </label>
+      <label className="inline-flex gap-4 items-center">
+        <input
+          type="radio"
+          name="travelOption"
+          value="none"
+          checked={travelOption === "none"}
+          onChange={(e) => setTravelOption(e.target.value)}
+          className="w-6 h-6"
+        />
+        <span>ไม่ต้องการเลย</span>
+      </label>
+    </div>
 
-          {error && <p className="text-red-600 text-center">{error}</p>}
-        </div>
+    <button
+      type="submit"
+      disabled={loading}
+      className="w-full px-10 py-6 bg-[#fecb00] text-[#7f4534ff] rounded-3xl font-extrabold shadow hover:bg-blue-700 transition transform hover:scale-105 text-4xl md:text-5xl"
+    >
+      {loading ? "กำลังสร้าง..." : "สร้าง Trip"}
+    </button>
+  </form>
+
+  {error && <p className="text-red-600 text-center text-2xl md:text-3xl">{error}</p>}
+</div>
+
       </div>
 
   );

@@ -115,63 +115,153 @@ export default function ProfilePage() {
     : "/default-avatar.png";
 
   return (
-    <div style={{ padding: 20, textAlign: "center" }}>
-      <div style={{
-        width: 120, height: 120, margin: "0 auto",
-        borderRadius: "50%", overflow: "hidden", border: "4px solid #fecb00",
-      }}>
-        <img src={avatarUrl} alt="Avatar" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-      </div>
+    
+    <div className="flex flex-col h-screen w-screen bg-white text-slate-900 px-4 md:px-12 mt-6">
+      {/* Header */}
+      <div className="w-full h-[300px] bg-white flex flex-col justify-center px-6 md:px-12 py-5 relative overflow-hidden">
+        {/* Background decoration */}
+        <div className="pointer-events-none absolute -top-10 -right-10 w-36 h-36 rounded-full bg-indigo-100/30 blur-2xl"></div>
+        <div className="pointer-events-none absolute -bottom-12 -left-10 w-32 h-32 rounded-full bg-emerald-100/30 blur-2xl"></div>
 
-      {!editing ? (
-        <>
-          <h2 style={{ marginTop: 16, fontSize: 28, fontWeight: 600 }}>{user.name}</h2>
-          <p>{user.first_name} {user.last_name}</p>
-          <p>{user.email}</p>
-          <p>{user.phone}</p>
-          <p>{user.social_media}</p>
-          <p>{user.description}</p>
-          <p>Role: {user.role}</p>
-          <button onClick={handleEditClick} style={buttonStyle("#37a6ff")}>
-            <FaEdit /> Edit Profile
-          </button>
-        </>
-      ) : (
-        <div style={{ marginTop: 20, textAlign: "left", maxWidth: 400, margin: "20px auto" }}>
-          <label>Name:<input name="name" value={formData.name} onChange={handleInputChange} style={inputStyle} /></label>
-          <label>First Name:<input name="first_name" value={formData.first_name} onChange={handleInputChange} style={inputStyle} /></label>
-          <label>Last Name:<input name="last_name" value={formData.last_name} onChange={handleInputChange} style={inputStyle} /></label>
-          <label>Email:<input name="email" value={formData.email} onChange={handleInputChange} style={inputStyle} /></label>
-          <label>Phone:<input name="phone" value={formData.phone} onChange={handleInputChange} style={inputStyle} /></label>
-          <label>Social Media:<input name="social_media" value={formData.social_media} onChange={handleInputChange} style={inputStyle} /></label>
-          <label>Description:<textarea name="description" value={formData.description} onChange={handleInputChange} style={{ ...inputStyle, height: 80 }} /></label>
-          <label>Avatar:<input type="file" accept="image/*" onChange={handleAvatarChange} style={{ display: "block", marginTop: 4, marginBottom: 12 }} /></label>
-
-          <div style={{ display: "flex", justifyContent: "space-between" }}>
-            <button onClick={handleSave} disabled={saving} style={buttonStyle("#37a6ff")}>
-              <FaSave /> {saving ? "Saving..." : "Save"}
-            </button>
-            <button onClick={handleCancel} style={buttonStyle("#f87171")}>
-              <FaTimes /> Cancel
-            </button>
+        {/* Title */}
+        <div className="flex items-center justify-between mb-4 mt-12">
+          <div className="inline-flex items-center gap-4 text-[#7f4534ff] bg-[#fecb00] px-5 py-3 rounded-full text-3xl font-bold">
+             <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7Zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5Z" />
+        </svg>
+        โปรไฟล์ของฉัน
           </div>
         </div>
-      )}
-    </div>
+
+        <h1 className="text-6xl font-extrabold text-slate-900 mb-4 mt-5">โปรไฟล์</h1>
+        <p className="text-2xl text-slate-700 mb-6">จัดการข้อมูลส่วนตัวของคุณ</p>
+      </div>
+
+
+    <div className="flex justify-center py-10">
+  <div className="w-full bg-gradient-to-r from-blue-50 to-blue-75 rounded-3xl p-8 shadow-lg flex flex-col items-center space-y-6">
+    
+    {/* Avatar */}
+    <div className="w-52 h-52 rounded-full border-6 border-[#fecb00] overflow-hidden shadow-lg">
+  <img src={avatarUrl} alt="Avatar" className="w-full h-full object-cover" />
+</div>
+
+{!editing ? (
+  <>
+    <h2 className="text-6xl font-extrabold text-slate-900">{user.name}</h2>
+    <p className="text-4xl text-slate-700">{user.first_name} {user.last_name}</p>
+    <p className="text-4xl text-slate-700">{user.email}</p>
+    <p className="text-4xl text-slate-700">{user.phone}</p>
+    <p className="text-4xl text-slate-700">{user.social_media}</p>
+    <p className="text-4xl text-slate-700">{user.description}</p>
+    <p className="text-4xl text-slate-700">Role: {user.role}</p>
+
+    <button
+      onClick={handleEditClick}
+      className="w-full px-10 py-6 bg-[#fecb00] text-[#7f4534ff] rounded-3xl font-semibold shadow hover:bg-yellow-600 transition transform hover:scale-105 text-4xl"
+    >
+      Edit Profile
+    </button>
+  </>
+
+    ) : (
+      <div className="w-full flex flex-col gap-6">
+  <label className="text-3xl font-semibold text-slate-800">
+    Name:
+    <input
+      name="name"
+      value={formData.name}
+      onChange={handleInputChange}
+      className="w-full mt-3 mb-6 p-5 rounded-2xl border border-gray-300 focus:border-yellow-500 focus:ring focus:ring-yellow-300 text-3xl"
+    />
+  </label>
+  <label className="text-3xl font-semibold text-slate-800">
+    First Name:
+    <input
+      name="first_name"
+      value={formData.first_name}
+      onChange={handleInputChange}
+      className="w-full mt-3 mb-6 p-5 rounded-2xl border border-gray-300 focus:border-yellow-500 focus:ring focus:ring-yellow-300 text-3xl"
+    />
+  </label>
+  <label className="text-3xl font-semibold text-slate-800">
+    Last Name:
+    <input
+      name="last_name"
+      value={formData.last_name}
+      onChange={handleInputChange}
+      className="w-full mt-3 mb-6 p-5 rounded-2xl border border-gray-300 focus:border-yellow-500 focus:ring focus:ring-yellow-300 text-3xl"
+    />
+  </label>
+  <label className="text-3xl font-semibold text-slate-800">
+    Email:
+    <input
+      name="email"
+      value={formData.email}
+      onChange={handleInputChange}
+      className="w-full mt-3 mb-6 p-5 rounded-2xl border border-gray-300 focus:border-yellow-500 focus:ring focus:ring-yellow-300 text-3xl"
+    />
+  </label>
+  <label className="text-3xl font-semibold text-slate-800">
+    Phone:
+    <input
+      name="phone"
+      value={formData.phone}
+      onChange={handleInputChange}
+      className="w-full mt-3 mb-6 p-5 rounded-2xl border border-gray-300 focus:border-yellow-500 focus:ring focus:ring-yellow-300 text-3xl"
+    />
+  </label>
+  <label className="text-3xl font-semibold text-slate-800">
+    Social Media:
+    <input
+      name="social_media"
+      value={formData.social_media}
+      onChange={handleInputChange}
+      className="w-full mt-3 mb-6 p-5 rounded-2xl border border-gray-300 focus:border-yellow-500 focus:ring focus:ring-yellow-300 text-3xl"
+    />
+  </label>
+  <label className="text-3xl font-semibold text-slate-800">
+    Description:
+    <textarea
+      name="description"
+      value={formData.description}
+      onChange={handleInputChange}
+      className="w-full mt-3 mb-6 p-5 rounded-2xl border border-gray-300 focus:border-yellow-500 focus:ring focus:ring-yellow-300 text-3xl h-36"
+    />
+  </label>
+  <label className="text-3xl font-semibold text-slate-800">
+    Avatar:
+    <input
+      type="file"
+      accept="image/*"
+      onChange={handleAvatarChange}
+      className="block mt-3 mb-6"
+    />
+  </label>
+
+  <div className="flex flex-col md:flex-row gap-6">
+    <button
+      onClick={handleSave}
+      disabled={saving}
+      className="flex-1 flex items-center justify-center gap-3 px-10 py-6 bg-[#fecb00] text-[#7f4534ff] rounded-3xl font-semibold shadow hover:bg-yellow-500 transition transform hover:scale-105 text-3xl"
+    >
+      <FaSave /> {saving ? "Saving..." : "Save"}
+    </button>
+    <button
+      onClick={handleCancel}
+      className="flex-1 flex items-center justify-center gap-3 px-10 py-6 bg-[#f87171] text-white rounded-3xl font-semibold shadow hover:bg-red-500 transition transform hover:scale-105 text-3xl"
+    >
+      <FaTimes /> Cancel
+    </button>
+  </div>
+</div>
+
+    )}
+  </div>
+</div>
+
+</div>
+
   );
 }
 
-// Styles
-const inputStyle = { width: "100%", padding: 8, marginTop: 4, marginBottom: 12 };
-const buttonStyle = (bg) => ({
-  display: "inline-flex",
-  alignItems: "center",
-  gap: 8,
-  backgroundColor: bg,
-  color: "#fff",
-  padding: "8px 16px",
-  border: "none",
-  borderRadius: 8,
-  fontWeight: 600,
-  cursor: "pointer",
-});

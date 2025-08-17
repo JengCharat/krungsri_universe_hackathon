@@ -250,7 +250,7 @@ const UploadTouristAttractionForm = () => {
     <div className="text-center mt-6">
       <button
         type="submit"
-        className="w-full px-8 py-5 bg-[#fecb00] text-[#7f4534ff] rounded-3xl font-semibold shadow hover:bg-blue-700 transition transform hover:scale-105 text-4xl"
+        className="w-full px-8 py-5 bg-[#fecb00] text-[#7f4534ff] rounded-3xl font-semibold shadow hover:bg-yello-700 transition transform hover:scale-105 text-4xl"
       >
         อัปโหลด
       </button>
