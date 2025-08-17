@@ -11,18 +11,32 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('users', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->string('email')->unique();
-            $table->timestamp('email_verified_at')->nullable();
-            $table->string('password');
-            $table->rememberToken();
-            $table->foreignId('current_team_id')->nullable();
-            $table->string('profile_photo_path', 2048)->nullable();
-            $table->string('role')->default('user');
-            $table->timestamps();
-        });
+Schema::create('users', function (Blueprint $table) {
+    $table->id();
+
+    // ข้อมูลส่วนตัว
+    $table->string('first_name')->nullable(); // ชื่อจริง
+    $table->string('last_name')->nullable();  // นามสกุล
+    $table->string('phone')->nullable();      // เบอร์โทร
+
+    // ข้อมูลทั่วไป
+    $table->string('name');                   // ชื่อผู้ใช้ / username
+    $table->string('email')->unique();
+    $table->timestamp('email_verified_at')->nullable();
+    $table->string('password');
+    $table->rememberToken();
+    $table->foreignId('current_team_id')->nullable();
+
+    // Profile
+    $table->string('profile_photo_path', 2048)->nullable();
+    $table->string('role')->default('user');
+
+    // Social media & description
+    $table->string('social_media')->nullable();   // ลิงก์ social media
+    $table->text('description')->nullable();      // คำอธิบายผู้ใช้
+
+    $table->timestamps();
+});
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {
             $table->string('email')->primary();
