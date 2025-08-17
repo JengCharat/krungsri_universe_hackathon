@@ -7,6 +7,7 @@ use App\Models\TouristAttraction;
 
 use App\Http\Controllers\ChatGroupController;
 use App\Http\Controllers\TripController;
+use App\Http\Controllers\ProfileController;
 
 Route::get('/user', function (Request $request) {
     return $request->user();
@@ -83,3 +84,8 @@ Route::post('/my-trips/{tripId}/choose-guide/{guideId}', [TripController::class,
 Route::middleware('auth:sanctum')->group(function () {
     Route::post('/trips/{trip}/confirm-end', [TripController::class, 'confirmEndTrip']);
 });
+Route::middleware('auth:sanctum')->group(function () {
+    Route::get('/profile', [ProfileController::class, 'show']);
+    Route::put('/profile', [ProfileController::class, 'update']);
+});
+

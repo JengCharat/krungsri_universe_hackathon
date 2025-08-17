@@ -14,6 +14,7 @@ import MyTripDetail from "./components/MyTripDetail";
 import { AllChatGroups, ChatPage } from './all_chat'; // import ทั้งสองหน้า
 import { FaMapMarkedAlt, FaBus, FaSuitcaseRolling, FaComments, FaUpload, FaUser } from 'react-icons/fa';
 import AllTripsForGuide from './AllTripsForGuide';
+import ProfilePage from './components/profile_page';
 // ---------- Error Boundary ----------
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -127,7 +128,7 @@ function App() {
           <Route path="/all_chat" element={<AllChatGroups userToken={window.userToken} />} />
           <Route path="/chat-group/:id" element={<ChatPage userToken={window.userToken} />} />
           <Route path="/upload" element={<UploadTouristAttractionForm />} />
-          <Route path="/profile" element={<div style={{ padding: 20 }}>Profile Page</div>} />
+            <Route path="/profile" element={<ProfilePage />} />
         </Routes>
       </div>
       <BottomNav />
