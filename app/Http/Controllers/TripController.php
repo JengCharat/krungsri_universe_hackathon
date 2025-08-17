@@ -188,36 +188,39 @@ public function myTripDetail($id, Request $request)
     }
 
 // TripController.php
-            public function myTrips(Request $request)
-            {
-                $user = $request->user();
-                $role = $user->role ?? 'user'; // สมมติมีคอลัมน์ role
+public function myTrips(Request $request)
+{
+    $user = $request->user();
+    $role = $user->role ?? 'user'; // สมมติมีคอลัมน์ role
 
-                if ($role === 'guide') {
-                    // ดึง trip_guides ของ guide พร้อม trip info
-                    $trips = TripGuide::with('trip')
-                        ->where('guide_id', $user->id)
-                        ->get();
-                } else {
-                    // ดึงทริปที่ผู้ใช้สร้างหรือเข้าร่วม
-                    $trips = Trip::with([
-                            'touristAttractions',
-                            'users',
-                        ])
-                        ->where(function ($query) use ($user) {
-                            $query->where('created_by', $user->id)
-                                  ->orWhereHas('users', function ($q) use ($user) {
-                                      $q->where('user_id', $user->id);
-                                  });
-                        })
-                        ->get();
-                }
+    if ($role === 'guide') {
+        $trips = TripGuide::with('trip')
+            ->where('guide_id', $user->id)
+            ->get()
+            ->map(function($tg) {
+                $t = $tg->trip;
+                $t->is_danger = $t->is_danger; // เพิ่ม is_danger
+                return [
+                    'trip' => $t,
+                    'pivot' => $tg->pivot,
+                ];
+            });
+    } else {
+        $trips = Trip::with(['touristAttractions', 'users'])
+            ->where(function ($query) use ($user) {
+                $query->where('created_by', $user->id)
+                      ->orWhereHas('users', function ($q) use ($user) {
+                          $q->where('user_id', $user->id);
+                      });
+            })
+            ->get();
+    }
 
-                return response()->json([
-                    'role' => $role,
-                    'trips' => $trips,
-                ]);
-            }
+    return response()->json([
+        'role' => $role,
+        'trips' => $trips,
+    ]);
+}
 
 
 
