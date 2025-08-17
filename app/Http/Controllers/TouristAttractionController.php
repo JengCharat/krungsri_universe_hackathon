@@ -25,7 +25,7 @@ class TouristAttractionController extends Controller
             'open_time' => 'nullable|string',
             'close_time' => 'nullable|string',
             'entry_fee' => 'nullable|numeric',
-            'tag' => 'required|in:nature,history,adventure,culture,food',
+            'tag' => 'required|in:beach,mountain,temple,historical,cultural,shopping,food,adventure,other',
             'contact_info' => 'nullable|string',
         ]);
 

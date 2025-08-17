@@ -113,7 +113,7 @@ const UploadTouristAttractionForm = () => {
   </div>
 
   {/* Form */}
-  <form onSubmit={handleSubmit} 
+  <form onSubmit={handleSubmit}
   className="flex flex-col gap-8 w-full max-w-4xl mx-auto py-6">
     {/* Card wrapper for inputs */}
     <div className="bg-gradient-to-r from-blue-50 to-blue-75 bg-white p-8 rounded-3xl shadow-md space-y-6">
@@ -137,12 +137,16 @@ const UploadTouristAttractionForm = () => {
           onChange={(e) => setTag(e.target.value)}
           className="w-full px-5 py-4 rounded-2xl bg-gray-100 focus:ring-2 focus:ring-blue-400 shadow-inner text-2xl"
         >
-          <option value="">Select a category</option>
-          <option value="nature">Nature</option>
-          <option value="historical">Historical</option>
-          <option value="cultural">Cultural</option>
-          <option value="shopping">Shopping</option>
-          <option value="other">Other</option>
+            <option value="">Select a category</option>
+            <option value="beach">Beach</option>
+            <option value="mountain">Mountain</option>
+            <option value="temple">Temple</option>
+            <option value="historical">Historical</option>
+            <option value="cultural">Cultural</option>
+            <option value="shopping">Shopping</option>
+            <option value="food">Food</option>
+            <option value="adventure">Adventure</option>
+            <option value="other">Other</option>
         </select>
       </div>
 
@@ -245,7 +249,7 @@ const UploadTouristAttractionForm = () => {
           )}
         </div>
       </div>
-      
+
       {/* Submit */}
     <div className="text-center mt-6">
       <button
@@ -258,7 +262,7 @@ const UploadTouristAttractionForm = () => {
 
     </div>
 
-    
+
     {/* Message */}
     {message && (
       <div

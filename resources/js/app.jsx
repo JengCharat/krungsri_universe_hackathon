@@ -44,7 +44,7 @@ class ErrorBoundary extends React.Component {
 function BottomNav() {
   const location = useLocation();
   const navItems = [
-    { path: "/test", label: "Map", icon: <FaMapMarkedAlt /> },
+    { path: "/map", label: "Map", icon: <FaMapMarkedAlt /> },
     { path: "/all_trip", label: "All Trips", icon: <FaBus /> },
     { path: "/my-trips", label: "My Trips", icon: <FaSuitcaseRolling /> },
     { path: "/all_chat", label: "Chat", icon: <FaComments /> },
@@ -116,7 +116,7 @@ function App() {
     <Router>
       <div style={{ paddingBottom: "160px" }}> {/* ปรับให้เท่ากับความสูง BottomNav */}
         <Routes>
-          <Route path="/test" element={<TouristAttractionMap />} />
+          <Route path="/map" element={<TouristAttractionMap />} />
           <Route path="/attraction/:id" element={<TouristDetail />} />
         <Route
             path="/all_trip"
