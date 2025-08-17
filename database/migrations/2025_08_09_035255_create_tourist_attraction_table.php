@@ -23,7 +23,17 @@ return new class extends Migration
             $table->time('open_time')->nullable();
             $table->time('close_time')->nullable();
             $table->decimal('entrance_fee', 8, 2)->default(0)->nullable();  // ค่าเข้า
-            $table->enum('tag', ['nature', 'historical', 'cultural', 'shopping', 'other'])->default('other');
+                $table->enum('tag', [
+                'beach',        // ชายทะเล
+                'mountain',     // ภูเขา
+                'temple',       // วัด/ศาสนสถาน
+                'historical',   // แหล่งประวัติศาสตร์
+                'cultural',     // วัฒนธรรม/ชุมชน
+                'shopping',     // ช้อปปิ้ง/ตลาด
+                'food',         // ร้านอาหาร/ของกิน
+                'adventure',    // กีฬา/ผจญภัย
+                'other'         // อื่นๆ
+            ])->default('other');
             $table->string('contact_info')->nullable(); // เช่น เบอร์โทร, อีเมล, เว็บไซต์
             $table->timestamps();
         });

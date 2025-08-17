@@ -23,7 +23,7 @@ Route::middleware([
 
 
 
-Route::get('/test', function () {
+Route::get('/map', function () {
     $user = Auth::user();
     $token = $user->createToken('chat-token')->plainTextToken;
     $chatGroupId = 1; // ตัวอย่าง
@@ -56,9 +56,6 @@ Route::middleware('auth:sanctum')->group(function () {
 
 
 
-Route::get('/map', function () {
-    return view('map');
-});
 Route::get('/admin', function () {
     return 'Welcome Admin!';
 })->middleware('checkRole:admin');
