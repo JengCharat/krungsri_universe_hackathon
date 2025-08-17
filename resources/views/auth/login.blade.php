@@ -1,10 +1,12 @@
 <x-guest-layout>
-    <div class="flex justify-center items-center min-h-screen px-4">
-        <x-authentication-card class="w-full max-w-xl bg-gradient-to-r from-blue-50 to-blue-75 rounded-3xl p-6 md:p-12 shadow-lg flex flex-col space-y-6 mx-auto my-20">
-            <x-slot name="logo">
-                <x-authentication-card-logo />
-            </x-slot>
+    <div class="flex flex-col justify-center items-center min-h-screen px-4 bg-[#fecb00]">
+        <!-- Logo วงกลม ขนาดใหญ่ -->
+        <a href="/">
+            <img src="{{ asset('images/logo1.png') }}" alt="Logo" class="w-56 h-56 object-cover rounded-full" />
+        </a>
 
+        <!-- Card Login สีขาว -->
+        <x-authentication-card class="w-full max-w-xl bg-white rounded-3xl p-6 md:p-12 shadow-lg flex flex-col space-y-6 ">
             <x-validation-errors class="mb-4" />
 
             @session('status')
@@ -13,7 +15,7 @@
                 </div>
             @endsession
 
-            <form method="POST" action="{{ route('login') }}" class="space-y-6">
+            <form method="POST" action="{{ route('login') }}" class="space-y-6 w-full">
                 @csrf
                 <!-- Email -->
                 <div>
@@ -30,15 +32,13 @@
                 </div>
 
                 <!-- Remember me -->
-                <div class="block mt-2">
-                    <label for="remember_me" class="flex items-center">
-                        <x-checkbox id="remember_me" name="remember" class="rounded text-yellow-600 focus:ring-yellow-500" />
-                        <span class="ms-2 text-base text-gray-700">{{ __('Remember me') }}</span>
-                    </label>
+                <div class="flex items-center mt-2">
+                    <x-checkbox id="remember_me" name="remember" class="rounded text-yellow-600 focus:ring-yellow-500" />
+                    <span class="ms-2 text-base text-gray-700">{{ __('Remember me') }}</span>
                 </div>
 
                 <!-- Buttons -->
-                <div class="flex flex-col md:flex-row items-center justify-between gap-4 mt-6">
+                <div class="flex flex-col md:flex-row items-center justify-between gap-4 mt-6 w-full">
                     @if (Route::has('password.request'))
                         <a class="text-base text-gray-600 hover:text-gray-900 underline"
                            href="{{ route('password.request') }}">
@@ -46,10 +46,9 @@
                         </a>
                     @endif
 
-<x-button class="px-8 py-4 rounded-2xl bg-yellow-400 text-[#7f4534] text-xl font-bold shadow hover:bg-yellow-500 transition transform hover:scale-105">
-    {{ __('Log in') }}
-</x-button>
-
+                    <x-button class="px-8 py-4 rounded-2xl bg-yellow-400 text-[#7f4534] text-xl font-bold shadow hover:bg-yellow-500 transition transform hover:scale-105">
+                        {{ __('Log in') }}
+                    </x-button>
                 </div>
             </form>
         </x-authentication-card>

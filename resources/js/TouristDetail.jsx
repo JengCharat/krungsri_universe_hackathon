@@ -64,7 +64,7 @@ export default function TouristDetail() {
           <h1 className="text-3xl font-bold">กำลังโหลดข้อมูล...</h1>
           <button
             onClick={() => navigate(-1)}
-            className="px-6 py-3 bg-blue-600 text-white rounded-3xl font-semibold shadow hover:bg-blue-700 transition"
+            className="px-6 py-3 bg-[#fecb00] text-white rounded-3xl font-semibold shadow hover:bg-blue-700 transition"
           >
             กลับ
           </button>

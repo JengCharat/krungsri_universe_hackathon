@@ -188,7 +188,7 @@ export function ChatPage({ userToken }) {
         />
         <button
           onClick={sendMessage}
-          className="px-12 py-6 bg-blue-500 text-white rounded-3xl hover:bg-blue-600 font-extrabold text-4xl transition"
+          className="px-12 py-6 bg-[#fecb00] text-white rounded-3xl hover:bg-blue-600 font-extrabold text-4xl transition"
         >
           ส่ง
         </button>
