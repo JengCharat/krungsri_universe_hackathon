@@ -64,16 +64,16 @@ export default function AllTrips() {
     );
 
  return (
-  <div className="flex flex-col h-screen w-screen bg-white text-slate-900 px-4 md:px-12 mt-12">
+  <div className="flex flex-col h-screen w-screen bg-white text-slate-900 px-4 md:px-12 mt-6">
   {/* Header */}
-  <div className="w-full h-[300px] bg-white flex flex-col justify-center px-6 md:px-12 py-5 relative overflow-hidden">
+  <div className="w-full h-[350px] bg-white flex flex-col justify-center px-6 md:px-12 py-5 relative overflow-hidden">
     {/* Decorative blobs */}
     <div className="pointer-events-none absolute -top-10 -right-10 w-36 h-36 rounded-full bg-indigo-100/30 blur-2xl"></div>
     <div className="pointer-events-none absolute -bottom-12 -left-10 w-32 h-32 rounded-full bg-emerald-100/30 blur-2xl"></div>
 
     {/* Top row */}
   
-      <div className="flex items-center justify-between mb-4">
+      <div className="flex items-center justify-between mb-4 mt-12">
         <div className="inline-flex items-center gap-4 text-[#7f4534ff] bg-[#fecb00] px-5 py-3 rounded-full text-3xl font-bold">
           <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" viewBox="0 0 24 24" fill="currentColor">
             <path d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7Zm0 9.5a2.5 2.5 0 1 1 0-5 2.5 2.5 0 0 1 0 5Z" />
@@ -93,7 +93,7 @@ export default function AllTrips() {
   {/* Trip List */}
   <div className="flex-1 overflow-auto flex flex-col items-center gap-6 w-full max-w-6xl mx-auto py-6">
     {trips.length === 0 ? (
-      <p className="text-center text-xl md:text-2xl text-slate-700">
+      <p className="text-center text-3xl md:text-2xl text-slate-700">
         ไม่มีทริปในระบบ
       </p>
     ) : (

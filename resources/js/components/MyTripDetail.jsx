@@ -87,7 +87,7 @@ export default function MyTripDetail() {
         <div className="pointer-events-none absolute -top-10 -right-10 w-36 h-36 rounded-full bg-indigo-100/30 blur-2xl"></div>
         <div className="pointer-events-none absolute -bottom-12 -left-10 w-32 h-32 rounded-full bg-emerald-100/30 blur-2xl"></div>
         <div className="flex items-center justify-between mb-4">
-          <div className="inline-flex items-center gap-4 text-blue-800 bg-blue-200 px-5 py-3 rounded-full text-lg font-bold">
+          <div className="inline-flex items-center gap-4 text-[#7f4534ff] bg-[#fecb00] px-5 py-3 rounded-full text-3xl font-bold">
             รายละเอียด
           </div>
         </div>
@@ -98,7 +98,7 @@ export default function MyTripDetail() {
       {/* Main content */}
       <div className="flex-1 overflow-auto flex flex-col items-center gap-8 w-full max-w-5xl mx-auto py-4">
         {/* ข้อมูลทริป */}
-        <div className="w-full bg-gradient-to-r from-blue-50 to-blue-100 rounded-3xl p-8 md:p-10 shadow-lg flex flex-col space-y-8 text-2xl md:text-3xl items-start">
+        <div className="w-full bg-gradient-to-r from-blue-50 to-blue-75 rounded-3xl p-8 md:p-10 shadow-lg flex flex-col space-y-8 text-2xl md:text-3xl items-start">
           <h1 className="text-5xl md:text-6xl font-extrabold text-slate-900 text-center">{trip.name}</h1>
           <div className="flex flex-col items-start space-y-6">
             <p><strong>วันที่เริ่ม:</strong> {trip.start_date || "-"}</p>
@@ -146,7 +146,7 @@ export default function MyTripDetail() {
               <h3 className="text-4xl md:text-4xl font-bold mb-6">รายการไกด์ที่เสนอราคา</h3>
               {guidesToShow.length > 0 ? (
                 <table className="border-collapse border border-gray-300 text-center w-full md:max-w-5xl text-2xl md:text-3xl">
-                  <thead className="bg-blue-600 text-white">
+                  <thead className="bg-[#fecb00] text-white">
                     <tr>
                       <th className="p-4">ชื่อไกด์</th>
                       <th className="p-4">อีเมล</th>
@@ -164,7 +164,7 @@ export default function MyTripDetail() {
                         <td className="p-4">{status}</td>
                         <td className="p-4">
                           {status === "selected" ? (
-                            <span className="text-green-600 font-bold text-2xl">✅ ไกด์ที่ถูกเลือก</span>
+                            <span className="text-green-600 font-bold text-2xl">ไกด์ที่ถูกเลือก</span>
                           ) : (
                             <button
                               onClick={() => chooseGuide(guide_id)}
@@ -188,7 +188,7 @@ export default function MyTripDetail() {
         {/* ปุ่มกลับ */}
         <button
           onClick={() => navigate(-1)}
-          className="px-10 py-6 md:px-12 md:py-7 text-white rounded-3xl bg-gradient-to-r from-blue-500 to-cyan-400 font-extrabold shadow-xl transform transition-transform hover:scale-110 hover:shadow-2xl text-2xl md:text-3xl mt-6"
+          className="px-10 py-6 md:px-12 md:py-7 text-white rounded-3xl bg-gray-500 font-extrabold shadow-xl transform transition-transform hover:scale-110 hover:shadow-2xl text-3xl md:text-3xl mt-6 hover:bg-gray-400"
         >
           กลับ
         </button>

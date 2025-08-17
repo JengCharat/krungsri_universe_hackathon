@@ -129,11 +129,11 @@ export function ChatPage({ userToken }) {
       <div className="flex items-center justify-between bg-[#fecb00] text-white p-10 shadow">
         <button
           onClick={() => navigate(-1)}
-          className="px-10 py-6 bg-[#fecb00] rounded-3xl hover:bg-blue-700 transition text-4xl font-extrabold"
+          className="px-10 py-6 bg-[#7f4534ff] rounded-3xl hover:bg-gray-700 transition text-4xl font-extrabold"
         >
           กลับ
         </button>
-        <h2 className="font-extrabold text-7xl">Chat Group {chatGroupId}</h2>
+        <h2 className="text-5xl md:text-6xl font-extrabold text-[#7f4534ff]">Chat Group {chatGroupId}</h2>
         <div className="w-28"></div> {/* Spacer */}
       </div>
 
